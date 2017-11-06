@@ -34,8 +34,7 @@ func main() {
 		var user_name string
 
 		err = rows.Scan(&user_id, &user_name)
-		fmt.Println(user_id, user_name)	// print:	001 Administrator
-										//          002 Anggit Muhamad Ginanjar
+		fmt.Println(user_id, user_name)	// print:	001 Administrator \n 002 Anggit Muhamad Ginanjar
 		if err != nil {
 			log.Println("MySQL Error:", err)
 		}
@@ -46,7 +45,7 @@ func main() {
 	users := []user_login{}
 	// usgin Select() method for fetching all data in table as array struct
 	err = db.Select(&users, "SELECT user_id, user_name FROM user_login")
-	fmt.Println(users)	// print: [{001 Administrator}, {002, Anggit Muhamad Ginanjar}]
+	fmt.Println(users)					// print: [{001 Administrator}, {002, Anggit Muhamad Ginanjar}]
 	fmt.Println(users[1].User_name)		// print: Anggit Muhamad Ginanjar
 
 	if err != nil {
