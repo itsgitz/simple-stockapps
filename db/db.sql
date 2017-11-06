@@ -1,7 +1,10 @@
 --  SQL script: DC Stock Apps
 --  Created by: Anggit Muhamad Ginanjar
 --  Copyright @AQX
---
+
+-- Create user if not exsits
+CREATE USER IF NOT EXISTS 'dc'@'localhost' IDENTIFIED BY 'IniP4ssword';
+GRANT ALL ON stockapps.* TO 'dc'@'localhost';
 
 -- Create user login table
 -- Table that contains information about login
