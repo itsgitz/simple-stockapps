@@ -1,6 +1,7 @@
 # StockApps: Stock of goods management system - Web Based Application
 
 *Note: This is beta version and this still in proccess*
+
 StockApps is simple web based application that used for stock of goods management system. Below is several funtion of StockApps:
 
 - Realtime table monitoring:
