@@ -26,6 +26,7 @@ I've been writing all of these codes for 1 Months for free. You can always use o
   - github.com/jmoiron/sqlx (SQL Extentions)
   - github.com/go-sql-driver (MySQL Driver for golang)
 5. If all packages and application has installed you should change directory to stockapps and you can run it using:
+  
   $go run main.go
   
   I hope you enjoy my application... have a nice day :)
