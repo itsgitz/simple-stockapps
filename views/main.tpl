@@ -1,4 +1,4 @@
-[[ define main_layout ]]
+[[ define "main_layout" ]]
 <!DOCTYPE html>
 <html>
 	<head>
