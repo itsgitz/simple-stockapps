@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"github.com/urfave/negroni"
 	"github.com/gorilla/mux"
-	"_apps_/controllers"
+	"simple_stockapps/controllers"
 )
 
 func main() {
