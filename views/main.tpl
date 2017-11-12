@@ -2,15 +2,44 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>None</title>
+		<title>[[.HtmlTitle]]</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<style>
+			* { box-sizing: border-box; }
+			/* Login popup style */
+			div#app-login-popup {
+				visibility: hidden;
+			}
+			/* end of login popup style */
+		</style>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script>
 			// jQuery.3.2.1
 			$(document).ready(function() {
+				// login popup box procedure
+				appLoginHandler();
+			});
+
+			// Login popup box function
+			function appLoginHandler() {
 				// login form variable element
 				var loginForm = $("form.app-login-form");
+				// login popup box
+				var loginPopupBox = $("div#app-login-popup");
+				// login button and close button
+				var signButton = $("button.app-sign-btn");
+				var closeButton = $("button.app-close-btn");
+
+				// show login popup when sign button clicked
+				signButton.click(function() {
+					loginPopupBox.css("visibility", "visible");
+				});
+				// close login popup
+				closeButton.click(function() {
+					loginPopupBox.css("visibility", "hidden");
+				});
+
 				// login form for prevent default
 				loginForm.submit(function(e) {
 					e.preventDefault();
@@ -28,19 +57,25 @@
 								username: usernameValue,
 								password: passwordValue
 							},
-							success: function(data) {
-									
+							success: function(jsonLoginDataAuth) {
+								// jsonLoginDataAuth --> JSON data that sended from login handler AppLogin
+								if (jsonLoginDataAuth.Message) {
+									window.location = jsonLoginDataAuth.Redirect_Url;
+								} else {
+									$("div.app-login-alert").html("<b>Incorrect username or password!</b>");
+								}
 							}
 						});
-						loginForm[0].reset(); // reset (clearing) the form after submit
+						loginForm[0].reset(); // reset (clearing) the login form after submit
 					}
 				});
-			});
+			}
 		</script>
 	</head>
 	<body>
 		<div id="app-container">
 			<h2>Main Page: None</h2>
+			[[ template "navigation". ]]
 			[[ template "login_popup". ]]
 		</div>
 	</body>
@@ -48,11 +83,21 @@
 [[ end ]]
 
 [[ define "login_popup" ]]
-<div id="app-login-popup">
+<br>
+<div id="app-login-popup" class="login-hidden">
 	<form class="app-login-form">
 		<label><input class="app-username" type="text" placeholder="Username"></label><br>
 		<label><input class="app-password" type="password" placeholder="Password"></label><br>
 		<label><input class="app-login-btn" type="submit" value="Sign in"></label>
 	</form>
+	<div class="app-login-alert"></div>
+	<br><br>
+	<button class="app-close-btn">Close</button>
+</div>
+[[ end ]]
+
+[[ define "navigation" ]]
+<div id="app-navbar">
+	<button class="app-sign-btn">[[.HtmlLoginButton]]</button>
 </div>
 [[ end ]]
