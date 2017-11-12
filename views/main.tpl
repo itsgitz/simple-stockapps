@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>[[.Title]]</title>
+		<title>None</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -21,6 +21,18 @@
 					// submit while value not null
 					if (usernameValue && passwordValue) {
 						// these values will send to server (login controller) using AJAX method
+						$.ajax({
+							url: "/login",	// send data to login handler on server
+							async: true,
+							data: {
+								username: usernameValue,
+								password: passwordValue
+							},
+							success: function(data) {
+									
+							}
+						});
+						loginForm[0].reset(); // reset (clearing) the form after submit
 					}
 				});
 			});
@@ -28,7 +40,7 @@
 	</head>
 	<body>
 		<div id="app-container">
-			<h2>Main Page: [[.Title]]</h2>
+			<h2>Main Page: None</h2>
 			[[ template "login_popup". ]]
 		</div>
 	</body>
