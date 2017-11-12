@@ -4,22 +4,48 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
+	"time"
 	"net/http"
+	"encoding/json"
 	"html/template"
 	"simple_stockapps/models"
+
+	// http session using kataras
+	"github.com/kataras/go-sessions"
 )
 
 type MainController struct {
-	AuthLoginMessage	string	`json:""`
 }
 
+var (
+	session = sessions.New(sessions.Config{
+		Cookie: "simple_stockapps_session",
+		Expires: time.Hour * 2,
+		DisableSubdomainPersistence: false,
+	})
+)
+
+
 // Main page controller
-func (this MainController) AppMainPage(w http.ResponseWriter, r *http.Request) {
+func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	// get the sessions
+	username_session := sess.GetString("user_name")	// get username session
+	fmt.Println("Session:", username_session)
+
 	html_data := struct{
-		Title string
-	}{
-		Title: "Simple StockApps",
+		HtmlTitle			string
+		HtmlSignButton		string
+	}{}
+
+	html_data.HtmlTitle = "Simple StockApps"
+
+	if len(username_session) != 0 {
+		html_data.HtmlSignButton = "Logout"
+	} else {
+		html_data.HtmlSignButton = "Login"
 	}
 
 	tpl_filename := "views/main.tpl"
@@ -37,7 +63,11 @@ func (this MainController) AppMainPage(w http.ResponseWriter, r *http.Request) {
 // login process handler
 // custom login authentication
 // checking if username and password is exists (matching)
-func (this MainController) AppLogin(w http.ResponseWriter, r *http.Request) {
+func (this *MainController) AppLogin(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	// set header as "application/json"
+	w.Header().Set("Content-Type", "application/json")
+
 	r.ParseForm()	// parsing form (data input)
 	log.Println(r.Form["username"])
 	log.Println(r.Form["password"])
@@ -48,5 +78,45 @@ func (this MainController) AppLogin(w http.ResponseWriter, r *http.Request) {
 	// if exists then return true,
 	// else, return false
 	user_isExists := models.ModelsReadLogin(username, password) // print true / false
+	// print testing
 	log.Println(user_isExists)
+
+	// outgoingJSON for outgoing JSON data that send to web client
+	// errJSON error
+	var outgoingJSON []byte
+	var errJSON error
+	// for send JSON data as authentication message
+	json_login_auth := struct {
+		AuthLoginMessage	bool	`json:"Message"`
+		AuthRedirectUrl		string	`json:"Redirect_Url"`
+	}{}
+
+	// authentication
+	if user_isExists {
+		json_login_auth.AuthLoginMessage = true
+		json_login_auth.AuthRedirectUrl = "/"
+		outgoingJSON, errJSON = json.Marshal(json_login_auth)
+		sess.Set("user_name", username)
+	} else {
+		json_login_auth.AuthLoginMessage = false
+		json_login_auth.AuthRedirectUrl = ""
+		outgoingJSON, errJSON = json.Marshal(json_login_auth)
+	}
+
+	if errJSON != nil {
+		log.Println(errJSON)
+	}
+	fmt.Println(string(outgoingJSON))
+	fmt.Fprint(w, string(outgoingJSON))	
+}
+
+// AppLogout for destroy all sessions
+// User will logout
+func (this *MainController) AppLogout(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	sess := session.Start(w, r)
+	sess.Delete("user_name")
+	session.Destroy(w, r)
+	http.Redirect(w, r, "/", 302)
 }
