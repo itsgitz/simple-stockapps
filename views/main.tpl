@@ -29,6 +29,7 @@
 				var loginPopupBox = $("div#app-login-popup");
 				// login button and close button
 				var signButton = $("button.app-sign-btn");
+				var signText = signButton.text();
 				var closeButton = $("button.app-close-btn");
 
 				// show login popup when sign button clicked
@@ -39,6 +40,25 @@
 				closeButton.click(function() {
 					loginPopupBox.css("visibility", "hidden");
 				});
+
+				// if user has logged in, then sign button changes to logout button
+				// ajax will send request to AppLogout Handler
+				if (signText == "Logout") {
+					signButton.click(function() {
+						loginPopupBox.css("visibility", "hidden");
+						/*$.ajax({
+							url: "/logout",
+							async: true,
+							data: {
+								akuInginLogout: true
+							},
+							success: function() {
+								window.location.reload();
+							}
+						});*/
+						window.location = "/logout";
+					});
+				}
 
 				// login form for prevent default
 				loginForm.submit(function(e) {
@@ -98,6 +118,6 @@
 
 [[ define "navigation" ]]
 <div id="app-navbar">
-	<button class="app-sign-btn">[[.HtmlLoginButton]]</button>
+	<button class="app-sign-btn">[[.HtmlSignButton]]</button>
 </div>
 [[ end ]]
