@@ -7,6 +7,7 @@ package models
 
 import (
 	"log"
+	"time"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -47,4 +48,23 @@ func ModelsReadLogin(username, password string) bool {
 
 	// return the boolean value
 	return isExists
+}
+
+// ModelsSelectFrom function used for display the table of database content
+// table nam used as parameter on this function
+func ModelsSelectFrom(tabel_name string) {
+	items_value := []items_columns{}
+	err = db.Select(&items_value, "SELECT * FROM items")
+	log.Println(items_value)
+}
+
+type items_columns struct{
+		No              string
+		Item_name       string
+		Item_brand      string
+		Item_owner      string
+		Item_quantity   int
+		Item_unit       string
+		Date_of_entry   string
+		Time_period     time.Time
 }

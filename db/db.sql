@@ -28,8 +28,9 @@ CREATE TABLE IF NOT EXISTS `items` (
 	`item_limitation` INT NOT NULL,
 	`item_quantity` INT NOT NULL,
 	`item_unit` VARCHAR(32) NOT NULL,
-	`time_period` DATE NOT NULL,
 	`date_of_entry` DATETIME NOT NULL,
+	`item_time_period` VARCHAR(64) NOT NULL,
+	`item_expired` DATETIME NOT NULL,
 	`item_owner` VARCHAR(254) NOT NULL,
 	`item_status` VARCHAR(32) NOT NULL
 );
