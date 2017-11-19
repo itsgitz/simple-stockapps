@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `user_login` (
 CREATE TABLE IF NOT EXISTS `items` (
 	`item_id` VARCHAR(8) NOT NULL PRIMARY KEY,		-- Item ID
 	`item_name` VARCHAR(254) NOT NULL,				-- Item name
+	`item_model` VARCHAR(254) NOT NULL,
 	`item_limitation` INT NOT NULL,
 	`item_quantity` INT NOT NULL,
 	`item_unit` VARCHAR(32) NOT NULL,
