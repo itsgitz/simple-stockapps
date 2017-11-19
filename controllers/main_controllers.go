@@ -42,6 +42,7 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 	}{}
 
 	html_data.HtmlTitle = "Simple StockApps"
+	models.ModelsSelectFromItems()
 
 	if len(username_session) != 0 {
 		html_data.HtmlSignButton = "Logout"
