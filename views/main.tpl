@@ -46,16 +46,6 @@
 				if (signText == "Logout") {
 					signButton.click(function() {
 						loginPopupBox.css("visibility", "hidden");
-						/*$.ajax({
-							url: "/logout",
-							async: true,
-							data: {
-								akuInginLogout: true
-							},
-							success: function() {
-								window.location.reload();
-							}
-						});*/
 						window.location = "/logout";
 					});
 				}
@@ -94,9 +84,10 @@
 	</head>
 	<body>
 		<div id="app-container">
-			<h2>Main Page: None</h2>
+			<h2>Main Page: [[.HtmlTitle]]</h2>
 			[[ template "navigation". ]]
 			[[ template "login_popup". ]]
+			[[ template "table_monitor". ]]
 		</div>
 	</body>
 </html>
@@ -119,5 +110,22 @@
 [[ define "navigation" ]]
 <div id="app-navbar">
 	<button class="app-sign-btn">[[.HtmlSignButton]]</button>
+</div>
+[[ end ]]
+
+[[ define "table_monitor" ]]
+<div id="app-table-monitor">
+	<table border="1" cellspacing="0" cellpadding="10">
+		<th>No.</th>
+		<th>Name</th>
+		<th>Brand/Model</th>
+		<th>Owner</th>
+		<th>Quantity</th>
+		<th>Item Unit</th>
+		<th>Date of Entry</th>
+		<th>Time Period</th>
+		<th>Status</th>
+		[[.HtmlTableHeaderAction]]
+	</table>
 </div>
 [[ end ]]
