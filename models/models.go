@@ -7,11 +7,24 @@ package models
 
 import (
 	"log"
-	"time"
+	//"time"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/go-sql-driver/mysql"
 )
 
+type items_columns struct{
+	Item_id				string
+	Item_name			string
+	Item_model			string
+	Item_limitation		int
+	Item_quantity		int
+	Item_unit 			string
+	Date_of_entry		string
+	Item_time_period	string
+	Item_expired		string
+	Item_owner			string
+	Item_status			string
+}
 
 var db *sqlx.DB
 var err error
@@ -52,19 +65,9 @@ func ModelsReadLogin(username, password string) bool {
 
 // ModelsSelectFrom function used for display the table of database content
 // table nam used as parameter on this function
-func ModelsSelectFrom(tabel_name string) {
+func ModelsSelectFromItems() {
 	items_value := []items_columns{}
+
 	err = db.Select(&items_value, "SELECT * FROM items")
 	log.Println(items_value)
-}
-
-type items_columns struct{
-		No              string
-		Item_name       string
-		Item_brand      string
-		Item_owner      string
-		Item_quantity   int
-		Item_unit       string
-		Date_of_entry   string
-		Time_period     time.Time
 }
