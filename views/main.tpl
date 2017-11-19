@@ -118,12 +118,13 @@
 	<table border="1" cellspacing="0" cellpadding="10">
 		<th>No.</th>
 		<th>Name</th>
-		<th>Brand/Model</th>
-		<th>Owner</th>
+		<th>Model/Brand</th>
 		<th>Quantity</th>
 		<th>Item Unit</th>
 		<th>Date of Entry</th>
-		<th>Time Period</th>
+		<tH>Time Period</tH>
+		<th>Expired</th>
+		<th>Owner</th>
 		<th>Status</th>
 		[[.HtmlTableHeaderAction]]
 	</table>
