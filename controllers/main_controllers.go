@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"time"
+	//"reflect"
 	"net/http"
 	"encoding/json"
 	"html/template"
@@ -36,13 +37,18 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 	fmt.Println("Session:", username_session)
 
 	html_data := struct{
-		HtmlTitle             string
-		HtmlSignButton        string
-		HtmlTableHeaderAction template.HTML
+		HtmlTitle             	string
+		HtmlSignButton        	string
+		HtmlTableHeaderAction 	template.HTML
+		HtmlTableValueFromItems	[]models.Items_Columns
 	}{}
 
 	html_data.HtmlTitle = "Simple StockApps"
-	models.ModelsSelectFromItems()
+	html_data.HtmlTableValueFromItems = models.ModelsSelectFromItems()
+
+	//items := models.ModelsSelectFromItems()
+	//log.Println(items[0].Item_name)
+	//log.Println(reflect.TypeOf(items))
 
 	if len(username_session) != 0 {
 		html_data.HtmlSignButton = "Logout"
