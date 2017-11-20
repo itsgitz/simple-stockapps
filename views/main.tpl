@@ -127,6 +127,20 @@
 		<th>Owner</th>
 		<th>Status</th>
 		[[.HtmlTableHeaderAction]]
+		[[ range .HtmlTableValueFromItems ]]
+			<tr>
+				<td>[[.Item_id]]</td>
+				<td>[[.Item_name]]</td>
+				<td>[[.Item_model]]</td>
+				<td>[[.Item_quantity]]</td>
+				<td>[[.Item_unit]]</td>
+				<td>[[.Date_of_entry]]</td>
+				<td>[[.Item_time_period]]</td>
+				<td>[[.Item_expired]]</td>
+				<td>[[.Item_owner]]</td>
+				<td>[[.Item_status]]</td>
+			</tr>
+		[[ end ]]
 	</table>
 </div>
 [[ end ]]
