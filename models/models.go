@@ -7,12 +7,11 @@ package models
 
 import (
 	"log"
-	//"time"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type items_columns struct{
+type Items_Columns struct{
 	Item_id				string
 	Item_name			string
 	Item_model			string
@@ -63,11 +62,15 @@ func ModelsReadLogin(username, password string) bool {
 	return isExists
 }
 
-// ModelsSelectFrom function used for display the table of database content
-// table nam used as parameter on this function
-func ModelsSelectFromItems() {
-	items_value := []items_columns{}
+// ModelsSelectFromItems function used for display the table of database content
+// the function will return all values in `items` table
+func ModelsSelectFromItems() []Items_Columns {
+	items_value := []Items_Columns{}
 
 	err = db.Select(&items_value, "SELECT * FROM items")
-	log.Println(items_value)
+	if err != nil {
+		log.Println("[!] ERROR: ModelsSelectFromItems:", err)
+	}
+
+	return items_value
 }
