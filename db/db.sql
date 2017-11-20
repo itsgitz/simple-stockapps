@@ -19,6 +19,15 @@ CREATE TABLE IF NOT EXISTS `user_login` (
 	`date_created` DATETIME NOT NULL			-- Date and time when it user was created
 );
 
+-- Default values for user_login table
+INSERT INTO `user_login` (
+	`user_id`, `user_login_name`, `user_name`, `user_privilege`,
+	`password`, `user_email`, `key`, `date_created`
+) VALUES (
+	'001', 'mimin', 'Default User', 'Administrator', '123456abC',
+	'mimin.mimin@lintasarta.co.id', '0992012412Bxas', '2017-11-11'
+);
+
 -- Item's table that contains list of item
 -- These items can added only by Administrator User
 CREATE TABLE IF NOT EXISTS `items` (
@@ -33,4 +42,14 @@ CREATE TABLE IF NOT EXISTS `items` (
 	`item_expired` DATETIME NOT NULL,
 	`item_owner` VARCHAR(254) NOT NULL,
 	`item_status` VARCHAR(32) NOT NULL
+);
+
+-- Default values for items table
+INSERT INTO `items` (
+	`item_id`, `item_name`, `item_model`, `item_limitation`, `item_quantity`,
+	`item_unit`, `date_of_entry`, `item_time_period`, `item_expired`, `item_owner`,
+	`item_status`
+) VALUES (
+	'001', 'Cat-7 UTP Cable', 'AMP Connect', 5, 10, 'Cable Roll', '2017-11-11', '2 Days',
+	'2017-11-13', 'PT APLIKANUSA LINTASARTA', 'Available'
 );
