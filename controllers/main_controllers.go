@@ -15,6 +15,7 @@ import (
 
 	// http session using kataras
 	"github.com/kataras/go-sessions"
+	"github.com/gorilla/securecookie"
 )
 
 type MainController struct {
@@ -78,8 +79,8 @@ func (this *MainController) AppLogin(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	r.ParseForm()	// parsing form (data input)
-	log.Println(r.Form["username"])
-	log.Println(r.Form["password"])
+	//log.Println(r.Form["username"])
+	//log.Println(r.Form["password"])
 	username := r.Form["username"][0]
 	password := r.Form["password"][0]
 
@@ -88,7 +89,7 @@ func (this *MainController) AppLogin(w http.ResponseWriter, r *http.Request) {
 	// else, return false
 	user_isExists := models.ModelsReadLogin(username, password) // print true / false
 	// print testing
-	log.Println(user_isExists)
+	//log.Println(user_isExists)
 
 	// outgoingJSON for outgoing JSON data that send to web client
 	// errJSON error
@@ -98,31 +99,44 @@ func (this *MainController) AppLogin(w http.ResponseWriter, r *http.Request) {
 	json_login_auth := struct {
 		AuthLoginMessage    	bool	`json:"Message"`
 		AuthRedirectUrl     	string	`json:"Redirect_Url"`
-		AuthSessionSaveCookie	string 	`json:"Session_Cookie"`	// custom cookies using session information
 	}{}
 
 	// authentication
 	if user_isExists {
 		json_login_auth.AuthLoginMessage = true
 		json_login_auth.AuthRedirectUrl = "/"
-		json_login_auth.AuthSessionSaveCookie = username
 		outgoingJSON, errJSON = json.Marshal(json_login_auth)
+
+		// set secure cookie
+		hash_key := []byte("rahasia")
+		secure_cookie := securecookie.New(hash_key, nil)
+		encoded_value, err := secure_cookie.Encode("simple_stockapps_login", username)
+		if err != nil {
+			log.Println("[!] ERROR:", err)
+		}
+		// set cookie and expiration
+		cookie := &http.Cookie{
+			Name:		"simple_stockapps_login",
+			Value:		encoded_value,
+			Path:		"/",
+			Expires:	time.Now().Add(2 * time.Hour),
+		}
+		http.SetCookie(w, cookie)
 		sess.Set("user_name", username)
 	} else {
 		json_login_auth.AuthLoginMessage = false
 		json_login_auth.AuthRedirectUrl = "none"
-		json_login_auth.AuthSessionSaveCookie = "none"
 		outgoingJSON, errJSON = json.Marshal(json_login_auth)
 	}
 
 	if errJSON != nil {
 		log.Println(errJSON)
 	}
-	fmt.Println(string(outgoingJSON))
+	//fmt.Println(string(outgoingJSON))
 	fmt.Fprint(w, string(outgoingJSON))	
 }
 
-// AppLogout for destroy all sessions
+// AppLogout for destroy all user login sessions
 // User will logout
 func (this *MainController) AppLogout(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
