@@ -37,10 +37,10 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 	fmt.Println("Session:", username_session)
 
 	html_data := struct{
-		HtmlTitle             	string
-		HtmlSignButton        	string
-		HtmlTableHeaderAction 	template.HTML
-		HtmlTableValueFromItems	[]models.Items_Columns
+		HtmlTitle             		string
+		HtmlSignButton        		string
+		HtmlTableActionHeader 		template.HTML
+		HtmlTableValueFromItems		[]models.Items_Columns
 	}{}
 
 	html_data.HtmlTitle = "Simple StockApps"
@@ -52,7 +52,7 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 
 	if len(username_session) != 0 {
 		html_data.HtmlSignButton = "Logout"
-		html_data.HtmlTableHeaderAction = template.HTML(`<th>Action</th>`)
+		html_data.HtmlTableActionHeader = template.HTML(`<th>Action</th>`)
 	} else {
 		html_data.HtmlSignButton = "Login"
 	}
@@ -96,19 +96,22 @@ func (this *MainController) AppLogin(w http.ResponseWriter, r *http.Request) {
 	var errJSON error
 	// for send JSON data as authentication message
 	json_login_auth := struct {
-		AuthLoginMessage    bool	`json:"Message"`
-		AuthRedirectUrl     string	`json:"Redirect_Url"`
+		AuthLoginMessage    	bool	`json:"Message"`
+		AuthRedirectUrl     	string	`json:"Redirect_Url"`
+		AuthSessionSaveCookie	string 	`json:"Session_Cookie"`	// custom cookies using session information
 	}{}
 
 	// authentication
 	if user_isExists {
 		json_login_auth.AuthLoginMessage = true
 		json_login_auth.AuthRedirectUrl = "/"
+		json_login_auth.AuthSessionSaveCookie = username
 		outgoingJSON, errJSON = json.Marshal(json_login_auth)
 		sess.Set("user_name", username)
 	} else {
 		json_login_auth.AuthLoginMessage = false
-		json_login_auth.AuthRedirectUrl = ""
+		json_login_auth.AuthRedirectUrl = "none"
+		json_login_auth.AuthSessionSaveCookie = "none"
 		outgoingJSON, errJSON = json.Marshal(json_login_auth)
 	}
 
