@@ -12,13 +12,21 @@
 				visibility: hidden;
 			}
 			/* end of login popup style */
+			/* Table button style */
+			td.app-action-table-data {
+				display: none;
+			}
+			/* end of table data header */
 		</style>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+		<script src="/js/jquery-3.2.1.js"></script>
 		<script>
 			// jQuery.3.2.1
 			$(document).ready(function() {
-				// login popup box procedure
+				// login popup box function
 				appLoginHandler();
+				// table handler function
+				appTableHandler();
 			});
 
 			// Login popup box function
@@ -47,6 +55,7 @@
 					signButton.click(function() {
 						loginPopupBox.css("visibility", "hidden");
 						window.location = "/logout";
+						document.cookie = "simple_stockapps_login=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 					});
 				}
 
@@ -79,6 +88,18 @@
 						loginForm[0].reset(); // reset (clearing) the login form after submit
 					}
 				});
+			}
+
+			// appTableHandler for handling table items
+			function appTableHandler() {
+				// get login cooki if user has logged in
+				var login_cookie = document.cookie;
+				var tableDataPickupButton = $("td.app-action-table-data");
+
+				// if user has logged in, show table data below Action table header
+				if (login_cookie) {
+					tableDataPickupButton.css("display", "block");
+				}
 			}
 		</script>
 	</head>
@@ -115,7 +136,7 @@
 
 [[ define "table_monitor" ]]
 <div id="app-table-monitor">
-	<table border="1" cellspacing="0" cellpadding="10">
+	<table border="1" cellspacing="0" cellpadding="10" style="overflow-x: auto;">
 		<th>No.</th>
 		<th>Name</th>
 		<th>Model/Brand</th>
@@ -126,19 +147,20 @@
 		<th>Expired</th>
 		<th>Owner</th>
 		<th>Status</th>
-		[[.HtmlTableHeaderAction]]
-		[[ range .HtmlTableValueFromItems ]]
+		[[.HtmlTableActionHeader]]
+		[[ range $value := .HtmlTableValueFromItems ]]
 			<tr>
-				<td>[[.Item_id]]</td>
-				<td>[[.Item_name]]</td>
-				<td>[[.Item_model]]</td>
-				<td>[[.Item_quantity]]</td>
-				<td>[[.Item_unit]]</td>
-				<td>[[.Date_of_entry]]</td>
-				<td>[[.Item_time_period]]</td>
-				<td>[[.Item_expired]]</td>
-				<td>[[.Item_owner]]</td>
-				<td>[[.Item_status]]</td>
+				<td>[[$value.Item_id]]</td>
+				<td>[[$value.Item_name]]</td>
+				<td>[[$value.Item_model]]</td>
+				<td>[[$value.Item_quantity]]</td>
+				<td>[[$value.Item_unit]]</td>
+				<td>[[$value.Date_of_entry]]</td>
+				<td>[[$value.Item_time_period]]</td>
+				<td>[[$value.Item_expired]]</td>
+				<td>[[$value.Item_owner]]</td>
+				<td>[[$value.Item_status]]</td>
+				<td class="app-action-table-data"><a href="/pick_up/[[$value.Item_id]]">Pick Up</a></td>
 			</tr>
 		[[ end ]]
 	</table>
