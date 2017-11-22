@@ -5,115 +5,9 @@
 		<title>[[.HtmlTitle]]</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<style>
-			* { box-sizing: border-box; }
-			/* Login popup style */
-			div#app-login-popup {
-				visibility: hidden;
-			}
-			table.app-table {
-				border:1px solid #DDD;
-			}
-			tr:nth-child(even) {
-				background-color: #F2F2F2;
-			}
-			/* end of login popup style */
-		</style>
-		<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+		<link rel="stylesheet" href="/css/style.css">
 		<script src="/js/jquery-3.2.1.js"></script>
-		<script>
-			// jQuery.3.2.1
-			$(document).ready(function() {
-				// login popup box function
-				appLoginHandler();
-				// table handler function
-				appTableHandler();
-			});
-
-			// Login popup box function
-			function appLoginHandler() {
-				// login form variable element
-				var loginForm = $("form.app-login-form");
-				// login popup box
-				var loginPopupBox = $("div#app-login-popup");
-				// login button and close button
-				var signButton = $("button.app-sign-btn");
-				var signText = signButton.text();
-				var closeButton = $("button.app-close-btn");
-
-				// show login popup when sign button clicked
-				signButton.click(function() {
-					loginPopupBox.css("visibility", "visible");
-				});
-				// close login popup
-				closeButton.click(function() {
-					loginPopupBox.css("visibility", "hidden");
-				});
-
-				// if user has logged in, then sign button changes to logout button
-				// ajax will send request to AppLogout Handler
-				if (signText == "Logout") {
-					signButton.click(function() {
-						loginPopupBox.css("visibility", "hidden");
-						window.location = "/logout";
-						document.cookie = "simple_stockapps_login=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-					});
-				}
-
-				// login form for prevent default
-				loginForm.submit(function(e) {
-					e.preventDefault();
-					// username and password value
-					var usernameValue = $("input.app-username").val();
-					var passwordValue = $("input.app-password").val();
-
-					// submit while value not null
-					if (usernameValue && passwordValue) {
-						// these values will send to server (login controller) using AJAX method
-						$.ajax({
-							url: "/login",	// send data to login handler on server
-							async: true,
-							data: {
-								username: usernameValue,
-								password: passwordValue
-							},
-							success: function(jsonLoginDataAuth) {
-								// jsonLoginDataAuth --> JSON data that sended from login handler AppLogin
-								if (jsonLoginDataAuth.Message) {
-									window.location = jsonLoginDataAuth.Redirect_Url;
-								} else {
-									$("div.app-login-alert").html("<b>Incorrect username or password!</b>");
-								}
-							}
-						});
-						loginForm[0].reset(); // reset (clearing) the login form after submit
-					}
-				});
-			}
-
-			// appTableHandler for handling table items
-			function appTableHandler() {
-				var ws = new WebSocket('ws://192.168.43.56:8080/ws');
-				ws.onopen = function() {
-					console.log("Connection Open");
-				}
-				ws.onerror = function(error) {
-					console.error('WebSocket' + error);
-				}
-				ws.onmessage = function(e) {
-					var msg = JSON.parse(e.data)
-					$("p.app-msg-box").html(msg.Pesan);
-				}
-				// button on click
-				$("button.app-send").click(function() {
-					var msg = $("input.message").val();
-					var json_msg = JSON.stringify({
-						Pesan: msg
-					});
-					ws.send(json_msg);
-				});
-			}
-		</script>
+		<script src="/js/app.js"></script>
 	</head>
 	<body>
 		<div id="app-container">
@@ -140,15 +34,17 @@
 
 [[ define "login_popup" ]]
 <br>
-<div id="app-login-popup" class="login-hidden">
-	<form class="app-login-form">
-		<label><input class="app-username" type="text" placeholder="Username"></label><br>
-		<label><input class="app-password" type="password" placeholder="Password"></label><br>
-		<label><input class="app-login-btn" type="submit" value="Sign in"></label>
-	</form>
-	<div class="app-login-alert"></div>
-	<br><br>
-	<button class="app-close-btn">Close</button>
+<div id="app-login-popup" class="app-modal">
+	<div class="app-modal-content">
+		<form class="app-login-form">
+			<label><input class="app-username" type="text" placeholder="Username"></label><br>
+			<label><input class="app-password" type="password" placeholder="Password"></label><br>
+			<label><input class="app-login-btn" type="submit" value="Sign in"></label>
+		</form>
+		<div class="app-login-alert"></div>
+		<br><br>
+		<button class="app-close-btn">Close</button>
+	</div>
 </div>
 [[ end ]]
 
