@@ -12,11 +12,6 @@
 				visibility: hidden;
 			}
 			/* end of login popup style */
-			/* Table button style */
-			td.app-action-table-data {
-				display: none;
-			}
-			/* end of table data header */
 		</style>
 		<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
 		<script src="/js/jquery-3.2.1.js"></script>
@@ -93,13 +88,8 @@
 			// appTableHandler for handling table items
 			function appTableHandler() {
 				// get login cooki if user has logged in
-				var login_cookie = document.cookie;
-				var tableDataPickupButton = $("td.app-action-table-data");
-
-				// if user has logged in, show table data below Action table header
-				if (login_cookie) {
-					tableDataPickupButton.css("display", "block");
-				}
+				//var login_cookie = document.cookie;
+				//var tableDataPickupButton = $("td.app-action-table-data");
 			}
 		</script>
 	</head>
@@ -130,7 +120,11 @@
 
 [[ define "navigation" ]]
 <div id="app-navbar">
-	<button class="app-sign-btn">[[.HtmlSignButton]]</button>
+	[[ if .HtmlUserSession ]]
+	<button class="app-sign-btn">Logout</button>
+	[[ else ]]
+	<button class="app-sign-btn">Login</button>
+	[[ end ]]
 </div>
 [[ end ]]
 
@@ -147,10 +141,12 @@
 		<th>Expired</th>
 		<th>Owner</th>
 		<th>Status</th>
-		[[.HtmlTableActionHeader]]
-		[[ range $value := .HtmlTableValueFromItems ]]
+		[[ if .HtmlUserSession ]]
+		<th>Action</th>
+		[[ end ]]
+		[[ range $index, $value := .HtmlTableValueFromItems ]]
 			<tr>
-				<td>[[$value.Item_id]]</td>
+				<td>[[tambah $index]]</td>
 				<td>[[$value.Item_name]]</td>
 				<td>[[$value.Item_model]]</td>
 				<td>[[$value.Item_quantity]]</td>
@@ -160,7 +156,9 @@
 				<td>[[$value.Item_expired]]</td>
 				<td>[[$value.Item_owner]]</td>
 				<td>[[$value.Item_status]]</td>
+				[[ if $.HtmlUserSession ]]
 				<td class="app-action-table-data"><a href="/pick_up/[[$value.Item_id]]">Pick Up</a></td>
+				[[ end ]]
 			</tr>
 		[[ end ]]
 	</table>
