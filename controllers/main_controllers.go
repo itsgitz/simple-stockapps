@@ -16,6 +16,7 @@ import (
 	// http session using kataras
 	"github.com/kataras/go-sessions"
 	"github.com/gorilla/securecookie"
+	"github.com/gorilla/websocket"
 )
 
 type MainController struct {
@@ -37,11 +38,11 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 	username_session := sess.GetString("user_name")	// get username session
 	fmt.Println("Session:", username_session)
 
+	// html template data
 	html_data := struct{
 		HtmlTitle             		string
-		HtmlSignButton        		string
-		HtmlTableActionHeader 		template.HTML
 		HtmlTableValueFromItems		[]models.Items_Columns
+		HtmlUserSession				bool
 	}{}
 
 	html_data.HtmlTitle = "Simple StockApps"
@@ -51,24 +52,60 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 	//log.Println(items[0].Item_name)
 	//log.Println(reflect.TypeOf(items))
 
+	// if username session is not null or user has already logged in into system
 	if len(username_session) != 0 {
-		html_data.HtmlSignButton = "Logout"
-		html_data.HtmlTableActionHeader = template.HTML(`<th>Action</th>`)
+		html_data.HtmlUserSession = true
 	} else {
-		html_data.HtmlSignButton = "Login"
+		html_data.HtmlUserSession = false
 	}
 
+	// create function map for template
+	// add `tambah` function for adding number (arithmetic)
+	funcMap := template.FuncMap{
+		"tambah": func(i int) int {
+			return i + 1
+		},
+	}
+
+	// template file
 	tpl_filename := "views/main.tpl"
-	tpl, err := template.New("").Delims("[[", "]]").ParseFiles(tpl_filename)
+	tpl, err := template.New("").Funcs(funcMap).Delims("[[", "]]").ParseFiles(tpl_filename)
 	if err != nil {
 		log.Println("[!] ERROR:", err)
 	}
-
+	// execute template with the given value from html_data struct 
 	err = tpl.ExecuteTemplate(w, "main_layout", html_data)
 	if err != nil {
 		log.Println("[!] ERROR:", err)
 	}
 }
+
+//////////////////////////////////////////////////////////////////////////////////
+// Web Socket
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:		1024,
+	WriteBufferSize:	1024,
+}
+func (this *MainController) AppWebSocket(w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Println("[!] ERROR: WebSocket", err)
+	}
+
+	// send and receive message using WebSocket (Server-side)
+	for {
+		message_type, p , err := conn.ReadMessage()
+		if err != nil {
+			log.Println("[!] ERROR: WebSocket", err)
+		}
+		if err := conn.WriteMessage(message_type, p); err != nil {
+			log.Println("[!] ERROR: WebSocket", err)
+		}
+	}
+}
+
+// end of Web Socket
+//////////////////////////////////////////////////////////////////////////////////
 
 // login process handler
 // custom login authentication
