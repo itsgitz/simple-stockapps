@@ -30,6 +30,60 @@ var (
 	})
 )
 
+//////////////////////////////////////////////////////////////////////////////////
+// Web Socket
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:		1024,
+	WriteBufferSize:	1024,
+}
+type Message struct {
+	Pesan	string 	`json:"Pesan"`
+}
+var clients = make(map[*websocket.Conn]bool)
+var broadcast = make(chan Message)
+
+func init() {
+	go handleMessage()
+}
+
+func (this *MainController) AppWebSocket(w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
+	defer conn.Close()
+	if err != nil {
+		log.Println(err)
+	}
+
+	clients[conn] = true
+	
+	for {
+		var msg Message
+		err := conn.ReadJSON(&msg)
+		if err != nil {
+			log.Println(err)
+			delete(clients, conn)
+			break
+		}
+
+		broadcast <- msg
+	}
+}
+
+func handleMessage() {
+	for {
+		msg := <-broadcast
+
+		for client := range clients {
+			err := client.WriteJSON(msg)
+			if err != nil {
+				log.Println(err)
+				delete(clients, client)
+			}
+		}
+	}
+}
+
+// end of Web Socket
+//////////////////////////////////////////////////////////////////////////////////
 
 // Main page controller
 func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) {
@@ -79,33 +133,6 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 		log.Println("[!] ERROR:", err)
 	}
 }
-
-//////////////////////////////////////////////////////////////////////////////////
-// Web Socket
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:		1024,
-	WriteBufferSize:	1024,
-}
-func (this *MainController) AppWebSocket(w http.ResponseWriter, r *http.Request) {
-	conn, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Println("[!] ERROR: WebSocket", err)
-	}
-
-	// send and receive message using WebSocket (Server-side)
-	for {
-		message_type, p , err := conn.ReadMessage()
-		if err != nil {
-			log.Println("[!] ERROR: WebSocket", err)
-		}
-		if err := conn.WriteMessage(message_type, p); err != nil {
-			log.Println("[!] ERROR: WebSocket", err)
-		}
-	}
-}
-
-// end of Web Socket
-//////////////////////////////////////////////////////////////////////////////////
 
 // login process handler
 // custom login authentication
