@@ -15,7 +15,6 @@ import (
 
 	// http session using kataras
 	"github.com/kataras/go-sessions"
-	"github.com/gorilla/securecookie"
 	"github.com/gorilla/websocket"
 )
 
@@ -42,11 +41,15 @@ type Message struct {
 var clients = make(map[*websocket.Conn]bool)
 var broadcast = make(chan Message)
 
+// handling message as concurrency
 func init() {
 	go handleMessage()
 }
 
+// AppWebSocket function handling incoming message and request using websocket connection
 func (this *MainController) AppWebSocket(w http.ResponseWriter, r *http.Request) {
+	// we want to using websocket communication, not http
+	// so upgrade connection to WebSocket
 	conn, err := upgrader.Upgrade(w, r, nil)
 	defer conn.Close()
 	if err != nil {
@@ -63,11 +66,11 @@ func (this *MainController) AppWebSocket(w http.ResponseWriter, r *http.Request)
 			delete(clients, conn)
 			break
 		}
-
+		// send message broadcast
 		broadcast <- msg
 	}
 }
-
+// handle incoming message
 func handleMessage() {
 	for {
 		msg := <-broadcast
@@ -171,21 +174,6 @@ func (this *MainController) AppLogin(w http.ResponseWriter, r *http.Request) {
 		json_login_auth.AuthRedirectUrl = "/"
 		outgoingJSON, errJSON = json.Marshal(json_login_auth)
 
-		// set secure cookie
-		hash_key := []byte("rahasia")
-		secure_cookie := securecookie.New(hash_key, nil)
-		encoded_value, err := secure_cookie.Encode("simple_stockapps_login", username)
-		if err != nil {
-			log.Println("[!] ERROR:", err)
-		}
-		// set cookie and expiration
-		cookie := &http.Cookie{
-			Name:		"simple_stockapps_login",
-			Value:		encoded_value,
-			Path:		"/",
-			Expires:	time.Now().Add(2 * time.Hour),
-		}
-		http.SetCookie(w, cookie)
 		sess.Set("user_name", username)
 	} else {
 		json_login_auth.AuthLoginMessage = false
