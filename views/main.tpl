@@ -11,6 +11,12 @@
 			div#app-login-popup {
 				visibility: hidden;
 			}
+			table.app-table {
+				border:1px solid #DDD;
+			}
+			tr:nth-child(even) {
+				background-color: #F2F2F2;
+			}
 			/* end of login popup style */
 		</style>
 		<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
@@ -87,21 +93,49 @@
 
 			// appTableHandler for handling table items
 			function appTableHandler() {
-				// get login cooki if user has logged in
-				//var login_cookie = document.cookie;
-				//var tableDataPickupButton = $("td.app-action-table-data");
+				var ws = new WebSocket('ws://192.168.43.56:8080/ws');
+				ws.onopen = function() {
+					console.log("Connection Open");
+				}
+				ws.onerror = function(error) {
+					console.error('WebSocket' + error);
+				}
+				ws.onmessage = function(e) {
+					var msg = JSON.parse(e.data)
+					$("p.app-msg-box").html(msg.Pesan);
+				}
+				// button on click
+				$("button.app-send").click(function() {
+					var msg = $("input.message").val();
+					var json_msg = JSON.stringify({
+						Pesan: msg
+					});
+					ws.send(json_msg);
+				});
 			}
 		</script>
 	</head>
 	<body>
 		<div id="app-container">
-			<h2>Main Page: [[.HtmlTitle]]</h2>
+			[[ template "logo". ]]
+			<h4>Main Page: [[.HtmlTitle]]</h4>
 			[[ template "navigation". ]]
 			[[ template "login_popup". ]]
 			[[ template "table_monitor". ]]
+			<!--[[ template "websocket_experiment". ]]-->
 		</div>
 	</body>
 </html>
+[[ end ]]
+
+[[ define "websocket_experiment" ]]
+<div id="app-experiment">
+	<form>
+		<p><input class="message" type="text" name=""></p>
+	</form>
+	<p class="app-msg-box"></p>
+	<button class="app-send">Send</button>
+</div>
 [[ end ]]
 
 [[ define "login_popup" ]]
@@ -128,9 +162,15 @@
 </div>
 [[ end ]]
 
+[[ define "logo" ]]
+<div id="app-logo">
+	<img src="/img/logo_lintasarta.png" style="width: 150px; height: auto;">
+</div>
+[[ end ]]
+
 [[ define "table_monitor" ]]
-<div id="app-table-monitor">
-	<table border="1" cellspacing="0" cellpadding="10" style="overflow-x: auto;">
+<div id="app-table-box">
+	<table class="app-table" border="0" cellspacing="0" cellpadding="10" style="overflow-x: auto;">
 		<th>No.</th>
 		<th>Name</th>
 		<th>Model/Brand</th>
@@ -144,6 +184,7 @@
 		[[ if .HtmlUserSession ]]
 		<th>Action</th>
 		[[ end ]]
+
 		[[ range $index, $value := .HtmlTableValueFromItems ]]
 			<tr>
 				<td>[[tambah $index]]</td>
@@ -157,7 +198,7 @@
 				<td>[[$value.Item_owner]]</td>
 				<td>[[$value.Item_status]]</td>
 				[[ if $.HtmlUserSession ]]
-				<td class="app-action-table-data"><a href="/pick_up/[[$value.Item_id]]">Pick Up</a></td>
+				<td><a href="/pick_up/[[$value.Item_id]]">Pick Up</a></td>
 				[[ end ]]
 			</tr>
 		[[ end ]]
