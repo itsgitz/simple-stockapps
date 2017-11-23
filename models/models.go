@@ -11,6 +11,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+//Items table in database
 type Items_Columns struct{
 	Item_id				string
 	Item_name			string
@@ -23,6 +24,16 @@ type Items_Columns struct{
 	Item_expired		string
 	Item_owner			string
 	Item_status			string
+}
+
+// user_login table in database
+type User_Login struct{
+	User_id				string
+	User_login_name 	string
+	User_name 			string	// fullname of user
+	User_privilege		string
+	User_email			string
+	Date_created		string
 }
 
 var db *sqlx.DB
@@ -73,4 +84,18 @@ func ModelsSelectFromItems() []Items_Columns {
 	}
 
 	return items_value
+}
+
+func ModelsSelectFromUserLogin(username string) []User_Login {
+	user_login_value := []User_Login{}
+	err = db.Select(&user_login_value, 
+		"SELECT user_id, user_login_name, user_name, user_privilege, user_email, date_created FROM user_login WHERE user_login_name=?", 
+		username,
+	)
+
+	if err != nil {
+		log.Println("[!] ERROR: ModelsSelectFromUserLogin:", err)
+	}
+
+	return user_login_value
 }
