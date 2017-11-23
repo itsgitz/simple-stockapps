@@ -21,6 +21,7 @@ import (
 type MainController struct {
 }
 
+// Kataras session config
 var (
 	session = sessions.New(sessions.Config{
 		Cookie: "simple_stockapps_session",
@@ -56,10 +57,12 @@ func (this *MainController) AppWebSocket(w http.ResponseWriter, r *http.Request)
 		log.Println(err)
 	}
 
+	// Register new connected client
 	clients[conn] = true
 	
 	for {
 		var msg Message
+		// Read JSON Messages
 		err := conn.ReadJSON(&msg)
 		if err != nil {
 			log.Println(err)
@@ -73,9 +76,12 @@ func (this *MainController) AppWebSocket(w http.ResponseWriter, r *http.Request)
 // handle incoming message
 func handleMessage() {
 	for {
+		// get message from broadcast channel
 		msg := <-broadcast
 
+		// send these messages to all connected clients
 		for client := range clients {
+			// Write JSON Message
 			err := client.WriteJSON(msg)
 			if err != nil {
 				log.Println(err)
@@ -93,27 +99,27 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 	sess := session.Start(w, r)
 	// get the sessions
 	username_session := sess.GetString("user_name")	// get username session
-	fmt.Println("Session:", username_session)
+	user_fullname_session := sess.GetString("user_fullname") // get username full session
+	//log.Println("Session:", username_session)
+	//log.Println("Session:", user_fullname_session)
 
 	// html template data
 	html_data := struct{
 		HtmlTitle             		string
 		HtmlTableValueFromItems		[]models.Items_Columns
-		HtmlUserSession				bool
+		HtmlUserIsLoggedIn			bool
+		HtmlUserFullName			string
 	}{}
 
 	html_data.HtmlTitle = "Simple StockApps"
 	html_data.HtmlTableValueFromItems = models.ModelsSelectFromItems()
 
-	//items := models.ModelsSelectFromItems()
-	//log.Println(items[0].Item_name)
-	//log.Println(reflect.TypeOf(items))
-
 	// if username session is not null or user has already logged in into system
 	if len(username_session) != 0 {
-		html_data.HtmlUserSession = true
+		html_data.HtmlUserIsLoggedIn = true
+		html_data.HtmlUserFullName = user_fullname_session
 	} else {
-		html_data.HtmlUserSession = false
+		html_data.HtmlUserIsLoggedIn = false
 	}
 
 	// create function map for template
@@ -163,6 +169,7 @@ func (this *MainController) AppLogin(w http.ResponseWriter, r *http.Request) {
 	var outgoingJSON []byte
 	var errJSON error
 	// for send JSON data as authentication message
+	// this is web service API
 	json_login_auth := struct {
 		AuthLoginMessage    	bool	`json:"Message"`
 		AuthRedirectUrl     	string	`json:"Redirect_Url"`
@@ -170,12 +177,21 @@ func (this *MainController) AppLogin(w http.ResponseWriter, r *http.Request) {
 
 	// authentication
 	if user_isExists {
+		// get value from user_login table where username=x?
+		data_user := models.ModelsSelectFromUserLogin(username)
+		//log.Println(data_user[0].User_name) // print user_name (isn't login name but fullname)
+		// fullname user
+		fullname := data_user[0].User_name
+
+		// create JSON data for web services
 		json_login_auth.AuthLoginMessage = true
 		json_login_auth.AuthRedirectUrl = "/"
 		outgoingJSON, errJSON = json.Marshal(json_login_auth)
 
 		sess.Set("user_name", username)
+		sess.Set("user_fullname", fullname)
 	} else {
+		// create json data for web service
 		json_login_auth.AuthLoginMessage = false
 		json_login_auth.AuthRedirectUrl = "none"
 		outgoingJSON, errJSON = json.Marshal(json_login_auth)
