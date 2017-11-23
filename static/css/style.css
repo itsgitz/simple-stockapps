@@ -32,3 +32,9 @@ table.app-table {
 tr:nth-child(even) {
 	background-color: #F2F2F2;
 }
+
+/* Navigation style */
+label.app-user-fullname {
+	float: right;
+}
+/* end of navigation style */
