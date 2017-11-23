@@ -22,16 +22,6 @@
 </html>
 [[ end ]]
 
-[[ define "websocket_experiment" ]]
-<div id="app-experiment">
-	<form>
-		<p><input class="message" type="text" name=""></p>
-	</form>
-	<p class="app-msg-box"></p>
-	<button class="app-send">Send</button>
-</div>
-[[ end ]]
-
 [[ define "login_popup" ]]
 <br>
 <div id="app-login-popup" class="app-modal">
@@ -50,8 +40,9 @@
 
 [[ define "navigation" ]]
 <div id="app-navbar">
-	[[ if .HtmlUserSession ]]
+	[[ if .HtmlUserIsLoggedIn ]]
 	<button class="app-sign-btn">Logout</button>
+	<label class="app-user-fullname">[[.HtmlUserFullName]]</label>
 	[[ else ]]
 	<button class="app-sign-btn">Login</button>
 	[[ end ]]
@@ -77,7 +68,7 @@
 		<th>Expired</th>
 		<th>Owner</th>
 		<th>Status</th>
-		[[ if .HtmlUserSession ]]
+		[[ if .HtmlUserIsLoggedIn ]]
 		<th>Action</th>
 		[[ end ]]
 
@@ -93,11 +84,21 @@
 				<td>[[$value.Item_expired]]</td>
 				<td>[[$value.Item_owner]]</td>
 				<td>[[$value.Item_status]]</td>
-				[[ if $.HtmlUserSession ]]
+				[[ if $.HtmlUserIsLoggedIn ]]
 				<td><a href="/pick_up/[[$value.Item_id]]">Pick Up</a></td>
 				[[ end ]]
 			</tr>
 		[[ end ]]
 	</table>
+</div>
+[[ end ]]
+
+[[ define "websocket_experiment" ]]
+<div id="app-experiment">
+	<form>
+		<p><input class="message" type="text" name=""></p>
+	</form>
+	<p class="app-msg-box"></p>
+	<button class="app-send">Send</button>
 </div>
 [[ end ]]
