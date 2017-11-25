@@ -15,8 +15,10 @@
 			<h4>Main Page: [[.HtmlTitle]]</h4>
 			[[ template "navigation". ]]
 			[[ template "login_popup". ]]
+
+			<!-- AJAX Wrapper -->
 			[[ template "table_monitor". ]]
-			<!--[[ template "websocket_experiment". ]]-->
+			<!-- End of Ajax Wrapper -->
 		</div>
 	</body>
 </html>
@@ -41,8 +43,14 @@
 [[ define "navigation" ]]
 <div id="app-navbar">
 	[[ if .HtmlUserIsLoggedIn ]]
-	<button class="app-sign-btn">Logout</button>
-	<label class="app-user-fullname">[[.HtmlUserFullName]]</label>
+	<a href="#" class="app-user-fullname">[[.HtmlUserFullName]]</a>
+	<a href="/items">Items Control</a>
+	<a href="/reports">Reports</a>
+	<a href="/users">User Administration</a>
+	<div class="app-dropdown-user">
+		<a href="/profile">Profile</a>
+		<a href="/logout">Logout</a>
+	</div>
 	[[ else ]]
 	<button class="app-sign-btn">Login</button>
 	[[ end ]]
@@ -90,15 +98,5 @@
 			</tr>
 		[[ end ]]
 	</table>
-</div>
-[[ end ]]
-
-[[ define "websocket_experiment" ]]
-<div id="app-experiment">
-	<form>
-		<p><input class="message" type="text" name=""></p>
-	</form>
-	<p class="app-msg-box"></p>
-	<button class="app-send">Send</button>
 </div>
 [[ end ]]
