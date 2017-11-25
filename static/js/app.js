@@ -4,6 +4,8 @@ $(document).ready(function() {
 	appLoginHandler();
 	// table handler function
 	appTableHandler();
+	// navigation handler function
+	appNavigationHandler();
 });
 
 // Login popup box function
@@ -14,7 +16,6 @@ function appLoginHandler() {
 	var loginPopupBox = $("div#app-login-popup");
 	// login button and close button
 	var signButton = $("button.app-sign-btn");
-	var signText = signButton.text();
 	var closeButton = $("button.app-close-btn");
 
 	// show login popup when sign button clicked
@@ -26,15 +27,6 @@ function appLoginHandler() {
 	closeButton.click(function() {
 		loginPopupBox.fadeOut();
 	});
-
-	// if user has logged in, then sign button changes to logout button
-	// ajax will send request to AppLogout Handler
-	if (signText == "Logout") {
-		signButton.click(function() {
-			loginPopupBox.css("display", "none");
-			window.location = "/logout";
-		});
-	}
 
 	// login form for prevent default
 	loginForm.submit(function(e) {
@@ -68,8 +60,8 @@ function appLoginHandler() {
 }
 
 // appTableHandler for handling table items
-function appTableHandler() {
-	var ws = new WebSocket('ws://192.168.43.56:8080/ws');
+function appTableHandler() {/*
+	var ws = new WebSocket('ws://127.0.0.1:8080/ws');
 	ws.onopen = function() {
 		console.log("Connection Open");
 	}
@@ -87,5 +79,12 @@ function appTableHandler() {
 			Pesan: msg
 		});
 			ws.send(json_msg);
+	});*/
+}
+
+function appNavigationHandler() {
+	// when user/profile button of user clicked, css class changed with show class
+	$("a.app-user-fullname").click(function() {
+		$("div.app-dropdown-user").toggleClass("app-show-dropdown-user");
 	});
 }
