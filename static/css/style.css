@@ -34,7 +34,26 @@ tr:nth-child(even) {
 }
 
 /* Navigation style */
-label.app-user-fullname {
-	float: right;
+div#app-navbar {
+	position: relative;
+	display: inline-block;
+}
+div#app-navbar a {
+	text-decoration: none;
+}
+div.app-dropdown-user {
+	display: none;
+	position: absolute;
+	background-color: #F9F9F9;
+	min-width: 160px;
+	z-index: 1;
+}
+div.app-dropdown-user a {
+	padding: 12px;
+	text-decoration: none;
+	display: block;
+}
+div.app-show-dropdown-user {
+	display: block;
 }
 /* end of navigation style */
