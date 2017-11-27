@@ -51,7 +51,7 @@
 	$(document).ready(function() {
 		$("a.app-dropdown-btn").click(function(e) {
 			e.preventDefault();
-			$("div.app-dropdown-content").slideToggle();
+			$("div.app-dropdown-content").slideToggle(300);
 		});
 	});
 </script>
@@ -87,23 +87,23 @@
 		float: right;
 		background-color: #3498db;
 		position: absolute;
-		top: 50px;
+		top: 55px;
 		right: 8px;
 		border-radius: 5px;
-		width: 150px;
 		text-align: center;
 	}
 	div#app-user-profile-nav a {
 		display: block;
-		padding: 10px;
+		padding: 7px;
 		text-decoration: none;
 		color: #FFFFFF;
-		font-size: 70%;
+		font-size: 80%;
 	}
 	div#app-user-profile-nav .app-dropdown-content {
 		display: none;
 		min-width: 160px;
 		z-index: 2;
+		border-radius: 5px;
 	}
 	div#app-user-profile-nav .app-dropdown-content {
 		background-color: #FFFFFF;
@@ -122,5 +122,27 @@
 		border-radius: 5px;
 	}
 	/* end of logo style */
+
+	/* Sign in Button style */
+	button.app-sign-btn {
+		position: absolute;
+		top: 35px;
+		right: 20px;
+		border: none;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		padding-left: 20px;
+		padding-right: 20px;
+		font-family: "arial", sans-serif;
+		color: #3498db;
+		background-color: #ecf0f1;
+		border: solid 1px #3498db;
+		border-radius: 5px;
+		font-weight: bold;
+	}
+	button.app-sign-btn:hover {
+		cursor: pointer;
+	}
+	/* end of sign in button style */
 </style>
 [[ end ]]

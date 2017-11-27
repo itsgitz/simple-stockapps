@@ -19,11 +19,11 @@ function appLoginHandler() {
 
 	// show login popup when sign button clicked
 	signButton.click(function() {
-		loginPopupBox.fadeIn(500);
+		loginPopupBox.fadeIn(300);
 	});
 	// close login popup
 	closeButton.click(function() {
-		loginPopupBox.fadeOut();
+		loginPopupBox.fadeOut(300);
 	});
 
 	// login form for prevent default
