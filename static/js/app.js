@@ -1,11 +1,10 @@
 // jQuery.3.2.1
 $(document).ready(function() {
+	////////// Main Page ///////////////////
 	// login popup box function
 	appLoginHandler();
 	// table handler function
 	appTableHandler();
-	// navigation handler function
-	appNavigationHandler();
 });
 
 // Login popup box function
@@ -20,8 +19,7 @@ function appLoginHandler() {
 
 	// show login popup when sign button clicked
 	signButton.click(function() {
-		//loginPopupBox.css("display", "block");
-		loginPopupBox.show(500);
+		loginPopupBox.fadeIn(500);
 	});
 	// close login popup
 	closeButton.click(function() {
@@ -80,11 +78,4 @@ function appTableHandler() {/*
 		});
 			ws.send(json_msg);
 	});*/
-}
-
-function appNavigationHandler() {
-	// when user/profile button of user clicked, css class changed with show class
-	$("a.app-user-fullname").click(function() {
-		$("div.app-dropdown-user").toggleClass("app-show-dropdown-user");
-	});
 }

@@ -23,7 +23,17 @@ func main() {
 	router.HandleFunc("/", main_ctrl.AppMainPage) // routing for "/" (root) handler
 	router.HandleFunc("/login", main_ctrl.AppLogin) // routing for "/login" handler
 	router.HandleFunc("/logout", main_ctrl.AppLogout) // routing for "/logout" handler
+
+	// Websocket router/controllers
 	router.HandleFunc("/ws", main_ctrl.AppWebSocket) // routing for web socket handler
+
+	// ajax handler routers
+	router.HandleFunc("/navbar", main_ctrl.AppNavbarMainPage)
+
+	// ajax sub-url routers
+	router.HandleFunc("/items", main_ctrl.AppItems)
+	router.HandleFunc("/reports", main_ctrl.AppReports)
+	router.HandleFunc("/users", main_ctrl.AppUsers)
 
 	// defining http middleware using negroni method
 	middleware := negroni.Classic()

@@ -1,0 +1,11 @@
+* { box-sizing: border-box; }
+body { font-family: "arial", sans-serif; margin: auto; }
+
+div#app-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	padding: 0px;
+}

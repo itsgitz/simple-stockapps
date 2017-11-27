@@ -28,6 +28,7 @@ var (
 		Expires: time.Hour * 2,
 		DisableSubdomainPersistence: false,
 	})
+	nav_tpl_filename = "views/navigation.tpl"
 )
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -132,12 +133,106 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 
 	// template file
 	tpl_filename := "views/main.tpl"
-	tpl, err := template.New("").Funcs(funcMap).Delims("[[", "]]").ParseFiles(tpl_filename)
+	tpl, err := template.New("").Funcs(funcMap).Delims("[[", "]]").ParseFiles(tpl_filename, nav_tpl_filename)
 	if err != nil {
 		log.Println("[!] ERROR:", err)
 	}
 	// execute template with the given value from html_data struct 
 	err = tpl.ExecuteTemplate(w, "main_layout", html_data)
+	if err != nil {
+		log.Println("[!] ERROR:", err)
+	}
+}
+
+// AppNavbarMainPage function used as AJAX handler and will parsing url by JavaScript
+// example:
+// /navbar?navigate_link=/items --> load "/items" as AJAX request
+// /navbar?navigate_link=/lol --> load "/lol" as AJAX request
+// ... and so on
+func (this *MainController) AppNavbarMainPage(w http.ResponseWriter, r *http.Request) {
+	// session start
+	sess := session.Start(w, r)
+
+	// 
+	html_data := struct{
+		HtmlUserFullName	string
+		HtmlUserIsLoggedIn	bool
+	}{}
+
+	// get session
+	username_session := sess.GetString("user_name")	// get username session
+	user_fullname_session := sess.GetString("user_fullname") // get username full session
+
+	// if username session is not null or user has already logged in into system
+	if len(username_session) != 0 {
+		html_data.HtmlUserIsLoggedIn = true
+		html_data.HtmlUserFullName = user_fullname_session
+	} else {
+		html_data.HtmlUserIsLoggedIn = false
+		http.Redirect(w, r, "/", 302)
+	}
+
+	// template
+	tpl_filename := "views/ajax/ajax_navbar.tpl"
+	tpl, err := template.New("").Delims("[[", "]]").ParseFiles(tpl_filename, nav_tpl_filename)
+	if err != nil {
+		log.Println("[!] ERROR:", err)
+	}
+
+	err = tpl.ExecuteTemplate(w, "ajax_navbar_layout", html_data)
+	if err != nil {
+		log.Println("[!] ERROR:", err)
+	}
+}
+
+// /items handler
+// load using ajax
+func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
+	// start session
+	sess := session.Start(w, r)
+	_ = sess
+
+	ajax_items_filename := "views/ajax/ajax_items.tpl"
+	tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
+	if err != nil {
+		log.Println("[!] ERROR:", err)
+	}
+
+	err = tpl.ExecuteTemplate(w, "items_layout", nil)
+	if err != nil {
+		log.Println("[!] ERROR:", err)
+	}
+}
+
+func (this *MainController) AppReports(w http.ResponseWriter, r *http.Request) {
+	// start session
+	sess := session.Start(w, r)
+	_ = sess
+
+	ajax_items_filename := "views/ajax/ajax_reports.tpl"
+	tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
+	if err != nil {
+		log.Println("[!] ERROR:", err)
+	}
+
+	err = tpl.ExecuteTemplate(w, "reports_layout", nil)
+	if err != nil {
+		log.Println("[!] ERROR:", err)
+	}
+}
+
+func (this *MainController) AppUsers(w http.ResponseWriter, r *http.Request) {
+		// start session
+	sess := session.Start(w, r)
+	_ = sess
+
+	ajax_items_filename := "views/ajax/ajax_users.tpl"
+	tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
+	if err != nil {
+		log.Println("[!] ERROR:", err)
+	}
+
+	err = tpl.ExecuteTemplate(w, "users_layout", nil)
 	if err != nil {
 		log.Println("[!] ERROR:", err)
 	}

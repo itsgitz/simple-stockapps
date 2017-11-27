@@ -4,7 +4,18 @@ body {
 	font-family: "arial", sans-serif;
 }
 
-/* Login popup style */
+/* Main/Root Container Style */
+div#app-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	padding: 0px;
+}
+/* End of Container Style */
+
+/* Login modal style */
 div.app-modal {
 	display: none;
 	position: fixed;
@@ -25,35 +36,13 @@ div.app-modal-content {
 	border: 1px solid #888;
 	width: 80%;
 }
-/* end of login popup style */
+/* end of login modal style */
+div#app-table-box {
+	overflow-x: auto;
+}
 table.app-table {
 	border:1px solid #DDD;
 }
 tr:nth-child(even) {
 	background-color: #F2F2F2;
 }
-
-/* Navigation style */
-div#app-navbar {
-	position: relative;
-	display: inline-block;
-}
-div#app-navbar a {
-	text-decoration: none;
-}
-div.app-dropdown-user {
-	display: none;
-	position: absolute;
-	background-color: #F9F9F9;
-	min-width: 160px;
-	z-index: 1;
-}
-div.app-dropdown-user a {
-	padding: 12px;
-	text-decoration: none;
-	display: block;
-}
-div.app-show-dropdown-user {
-	display: block;
-}
-/* end of navigation style */

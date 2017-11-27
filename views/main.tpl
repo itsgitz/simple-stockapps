@@ -11,14 +11,9 @@
 	</head>
 	<body>
 		<div id="app-container">
-			[[ template "logo". ]]
-			<h4>Main Page: [[.HtmlTitle]]</h4>
 			[[ template "navigation". ]]
 			[[ template "login_popup". ]]
-
-			<!-- AJAX Wrapper -->
 			[[ template "table_monitor". ]]
-			<!-- End of Ajax Wrapper -->
 		</div>
 	</body>
 </html>
@@ -40,32 +35,9 @@
 </div>
 [[ end ]]
 
-[[ define "navigation" ]]
-<div id="app-navbar">
-	[[ if .HtmlUserIsLoggedIn ]]
-	<a href="#" class="app-user-fullname">[[.HtmlUserFullName]]</a>
-	<a href="/items">Items Control</a>
-	<a href="/reports">Reports</a>
-	<a href="/users">User Administration</a>
-	<div class="app-dropdown-user">
-		<a href="/profile">Profile</a>
-		<a href="/logout">Logout</a>
-	</div>
-	[[ else ]]
-	<button class="app-sign-btn">Login</button>
-	[[ end ]]
-</div>
-[[ end ]]
-
-[[ define "logo" ]]
-<div id="app-logo">
-	<img src="/img/logo_lintasarta.png" style="width: 150px; height: auto;">
-</div>
-[[ end ]]
-
 [[ define "table_monitor" ]]
 <div id="app-table-box">
-	<table class="app-table" border="0" cellspacing="0" cellpadding="10" style="overflow-x: auto;">
+	<table class="app-table" border="0" cellspacing="0" cellpadding="10">
 		<th>No.</th>
 		<th>Name</th>
 		<th>Model/Brand</th>
@@ -77,7 +49,7 @@
 		<th>Owner</th>
 		<th>Status</th>
 		[[ if .HtmlUserIsLoggedIn ]]
-		<th>Action</th>
+		<th colspan="2">Action</th>
 		[[ end ]]
 
 		[[ range $index, $value := .HtmlTableValueFromItems ]]
@@ -94,6 +66,7 @@
 				<td>[[$value.Item_status]]</td>
 				[[ if $.HtmlUserIsLoggedIn ]]
 				<td><a href="/pick_up/[[$value.Item_id]]">Pick Up</a></td>
+				<td><a href="/edit/[[$value.Item_id]]">Edit</a></td>
 				[[ end ]]
 			</tr>
 		[[ end ]]
