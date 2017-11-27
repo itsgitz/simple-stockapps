@@ -51,7 +51,7 @@
 	$(document).ready(function() {
 		$("a.app-dropdown-btn").click(function(e) {
 			e.preventDefault();
-			$("div.app-dropdown-content").toggleClass("show");
+			$("div.app-dropdown-content").slideToggle();
 		});
 	});
 </script>
@@ -111,9 +111,6 @@
 	div#app-user-profile-nav .app-dropdown-content a {
 		text-align: left;
 		color: #000000;
-	}
-	.show {
-		display: block;
 	}
 	/* end of profile button */
 
