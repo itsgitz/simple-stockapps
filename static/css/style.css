@@ -32,11 +32,61 @@ div.app-modal {
 div.app-modal-content {
 	background-color: #FEFEFE;
 	margin: 5% auto;
-	padding: 20px;
+	padding: 30px;
 	border: 1px solid #888;
-	width: 80%;
+	width: 70%;
+	border-radius: 10px;
+	text-align: center;
+}
+h2.app-login-header {
+	color: #3498db;
+	padding: 5px;
+	border-radius: 5px;
+	font-weight: 500;
+}
+input.input-text {
+	border: none;
+	border-bottom: solid 1px #2ecc71;
+	outline: none;
+	padding: 10px;
+	width: 50%;
+	font-family: "arial", sans-serif;
+}
+input.app-login-btn {
+	border: none;
+	padding: 7px;
+	width: 50%;
+	background-color: #e74c3c;
+	color: #F2F2F2;
+	font-weight: 700;
+	border-radius: 5px;
+}
+
+button.app-close-btn {
+	border: none;
+	padding: 7px;
+	width: 50%;
+	background-color: #34495e;
+	color: #F2F2F2;
+	font-weight: 700;
+	border-radius: 5px;
+}
+
+div.app-login-alert {
+	font-size: 80%;
+	color: red;
+}
+
+button.app-close-btn:hover {
+	cursor: pointer;
+}
+
+input.app-login-btn:hover {
+	cursor: pointer;
 }
 /* end of login modal style */
+
+/* Table style */
 div#app-table-box {
 	overflow-x: auto;
 }

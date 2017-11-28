@@ -68,6 +68,10 @@ function appAjaxRequestPage(url) {
 		asycn: true,
 		success: function(response) {
 			$("div#app-ajax-wrapper").html(response);
+			$("div#app-loading-bar").css("display", "none");
+		},
+		beforeSend: function(response) {
+			$("div#app-loading-bar").css("display", "block");
 		}
 	});
 }

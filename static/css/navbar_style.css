@@ -1,6 +1,7 @@
 * { box-sizing: border-box; }
 body { font-family: "arial", sans-serif; margin: auto; }
 
+/* Main container */
 div#app-container {
 	position: absolute;
 	top: 0;
@@ -8,4 +9,18 @@ div#app-container {
 	right: 0;
 	margin: auto;
 	padding: 0px;
+}
+
+/* Ajax page container */
+div#app-ajax-wrapper {
+	padding: 10px;
+}
+div#app-loading-bar {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	background-color: #16a085;
+	padding: 2px;
 }

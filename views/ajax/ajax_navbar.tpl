@@ -11,6 +11,7 @@
 	</head>
 	<body>
 		<div id="app-container">
+			<div id="app-loading-bar"></div>
 			[[ template "navigation". ]]
 			<div id="app-ajax-wrapper"></div>
 		</div>

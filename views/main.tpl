@@ -23,13 +23,14 @@
 <br>
 <div id="app-login-popup" class="app-modal">
 	<div class="app-modal-content">
+		<h2 class="app-login-header">Sign in to StockApps</h2>
+		<div class="app-login-alert"></div>
 		<form class="app-login-form">
-			<label><input class="app-username" type="text" placeholder="Username"></label><br>
-			<label><input class="app-password" type="password" placeholder="Password"></label><br>
+			<label><input class="app-username input-text" type="text" placeholder="Username"></label><br>
+			<label><input class="app-password input-text" type="password" placeholder="Password"></label><br><br>
 			<label><input class="app-login-btn" type="submit" value="Sign in"></label>
 		</form>
-		<div class="app-login-alert"></div>
-		<br><br>
+		<br>
 		<button class="app-close-btn">Close</button>
 	</div>
 </div>

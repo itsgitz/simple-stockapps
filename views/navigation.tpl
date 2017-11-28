@@ -118,8 +118,11 @@
 	div#app-logo {
 		margin: 0;
 		padding: 10px;
+		padding-bottom: 20px;
+		padding-left: 20px;
 		background-color: #ecf0f1;
 		border-radius: 5px;
+		box-shadow: 1px 2px 2px #888888;
 	}
 	/* end of logo style */
 
