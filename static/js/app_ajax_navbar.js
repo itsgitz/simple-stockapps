@@ -24,6 +24,8 @@ function appAjaxController() {
 				break;
 		}
 		appAjaxRequestPage(getUrlFromHash);
+	} else {
+		window.location = "/";
 	}
 
 	// prevent default on "a" element link onclick

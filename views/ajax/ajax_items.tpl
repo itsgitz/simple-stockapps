@@ -5,7 +5,7 @@
 
 <div id="app-ajax-items">
 	<h3>Items Management</h3>
-	<span><i style="font-size: 90%;">You could add or remove item(s) in the item table using navigation option link below. Make sure that you have an Administrator Privilege to be could to do this.</i></span>
+	<span><i style="font-size: 90%;">You could add, remove (Administrator privilege), or request items (Operator privilege).</i></span>
 
 	[[ template "side_navigation". ]]
 	<div id="app-form-wrapper">
@@ -33,6 +33,7 @@
 				addBox.css("display", "block");
 				removeBox.css("display", "none");
 				$("title").text("Adding Item - Simple StockApps");
+				$("input[placeholder='Item Name']").focus();
 			break;
 			case "remove":
 				removeBox.css("display", "block");
@@ -44,7 +45,7 @@
 		// prevent default from clicked links		
 		sideNavBar.click(function(e) {
 			e.preventDefault();
-		})
+		});
 
 		// when addbutton click
 		addButton.click(function() {
@@ -53,6 +54,7 @@
 			addBox.css("display", "block");
 			removeBox.css("display", "none");
 			$("title").text("Adding Item - Simple StockApps");
+			$("input[placeholder='Item Name']").focus();
 		});
 		// when removebutton click
 		removeButton.click(function() {
@@ -60,44 +62,36 @@
 			history.pushState(stateObj, "page", "/navbar?#navigate_link=/items#remove");
 			removeBox.css("display", "block");
 			addBox.css("display", "none");
-			$("title").text("Removing Item - Simple StockApps");
+			$("title").text("Removingi Item - Simple StockApps");
 		});
 	});
 </script>
-[[ end ]]
-
-[[ define "side_navigation" ]]
-<br><br>
-<div id="app-side-nav">
-	<ul>
-		<li><a class="item-add" href="javascript:void(0)">Add Item</a></li>
-		<li><a class="item-remove" href="javascript:void(0)">Remove Item</a></li>
-	</ul>
-</div>
 [[ end ]]
 
 [[ define "style" ]]
 <style>
 	/* Vertical navigation style */
 	div#app-side-nav {
+		padding-top: 25px;
 		position: absolute;
 		left: 10px;
+		height: 100%;
+		box-shadow: 1px 5px 10px #888888;
+		background-color: #D8D8D8;
 	}
 	div#app-side-nav ul {
 		list-style-type: none;
 		margin: 0;
 		padding: 0;
 		width: 200px;
-		background-color: #FFFFFF;
-	}
-	div#app-side-nav ul li {
-		border-bottom: solid 1px #95a5a6;
+		background-color: #D8D8D8;
 	}
 	div#app-side-nav ul a {
 		text-decoration: none;
 		display: block;
-		color: #000000;
-		padding: 10px;
+		color: #2c3e50;
+		padding: 11px;
+		font-weight: 500;
 	}
 	/* end of vertical navigation style */
 
@@ -114,27 +108,82 @@
 		display: none;
 	}
 	/* end of wrapepr style */
+
+	/* Add Items Content Style */
+	div#app-add-content input[type="text"] {
+		outline: none;
+		border: none;
+		border-bottom: solid 1px #1abc9c;
+		padding: 10px;
+		width: 300px;
+	}
+	div#app-add-content input[type="date"] {
+		padding: 10px;
+		border: none;
+		width: 300px;
+		outline: none;
+		border-bottom: solid 1px #1abc9c;
+	}
+	div#app-add-content input[type="submit"] {
+		border: none;
+		padding: 5px;
+		width: 300px;
+		background-color: #c0392b;
+		color: #F2F2F2;
+		border-radius: 5px;
+	}
+	div#app-add-content input[type="submit"]:hover {
+		cursor: pointer;
+		background-color: #27ae60;
+	}
+	.row:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+	/* end of Add Items Content style */
 </style>
 [[ end ]]
 
 [[ define "add_box" ]]
 <!-- Add item content -->
 <div id="app-add-content">
-	<label>Item Name</label>
-	<input type="text"><br>
-	<label>Model/Brand</label>
-	<input type="text"><br>
-	<label>Quantity</label>
-	<input type="text"><br>
-	<label>Item Unit</label>
-	<input type="text"><br>
-	<label>Date of Entry</label>
-	<input type="text"><br>
-	<label>Expired</label>
-	<input type="text"><br>
-	<label>Owner<label>
-	<input type="text"><br>
-	<input type="submit" value="Submit Data">
+	<form class="app-form-add">
+		<div class=".row">
+			<input type="text" placeholder="Item Name">
+		</div>
+		<div class=".row">
+			<input type="text" placeholder="Model/Brand">
+		</div>
+		<div class=".row">
+			<input type="text" placeholder="Quantity">
+		</div>
+		<div class=".row">
+			<input type="text" placeholder="Item Unit">
+		</div><br>
+		<div class=".row">
+			<div class=".row">
+				<label style="font-size: 90%; padding: 10px; color: #2980b9;">Date of Entry</label>
+			</div>
+			<div class=".row">
+				<input type="date" >
+			</div>
+		</div><br>
+		<div class=".row">
+			<div class=".row">
+				<label style="font-size: 90%; padding: 10px; color: #2980b9;">Expired Date</label>
+			</div>
+			<div class=".row">
+				<input type="date">
+			</div>
+		</div>
+		<div class=".row">
+			<input type="text" placeholder="Owner">
+		</div><br>
+		<div class=".row">
+			<input type="submit" value="Submit Data">
+		</div>
+	</form>
 </div>
 <!-- -->
 [[ end ]]
@@ -145,4 +194,15 @@
 	<h1>Remove!</h1>
 </div>
 <!-- -->
+[[ end ]]
+
+[[ define "side_navigation" ]]
+<br><br>
+<div id="app-side-nav">
+	<ul>
+		<li><a class="item-add" href="javascript:void(0)">Add</a></li>
+		<li><a class="item-remove" href="javascript:void(0)">Remove</a></li>
+		<li><a class="request-item" href="javascript:void(0)">Request</a></li>
+	</ul>
+</div>
 [[ end ]]

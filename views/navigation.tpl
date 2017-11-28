@@ -14,7 +14,7 @@
 			<a class="ajax-navbar ajax-items" href="/navbar?#navigate_link=/items">Items</a>
 		</li>
 		<li>
-			<a class="ajax-navbar ajax-reports" href="/navbar?#navigate_link=/reports">Reports</a>
+			<a class="ajax-navbar ajax-reports" href="/navbar?#navigate_link=/reports">History</a>
 		</li>
 		<li>
 			<a class="ajax-navbar ajax-users" href="/navbar?#navigate_link=/users">Users</a>
@@ -29,7 +29,8 @@
 
 [[ define "logo" ]]
 <div id="app-logo">
-	<img src="/img/logo_lintasarta.png" style="width: 150px; height: auto;">
+	<img src="/img/logo_lintasarta.png" style="width: 150px; height: auto;"><br><br>
+	<label style="font-size: 80%; font-weight: 600; color: #2980b9;">Data Center Stock of Goods Management System</label>
 	[[ if .HtmlUserIsLoggedIn ]]
 	[[ template "user_profile". ]]
 	[[ end ]]
@@ -79,6 +80,7 @@
 		background-color: #e74c3c;
 		color: #FFFFFF;
 		text-decoration: none;
+		font-weight: 600;
 	}
 	/* end of navigation style */
 
