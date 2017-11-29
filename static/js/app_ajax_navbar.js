@@ -92,6 +92,10 @@ function appAjaxRequestPage(url) {
 		url: url,
 		asycn: true,
 		success: function(response) {
+			if (response.Message) {
+				window.location = "/";
+			}
+
 			$("div#app-ajax-wrapper").html(response);
 			$("div#app-loading-bar").css("display", "none");
 		},
