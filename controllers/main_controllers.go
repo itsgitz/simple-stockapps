@@ -191,23 +191,39 @@ func (this *MainController) AppNavbarMainPage(w http.ResponseWriter, r *http.Req
 func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 	// start session
 	sess := session.Start(w, r)
-	_ = sess
+
+	// get session
+	username_session := sess.GetString("user_name")	// get username session
+	user_fullname_session := sess.GetString("user_fullname") // get username full session
 
 	// get request method
 	//log.Println(r.Method)	// print GET, POST, etc.
 
 	// if http request method is "GET", then display the page
 	if r.Method == "GET" {
-		// template file
-		ajax_items_filename := "views/ajax/ajax_items.tpl"
-		tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
-		if err != nil {
-			log.Println("[!] ERROR:", err)
-		}
-		// execute template
-		err = tpl.ExecuteTemplate(w, "items_layout", nil)
-		if err != nil {
-			log.Println("[!] ERROR:", err)
+		if len(username_session) <= 0 && len(user_fullname_session) <= 0 {
+			w.Header().Set("Content-Type", "application/json")
+			redirectMessage := struct{
+				Message 	bool 	`json:"Message"`
+			}{}
+
+			redirectMessage.Message = true
+			outgoingJSON, err := json.Marshal(redirectMessage)
+			if err != nil { log.Println("[!] ERROR:", err) }
+			fmt.Fprint(w, string(outgoingJSON))
+		} else {
+
+			// template file
+			ajax_items_filename := "views/ajax/ajax_items.tpl"
+			tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
+			if err != nil {
+				log.Println("[!] ERROR:", err)
+			}
+			// execute template
+			err = tpl.ExecuteTemplate(w, "items_layout", nil)
+			if err != nil {
+				log.Println("[!] ERROR:", err)
+			}
 		}
 	// else ("POST"), porcess reqeust as ajax request and parsing data
 	} else if r.Method == "POST" {
@@ -216,37 +232,72 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/// Reportr handler
 func (this *MainController) AppReports(w http.ResponseWriter, r *http.Request) {
 	// start session
 	sess := session.Start(w, r)
-	_ = sess
+	
+	// get session
+	username_session := sess.GetString("user_name")	// get username session
+	user_fullname_session := sess.GetString("user_fullname") // get username full session
 
-	ajax_items_filename := "views/ajax/ajax_reports.tpl"
-	tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
-	if err != nil {
-		log.Println("[!] ERROR:", err)
-	}
+	if r.Method == "GET" {
+		if len(username_session) <= 0 && len(user_fullname_session) <= 0 {
+			w.Header().Set("Content-Type", "application/json")
+			redirectMessage := struct{
+				Message 	bool 	`json:"Message"`
+			}{}
 
-	err = tpl.ExecuteTemplate(w, "reports_layout", nil)
-	if err != nil {
-		log.Println("[!] ERROR:", err)
+			redirectMessage.Message = true
+			outgoingJSON, err := json.Marshal(redirectMessage)
+			if err != nil { log.Println("[!] ERROR:", err) }
+			fmt.Fprint(w, string(outgoingJSON))
+		} else {
+			ajax_items_filename := "views/ajax/ajax_reports.tpl"
+			tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
+			if err != nil {
+				log.Println("[!] ERROR:", err)
+			}
+
+			err = tpl.ExecuteTemplate(w, "reports_layout", nil)
+			if err != nil {
+				log.Println("[!] ERROR:", err)
+			}
+		}
 	}
 }
 
 func (this *MainController) AppUsers(w http.ResponseWriter, r *http.Request) {
-		// start session
+	// start session
 	sess := session.Start(w, r)
-	_ = sess
 
-	ajax_items_filename := "views/ajax/ajax_users.tpl"
-	tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
-	if err != nil {
-		log.Println("[!] ERROR:", err)
-	}
+	// get session
+	username_session := sess.GetString("user_name")	// get username session
+	user_fullname_session := sess.GetString("user_fullname") // get username full session
 
-	err = tpl.ExecuteTemplate(w, "users_layout", nil)
-	if err != nil {
-		log.Println("[!] ERROR:", err)
+	if r.Method == "GET" {
+		if len(username_session) <= 0 && len(user_fullname_session) <= 0 {
+			w.Header().Set("Content-Type", "application/json")
+			redirectMessage := struct{
+				Message 	bool 	`json:"Message"`
+			}{}
+
+			redirectMessage.Message = true
+			outgoingJSON, err := json.Marshal(redirectMessage)
+			if err != nil { log.Println("[!] ERROR:", err) }
+			fmt.Fprint(w, string(outgoingJSON))
+		} else {
+			ajax_items_filename := "views/ajax/ajax_users.tpl"
+			tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
+			if err != nil {
+				log.Println("[!] ERROR:", err)
+			}
+
+			err = tpl.ExecuteTemplate(w, "users_layout", nil)
+			if err != nil {
+				log.Println("[!] ERROR:", err)
+			}
+		}
 	}
 }
 
