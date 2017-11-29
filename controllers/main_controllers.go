@@ -187,20 +187,32 @@ func (this *MainController) AppNavbarMainPage(w http.ResponseWriter, r *http.Req
 
 // /items handler
 // load using ajax
+// Handling Add, remove, or request Controllers
 func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 	// start session
 	sess := session.Start(w, r)
 	_ = sess
 
-	ajax_items_filename := "views/ajax/ajax_items.tpl"
-	tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
-	if err != nil {
-		log.Println("[!] ERROR:", err)
-	}
+	// get request method
+	//log.Println(r.Method)	// print GET, POST, etc.
 
-	err = tpl.ExecuteTemplate(w, "items_layout", nil)
-	if err != nil {
-		log.Println("[!] ERROR:", err)
+	// if http request method is "GET", then display the page
+	if r.Method == "GET" {
+		// template file
+		ajax_items_filename := "views/ajax/ajax_items.tpl"
+		tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
+		if err != nil {
+			log.Println("[!] ERROR:", err)
+		}
+		// execute template
+		err = tpl.ExecuteTemplate(w, "items_layout", nil)
+		if err != nil {
+			log.Println("[!] ERROR:", err)
+		}
+	// else ("POST"), porcess reqeust as ajax request and parsing data
+	} else if r.Method == "POST" {
+		r.ParseForm()
+		log.Println(r.Form)
 	}
 }
 

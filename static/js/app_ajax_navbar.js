@@ -9,20 +9,43 @@ function appAjaxController() {
 	var hashUrl = window.location.hash;
 	var getUrlFromHash = hashUrl.substring(15);
 	
+	window.onpopstate = function(event) {
+		// get state
+		console.log(JSON.stringify(event.state));
+		var eventState = JSON.stringify(event.state);
+
+		if (eventState == "null") {
+			window.location = "/";
+		} else {
+			var url = "/" + event.state.page;
+			appAjaxRequestPage(url);
+			switch(event.state.page) {
+				case "items": $("title").text("Items Management - Simple StockApps"); break;
+				case "reports": $("title").text("History - Simple StockApps"); break;
+				case "users": $("title").text("Users Management - Simple StockApps"); break
+			}
+		}
+	}
+
 	// if current url/access url contains hash url,
 	// then request page using AJAX and display it on div#app-container
-	if (hashUrl) {
+	if (hashUrl) {	// hashUrl = "/foo, /bar"
 		switch(getUrlFromHash) {
+			// change title
 			case "/items":
 				$("title").text("Items Management - Simple StockApps");
 				break;
 			case "/reports":
-				$("title").text("Reports Management - Simple StockApps");
+				$("title").text("History - Simple StockApps");
 				break;
 			case "/users":
 				$("title").text("Users Management - Simple StockApps");
 				break;
 		}
+		var getStateFromUrl = getUrlFromHash.substring(1);
+		var stateObj = { page: getStateFromUrl };
+		var urlState = "/navbar?#navigate_link=" + getUrlFromHash;
+		history.pushState(stateObj, getStateFromUrl, urlState);
 		appAjaxRequestPage(getUrlFromHash);
 	} else {
 		window.location = "/";
@@ -35,8 +58,8 @@ function appAjaxController() {
 
 	$("a.ajax-items").click(function() {
 		// create history pushstate
-		var stateObj = { foo: "bar" };
-		history.pushState(stateObj, "page", "/navbar?#navigate_link=/items");
+		var stateObj = { page: "items" };
+		history.pushState(stateObj, "items", "/navbar?#navigate_link=/items");
 
 		// Change HTML Title when link clicked
 		$("title").text("Items Management - Simple StockApps");
@@ -46,17 +69,17 @@ function appAjaxController() {
 	});
 
 	$("a.ajax-reports").click(function() {
-		var stateObj = { foo: "bar" };
-		history.pushState(stateObj, "page", "/navbar?#navigate_link=/reports");
-		$("title").text("Reports Management - Simple StockApps");
+		var stateObj = { page: "reports" };
+		history.pushState(stateObj, "reports", "/navbar?#navigate_link=/reports");
+		$("title").text("History - Simple StockApps");
 		
 		// load again with ajax
 		appAjaxRequestPage("/reports");
 	});
 
 	$("a.ajax-users").click(function() {
-		var stateObj = { foo: "bar" };
-		history.pushState(stateObj, "page", "/navbar?#navigate_link=/users");
+		var stateObj = { page: "users" };
+		history.pushState(stateObj, "users", "/navbar?#navigate_link=/users");
 		$("title").text("Users Management - Simple StockApps");
 
 		// load again with ajax

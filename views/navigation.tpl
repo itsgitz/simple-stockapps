@@ -39,7 +39,9 @@
 
 [[ define "user_profile" ]]
 <div id="app-user-profile-nav">
-	<a class="app-dropdown-btn" href="">[[.HtmlUserFullName]]</a>
+	<a class="app-dropdown-btn" href="">
+		&nbsp;[[.HtmlUserFullName]]&nbsp;
+	</a>
 	<div class="app-dropdown-content">
 		<a href="/settings">Settings</a>
 		<a href="/logout">Logout</a>
