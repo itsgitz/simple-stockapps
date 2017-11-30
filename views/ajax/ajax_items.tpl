@@ -26,7 +26,7 @@ $(document).ready(function() {
 	var removeBox = $("div#app-remove-content");
 	var hashUrl = window.location.hash;
 	var getOptionFromHash = hashUrl.substring(22);
-	
+
 	// onload if current url has a hash url
 	switch(getOptionFromHash) {
 		case "add":
@@ -73,6 +73,29 @@ $(document).ready(function() {
 function appFormAddItemsHandler() {
 	var addItemForm = $("form.app-form-add");
 
+	// Date and time variable
+	// using current date and time on "date-of-entry" value when loaded
+	var waktuBaru = new Date();	// new date object
+	var tahun = waktuBaru.getFullYear(),	// full year (ex: 2017)
+		bulan = waktuBaru.getMonth(),		// month (ex: 10)
+		tanggal = waktuBaru.getDate(),		// date (ex: 01 or 12)
+		currentTanggal = tahun + "-" + bulan + "-" + tanggal; // 
+	var jam = waktuBaru.getHours(),
+		menit = waktuBaru.getMinutes();
+
+	if (jam < 10) {
+		jam = "0" + jam;
+	}
+
+	if (menit < 10) {
+		menit = "0" + menit;
+	}
+
+	var currentJam = jam + ":" + menit;
+
+	// set default current date
+	$("input.date-of-entry").val(currentTanggal + " " + currentJam);
+
 	// onsubmit
 	addItemForm.submit(function(e) {
 		e.preventDefault();
@@ -81,10 +104,21 @@ function appFormAddItemsHandler() {
 		var itemQuantity = $("input.item-quantity").val();
 		var itemUnit = $("input.item-unit").val();
 		var dateOfEntry = $("input.date-of-entry").val();
-		var itemExpired = $("input.item-expired").val();
+		var timePeriod = $("input.time-period").val();
+		var typeofTimePeriod = $("select.select-time-period");
 		var itemOwner = $("input.item-owner").val();
 
-		if (itemName && itemModel && itemQuantity && itemUnit && dateOfEntry && itemExpired && itemOwner) {
+		// regular expression --> YYYY-MM-DD hh:mm
+		var regularExpressionForDatetime = /^(\d{4})/;
+
+		// itemExpired is optional value, user could blank this out
+		// if value is null or empty, then system will change it with "-" string
+		if (!timePeriod) {
+			timePeriod = "";
+			typeofTimePeriod = "";
+		}
+
+		if (itemName && itemModel && itemQuantity && itemUnit && dateOfEntry && itemOwner) {
 			$.ajax({
 				url: "/items",
 				method: "POST",
@@ -95,17 +129,23 @@ function appFormAddItemsHandler() {
 					item_quantity: itemQuantity,
 					item_unit: itemUnit,
 					date_of_entry: dateOfEntry,
-					item_expired: itemExpired,
+					time_period: timePeriod,
+					typeof_time_period: typeofTimePeriod,
 					item_owner: itemOwner,
 					form_request: "ADD"
 				},
 				success: function() {
 					alert("Successfuly inserting data!");
+					window.location = "/";
 				}
 			});
 			addItemForm[0].reset();
 		}
 	});
+}
+
+function daysInMonth(month, year) {
+  	return new Date(year, month, 0).getDate();
 }
 </script>
 [[ end ]]
@@ -180,6 +220,20 @@ function appFormAddItemsHandler() {
 		border-bottom: solid 1px #1abc9c;
 		outline: none;
 	}
+	div#app-add-content input[type="number"].time-period {
+		width: 150px;
+		background-color: none;
+	}
+	select.select-time-period {
+		border: none;
+		outline: none;
+		padding: 9px;
+		border-bottom: solid 1px #1abc9c;
+		width: 148px;
+	}
+	select.select-time-period:hover {
+		cursor: pointer;
+	}
 	.row:after {
 		content: "";
 		display: table;
@@ -225,16 +279,16 @@ function appFormAddItemsHandler() {
 				<label style="font-size: 90%; padding: 10px; color: #2980b9;">Date of Entry</label>
 			</div>
 			<div class=".row">
-				<input class="date-of-entry" type="text" placeholder="YYYY-MM-DD hh:mm" required=""> <label class="app-input-note"><i>*Example: 2017-08-10 10:00</i></label>
+				<input class="date-of-entry" type="text" placeholder="YYYY-MM-DD hh:mm" required=""> <label class="app-input-note"><i>*Example: 2017-08-10 16:00 (Use 24 Hours Format)</i></label>
 			</div>
 		</div><br>
 		<div class=".row">
-			<div class=".row">
-				<label style="font-size: 90%; padding: 10px; color: #2980b9;">Expired Date</label>
-			</div>
-			<div class=".row">
-				<input class="item-expired" type="text" placeholder="YYYY-MM-DD hh:mm" required="">
-			</div>
+			<input class="time-period" type="number" placeholder="Time Period">
+			<select class="select-time-period">
+				<option value="day" selected>Day(s)</option>
+				<option value="month">Month(s)</option>
+				<option value="week">Week(s)</option>
+			</select> <label class="app-input-note"><i style="color: blue;">Optional or you could blank this out</i></label>
 		</div><br>
 		<div class=".row">
 			<input class="item-owner" type="text" placeholder="Owner" required="">

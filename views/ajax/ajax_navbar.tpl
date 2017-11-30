@@ -6,6 +6,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="/css/navbar_style.css">
+		<link rel="icon" href="/img/lintasarta_icon.jpg" type="image/gif">
 		<script src="/js/jquery-3.2.1.js"></script>
 		<script src="/js/app_ajax_navbar.js"></script>
 	</head>

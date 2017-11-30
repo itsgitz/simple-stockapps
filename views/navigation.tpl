@@ -125,7 +125,7 @@
 		padding-bottom: 20px;
 		padding-left: 20px;
 		background-color: #ecf0f1;
-		border-radius: 5px;
+		border-radius: 0px 0px 5px 5px;
 		box-shadow: 1px 2px 2px #888888;
 	}
 	/* end of logo style */
