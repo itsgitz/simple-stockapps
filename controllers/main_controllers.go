@@ -228,7 +228,21 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 	// else ("POST"), porcess reqeust as ajax request and parsing data
 	} else if r.Method == "POST" {
 		r.ParseForm()
-		log.Println(r.Form)
+		// print the request
+		//log.Println(r.Form)
+		form_request := r.Form["form_request"][0]
+
+		switch(form_request) {
+		case "ADD":
+			log.Println("ADD GOBLOG!")
+		break
+		case "REMOVE":
+			log.Println("REMOVE GOBLOG!")
+		break
+		case "REQUEST":
+			log.Println("REQUEST GOBLOG!")
+		break
+		}
 	}
 }
 
