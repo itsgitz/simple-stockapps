@@ -29,6 +29,7 @@ var (
 		DisableSubdomainPersistence: false,
 	})
 	nav_tpl_filename = "views/navigation.tpl"
+	footer_tpl_filename = "views/footer.tpl"
 )
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -133,7 +134,7 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 
 	// template file
 	tpl_filename := "views/main.tpl"
-	tpl, err := template.New("").Funcs(funcMap).Delims("[[", "]]").ParseFiles(tpl_filename, nav_tpl_filename)
+	tpl, err := template.New("").Funcs(funcMap).Delims("[[", "]]").ParseFiles(tpl_filename, nav_tpl_filename, footer_tpl_filename)
 	if err != nil {
 		log.Println("[!] ERROR:", err)
 	}
@@ -174,7 +175,7 @@ func (this *MainController) AppNavbarMainPage(w http.ResponseWriter, r *http.Req
 
 	// template
 	tpl_filename := "views/ajax/ajax_navbar.tpl"
-	tpl, err := template.New("").Delims("[[", "]]").ParseFiles(tpl_filename, nav_tpl_filename)
+	tpl, err := template.New("").Delims("[[", "]]").ParseFiles(tpl_filename, nav_tpl_filename, footer_tpl_filename)
 	if err != nil {
 		log.Println("[!] ERROR:", err)
 	}
