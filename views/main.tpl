@@ -6,7 +6,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="/css/style.css">
-		<link rel="icon" href="/img/lintasarta_icon.jpg" type="image/gif">
+		<link rel="icon" href="/img/lintasarta_icon.png" type="image/gif">
 		<script src="/js/jquery-3.2.1.js"></script>
 		<script src="/js/app.js"></script>
 	</head>
@@ -16,6 +16,7 @@
 			[[ template "login_popup". ]]
 			[[ template "table_monitor". ]]
 		</div>
+		[[ template "footer". ]]
 	</body>
 </html>
 [[ end ]]

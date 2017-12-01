@@ -9,6 +9,7 @@
 
 	[[ template "side_navigation". ]]
 	<div id="app-form-wrapper">
+		[[ template "welcome_box". ]]
 		[[ template "add_box". ]]
 		[[ template "remove_box". ]]
 	</div>
@@ -45,6 +46,15 @@ $(document).ready(function() {
 	// prevent default from clicked links		
 	sideNavBar.click(function(e) {
 		e.preventDefault();
+	});
+
+	// hide welcome-box when loaded
+	if (getOptionFromHash) {
+		$("div#app-welcome-box").css("display", "none");
+	}
+
+	$("div#app-side-nav ul li a").click(function() {
+		$("div#app-welcome-box").css("display", "none");
 	});
 
 	// when addbutton click
@@ -144,9 +154,6 @@ function appFormAddItemsHandler() {
 	});
 }
 
-function daysInMonth(month, year) {
-  	return new Date(year, month, 0).getDate();
-}
 </script>
 [[ end ]]
 
@@ -257,6 +264,13 @@ function daysInMonth(month, year) {
 </style>
 [[ end ]]
 
+<!-- Just Welcome :D -->
+[[ define "welcome_box" ]]
+<div id="app-welcome-box">
+	<h1>Please select the menu :)</h1>
+</div>
+[[ end ]]
+
 [[ define "add_box" ]]
 <!-- Add item content -->
 <div id="app-add-content">
@@ -270,6 +284,9 @@ function daysInMonth(month, year) {
 		</div><br>
 		<div class=".row">
 			<input class="item-quantity" type="number" placeholder="Quantity" min="1" required="">
+		</div><br>
+		<div class=".row">
+			<input class="item-limitation" type="number" placeholder="Limitation" min="1" required="">
 		</div><br>
 		<div class=".row">
 			<input class="item-unit" type="text" placeholder="Item Unit" required=""> <label class="app-input-note"><i>*Example: Roll, Packs, etc.</i></label>
@@ -297,7 +314,7 @@ function daysInMonth(month, year) {
 			<input type="submit" value="Submit Data">
 		</div>
 	</form>
-</div>
+</div><br><br>
 <!-- -->
 [[ end ]]
 
