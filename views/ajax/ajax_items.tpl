@@ -5,7 +5,7 @@
 
 <div id="app-ajax-items">
 	<h3>Items Management</h3>
-	<span><i style="font-size: 90%;">You could add, remove (Administrator privilege), or request items (Operator privilege), Please choose one of navigation options below.</i></span>
+	<span style="text-align: justify;"><i style="font-size: 90%;">You could add, remove (Administrator privilege), or request items (Operator privilege), Please choose one of navigation options below.</i></span>
 
 	[[ template "side_navigation". ]]
 	<div id="app-form-wrapper">
@@ -131,8 +131,6 @@ function appFormAddItemsHandler() {
 		var regularExpressionForDatetime = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})$/;
 		var resultFormValidation = regularExpressionForDatetime.test(dateOfEntry);
 
-		alert(resultFormValidation);
-
 		// itemExpired is optional value, user could blank this out
 		// if value is null or empty, then system will change it with "-" string
 		if (!timePeriod) {
@@ -161,9 +159,14 @@ function appFormAddItemsHandler() {
 					item_owner: itemOwner,	// send item owner data
 					form_request: "ADD"	// send what kind of request
 				},
-				success: function() {
-					alert("Successfuly inserting data!");
-					window.location = "/";
+				success: function(response) {
+					if (response.Message) {
+						alert("Session login has timed out :(");
+						window.location ="/";
+					} else {
+						alert("Successfuly inserting data!");
+						window.location = "/";	
+					}
 				}
 			});
 			addItemForm[0].reset();
@@ -222,12 +225,12 @@ function appFormAddItemsHandler() {
 		border: none;
 		border-bottom: solid 1px #1abc9c;
 		padding: 10px;
-		width: 300px;
+		width: 350px;
 	}
 	div#app-add-content input[type="submit"] {
 		border: none;
 		padding: 5px;
-		width: 300px;
+		width: 350px;
 		background-color: #c0392b;
 		color: #F2F2F2;
 		border-radius: 5px;
@@ -240,7 +243,7 @@ function appFormAddItemsHandler() {
 		border: none;
 		padding: 10px;
 		padding-left: 10px;
-		width: 300px;
+		width: 174px;
 		border-bottom: solid 1px #1abc9c;
 		outline: none;
 	}
@@ -253,7 +256,7 @@ function appFormAddItemsHandler() {
 		outline: none;
 		padding: 9px;
 		border-bottom: solid 1px #1abc9c;
-		width: 148px;
+		width: 196px;
 	}
 	select.select-time-period:hover {
 		cursor: pointer;
@@ -280,9 +283,9 @@ function appFormAddItemsHandler() {
 	/* end of Add Items Content style */
 
 	/* Media query when screen resolution > 1280px */
-	@media only screen and (min-width: 1280px) {
+	/*@media only screen and (min-width: 1600px) {
 		/* Add Items Content Style */
-		div#app-add-content input[type="text"] {
+	/*	div#app-add-content input[type="text"] {
 			width: 500px;
 		}
 		div#app-add-content input[type="submit"] {
@@ -300,7 +303,7 @@ function appFormAddItemsHandler() {
 		select.select-time-period:hover {
 			cursor: pointer;
 		}
-	}
+	}*/
 </style>
 [[ end ]]
 
@@ -323,10 +326,7 @@ function appFormAddItemsHandler() {
 			<input class="item-model" type="text" placeholder="Model/Brand" required=""> <label class="app-input-note"><i>*Example: AMP Connect</i></label>
 		</div><br>
 		<div class=".row">
-			<input class="item-quantity" type="number" placeholder="Quantity" min="1" required="">
-		</div><br>
-		<div class=".row">
-			<input class="item-limitation" type="number" placeholder="Limitation" min="1" required="">
+			<input class="item-quantity" type="number" placeholder="Quantity" min="1" required="">&nbsp;<input class="item-limitation" type="number" placeholder="Limitation" min="1" required="">
 		</div><br>
 		<div class=".row">
 			<input class="item-unit" type="text" placeholder="Item Unit" required=""> <label class="app-input-note"><i>*Example: Roll, Packs, etc.</i></label>
