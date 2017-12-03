@@ -23,6 +23,7 @@ type Items_Columns struct{
 	Item_time_period	string
 	Item_expired		string
 	Item_owner			string
+	Owner_id			string
 	Item_status			string
 }
 
