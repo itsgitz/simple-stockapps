@@ -235,7 +235,19 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 
 		switch(form_request) {
 		case "ADD":
-			log.Println("ADD GOBLOG!")
+			// Add items request
+			// handling the values and inserting it to database
+			item_name := r.Form["item_name"][0]
+			item_model := r.Form["item_model"][0]
+			item_quantity := r.Form["item_quantity"][0]
+			item_limitation := r.Form["item_limitation"][0]
+			item_unit := r.Form["item_unit"][0]
+			date_of_entry := r.Form["date_of_entry"][0]
+			time_period := r.Form["time_period"][0]
+			typeof_time_period := r.Form["typeof_time_period"][0]
+			item_owner := r.Form["item_owner"][0]
+
+			log.Println(item_name, item_model, item_quantity, item_limitation, item_unit, date_of_entry, time_period, typeof_time_period, item_owner)
 		break
 		case "REMOVE":
 			log.Println("REMOVE GOBLOG!")
