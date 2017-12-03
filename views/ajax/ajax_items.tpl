@@ -88,10 +88,17 @@ function appFormAddItemsHandler() {
 	var waktuBaru = new Date();	// new date object
 	var tahun = waktuBaru.getFullYear(),	// full year (ex: 2017)
 		bulan = waktuBaru.getMonth(),		// month (ex: 10)
-		tanggal = waktuBaru.getDate(),		// date (ex: 01 or 12)
-		currentTanggal = tahun + "-" + bulan + "-" + tanggal; // 
+		tanggal = waktuBaru.getDate()		// date (ex: 01 or 12)
 	var jam = waktuBaru.getHours(),
 		menit = waktuBaru.getMinutes();
+
+	if (bulan < 10) {
+		bulan = "0" + bulan;
+	}
+
+	if (tanggal < 10) {
+		tanggal = "0" + tanggal;
+	}
 
 	if (jam < 10) {
 		jam = "0" + jam;
@@ -102,6 +109,7 @@ function appFormAddItemsHandler() {
 	}
 
 	var currentJam = jam + ":" + menit;
+	var currentTanggal = tahun + "-" + bulan + "-" + tanggal; // 
 
 	// set default current date
 	$("input.date-of-entry").val(currentTanggal + " " + currentJam);
@@ -109,17 +117,21 @@ function appFormAddItemsHandler() {
 	// onsubmit
 	addItemForm.submit(function(e) {
 		e.preventDefault();
-		var itemName = $("input.item-name").val();
-		var itemModel = $("input.item-model").val();
-		var itemQuantity = $("input.item-quantity").val();
-		var itemUnit = $("input.item-unit").val();
-		var dateOfEntry = $("input.date-of-entry").val();
-		var timePeriod = $("input.time-period").val();
-		var typeofTimePeriod = $("select.select-time-period");
+		var itemName = $("input.item-name").val();		// item name
+		var itemModel = $("input.item-model").val();	// item model or brand
+		var itemQuantity = $("input.item-quantity").val();  // item quantity
+		var itemLimitation = $("input.item-limitation").val(); // item limitation
+		var itemUnit = $("input.item-unit").val();  // item unit, such as "Packs"
+		var dateOfEntry = $("input.date-of-entry").val(); // date of entry
+		var timePeriod = $("input.time-period").val();  // 
+		var typeofTimePeriod = $("select.select-time-period"); 
 		var itemOwner = $("input.item-owner").val();
 
 		// regular expression --> YYYY-MM-DD hh:mm
-		var regularExpressionForDatetime = /^(\d{4})/;
+		var regularExpressionForDatetime = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})$/;
+		var resultFormValidation = regularExpressionForDatetime.test(dateOfEntry);
+
+		alert(resultFormValidation);
 
 		// itemExpired is optional value, user could blank this out
 		// if value is null or empty, then system will change it with "-" string
@@ -128,21 +140,26 @@ function appFormAddItemsHandler() {
 			typeofTimePeriod = "";
 		}
 
-		if (itemName && itemModel && itemQuantity && itemUnit && dateOfEntry && itemOwner) {
+		if (!itemOwner) {
+			itemOwner = "-"
+		} 
+
+		if (itemName && itemModel && itemQuantity && itemLimitation && itemUnit && dateOfEntry && itemOwner) {
 			$.ajax({
 				url: "/items",
 				method: "POST",
 				async: true,
 				data: {
-					item_name: itemName,
-					item_model: itemModel,
-					item_quantity: itemQuantity,
-					item_unit: itemUnit,
-					date_of_entry: dateOfEntry,
-					time_period: timePeriod,
-					typeof_time_period: typeofTimePeriod,
-					item_owner: itemOwner,
-					form_request: "ADD"
+					item_name: itemName,	// send item name data
+					item_model: itemModel,	// send item model/brand data
+					item_quantity: itemQuantity,	// send quantity data
+					item_limitation: itemLimitation,	// send item limitation number data
+					item_unit: itemUnit,	// send item unit data
+					date_of_entry: dateOfEntry,	// send date of entry data (date and time when item was inserted)
+					time_period: timePeriod,	// how long the item could be in stagging (if not null)
+					typeof_time_period: typeofTimePeriod,	// send type of time period such as Day(s), Week(s), Month(s)
+					item_owner: itemOwner,	// send item owner data
+					form_request: "ADD"	// send what kind of request
 				},
 				success: function() {
 					alert("Successfuly inserting data!");
@@ -213,7 +230,7 @@ function appFormAddItemsHandler() {
 		width: 300px;
 		background-color: #c0392b;
 		color: #F2F2F2;
-		border-radius: 15px;
+		border-radius: 5px;
 	}
 	div#app-add-content input[type="submit"]:hover {
 		cursor: pointer;
@@ -261,6 +278,29 @@ function appFormAddItemsHandler() {
 		color: red;
 	}
 	/* end of Add Items Content style */
+
+	/* Media query when screen resolution > 1280px */
+	@media only screen and (min-width: 1280px) {
+		/* Add Items Content Style */
+		div#app-add-content input[type="text"] {
+			width: 500px;
+		}
+		div#app-add-content input[type="submit"] {
+			width: 500px;
+		}
+		div#app-add-content input[type="number"] {
+			width: 500px;
+		}
+		div#app-add-content input[type="number"].time-period {
+			width: 350px;
+		}
+		select.select-time-period {
+			width: 148px;
+		}
+		select.select-time-period:hover {
+			cursor: pointer;
+		}
+	}
 </style>
 [[ end ]]
 
