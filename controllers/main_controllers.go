@@ -229,32 +229,44 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 	// else ("POST"), porcess reqeust as ajax request and parsing data
 	} else if r.Method == "POST" {
 		r.ParseForm()
-		// print the request
-		//log.Println(r.Form)
-		form_request := r.Form["form_request"][0]
+		if len(username_session) > 0 && len(user_fullname_session) > 0 {
+			// print the request
+			//log.Println(r.Form)
+			form_request := r.Form["form_request"][0]
 
-		switch(form_request) {
-		case "ADD":
-			// Add items request
-			// handling the values and inserting it to database
-			item_name := r.Form["item_name"][0]
-			item_model := r.Form["item_model"][0]
-			item_quantity := r.Form["item_quantity"][0]
-			item_limitation := r.Form["item_limitation"][0]
-			item_unit := r.Form["item_unit"][0]
-			date_of_entry := r.Form["date_of_entry"][0]
-			time_period := r.Form["time_period"][0]
-			typeof_time_period := r.Form["typeof_time_period"][0]
-			item_owner := r.Form["item_owner"][0]
+			switch(form_request) {
+			case "ADD":
+				// Add items request
+				// handling the values and inserting it to database
+				item_name := r.Form["item_name"][0]		// item name to insert (varchar)
+				item_model := r.Form["item_model"][0]	// item model to insert (varchar)
+				item_quantity := r.Form["item_quantity"][0]	// item quantity to insert (integer)
+				item_limitation := r.Form["item_limitation"][0]	// item limitation to insert (integer)
+				item_unit := r.Form["item_unit"][0]	// item unit to insert (integer)
+				date_of_entry := r.Form["date_of_entry"][0]	// date of entry to insert (datetime)
+				time_period := r.Form["time_period"][0]	// time period to insert (integer)
+				typeof_time_period := r.Form["typeof_time_period"][0]	// days, week, month (varchar)
+				item_owner := r.Form["item_owner"][0] // item owner to insert (varchar)
 
-			log.Println(item_name, item_model, item_quantity, item_limitation, item_unit, date_of_entry, time_period, typeof_time_period, item_owner)
-		break
-		case "REMOVE":
-			log.Println("REMOVE GOBLOG!")
-		break
-		case "REQUEST":
-			log.Println("REQUEST GOBLOG!")
-		break
+				log.Println(item_name, item_model, item_quantity, item_limitation, item_unit, date_of_entry, time_period, typeof_time_period, item_owner)
+			break
+			case "REMOVE":
+				log.Println("REMOVE GOBLOG!")
+			break
+			case "REQUEST":
+				log.Println("REQUEST GOBLOG!")
+			break
+			}
+		} else {
+			w.Header().Set("Content-Type", "application/json")
+			responseMessageSessionTimedOut := struct{
+				Message 	bool	`json:"Message"`
+			}{
+				Message:	true,
+			}
+			json_message_session_timedout, err := json.Marshal(responseMessageSessionTimedOut)
+			if err != nil { log.Println(err) }
+			fmt.Fprintf(w, string(json_message_session_timedout))
 		}
 	}
 }
