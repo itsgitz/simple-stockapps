@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS `items` (
 	`item_time_period` VARCHAR(64) NOT NULL,
 	`item_expired` DATETIME NOT NULL,
 	`item_owner` VARCHAR(254) NOT NULL,
+	`owner_id` VARCHAR(64) NOT NULL,
 	`item_status` VARCHAR(32) NOT NULL
 );
 
