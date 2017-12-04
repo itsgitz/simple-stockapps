@@ -83,6 +83,15 @@
 		color: #FFFFFF;
 		text-decoration: none;
 		font-weight: 600;
+		border-bottom: solid 3px #e74c3c;
+	}
+	div#app-navbar ul li a:hover {
+		border-bottom: solid 3px #ecf0f1;
+		-moz-transition: all 1s ease-in;
+		-webkit-transition: all 0.4s ease-in;
+		-o-transition: all 0.4s ease-in;
+		-ms-transition: all 0.4s ease-in;
+		transition: all 0.4s ease-in;
 	}
 	/* end of navigation style */
 
