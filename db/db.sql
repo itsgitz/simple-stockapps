@@ -44,9 +44,9 @@ CREATE TABLE IF NOT EXISTS `items` (
 -- Default values for items table
 INSERT INTO `items` (
 	`item_id`, `item_name`, `item_model`, `item_limitation`, `item_quantity`,
-	`item_unit`, `date_of_entry`, `item_time_period`, `item_expired`, `item_owner`,
+	`item_unit`, `date_of_entry`, `item_time_period`, `item_expired`, `item_owner`, `owner_id`,
 	`item_status`
 ) VALUES (
 	'001', 'Cat-7 UTP Cable', 'AMP Connect', 5, 10, 'Cable Roll', '2017-11-11', '2 Days',
-	'2017-11-13', 'PT APLIKANUSA LINTASARTA', 'Available'
+	'2017-11-13', 'PT APLIKANUSA LINTASARTA', '0091202898120', 'Available'
 );
