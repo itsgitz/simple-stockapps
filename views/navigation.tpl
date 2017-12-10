@@ -65,6 +65,7 @@
 	/* Navigation Bar */
 	div#app-navbar {
 		background-color: #e74c3c;
+		padding-left: 10px;
 	}
 	div#app-navbar ul {
 		list-style-type: none;
