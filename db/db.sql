@@ -38,15 +38,16 @@ CREATE TABLE IF NOT EXISTS `items` (
 	`item_expired` DATETIME NOT NULL,
 	`item_owner` VARCHAR(254) NOT NULL,
 	`owner_id` VARCHAR(64) NOT NULL,
+	`item_location` VARCHAR(254) NOT NULL,
 	`item_status` VARCHAR(32) NOT NULL
 );
 
 -- Default values for items table
 INSERT INTO `items` (
 	`item_id`, `item_name`, `item_model`, `item_limitation`, `item_quantity`,
-	`item_unit`, `date_of_entry`, `item_time_period`, `item_expired`, `item_owner`, `owner_id`,
+	`item_unit`, `date_of_entry`, `item_time_period`, `item_expired`, `item_owner`, `owner_id`, `item_location`,
 	`item_status`
 ) VALUES (
 	'001', 'Cat-7 UTP Cable', 'AMP Connect', 5, 10, 'Cable Roll', '2017-11-11', '2 Days',
-	'2017-11-13', 'PT APLIKANUSA LINTASARTA', '0091202898120', 'Available'
+	'2017-11-13', 'PT APLIKANUSA LINTASARTA', '0091202898120', 'DC TBS 1st Floor', 'Available'
 );
