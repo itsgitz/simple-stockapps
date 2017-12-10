@@ -24,6 +24,7 @@ type Items_Columns struct{
 	Item_expired		string
 	Item_owner			string
 	Owner_id			string
+	Item_location		string
 	Item_status			string
 }
 
@@ -99,4 +100,10 @@ func ModelsSelectFromUserLogin(username string) []User_Login {
 	}
 
 	return user_login_value
+}
+
+// using this function could used for inserting data into database with spesific table
+// in parameter
+func ModelsInsertData(data ...string) {
+	log.Println(data)
 }
