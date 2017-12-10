@@ -27,7 +27,7 @@ INSERT INTO `user_login` (
 -- Item's table that contains list of item
 -- These items can added only by Administrator User
 CREATE TABLE IF NOT EXISTS `items` (
-	`item_id` VARCHAR(8) NOT NULL PRIMARY KEY,		-- Item ID
+	`item_id` VARCHAR(9) NOT NULL PRIMARY KEY,		-- Item ID
 	`item_name` VARCHAR(254) NOT NULL,				-- Item name
 	`item_model` VARCHAR(254) NOT NULL,
 	`item_limitation` INT NOT NULL,
@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS `items` (
 	`item_time_period` VARCHAR(64) NOT NULL,
 	`item_expired` DATETIME NOT NULL,
 	`item_owner` VARCHAR(254) NOT NULL,
-	`owner_id` VARCHAR(64) NOT NULL,
-	`item_location` VARCHAR(254) NOT NULL,
+	`owner_id` VARCHAR(16) NOT NULL,
+	`item_location` VARCHAR(32) NOT NULL,
 	`item_status` VARCHAR(32) NOT NULL
 );
 
