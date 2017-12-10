@@ -38,6 +38,15 @@
 </div>
 [[ end ]]
 
+[[ define "sub_main_navigation_of_table" ]]
+<div id="app-sub-nav">
+	<ul>
+		<li><a href="?#show=full">Full Data</a></li>
+		<li><a href="?#show=real_time">Realtime Monitor</a></li>
+	</ul>
+</div>
+[[ end ]]
+
 [[ define "table_monitor" ]]
 <div id="app-table-box">
 	<table class="app-table" border="0" cellspacing="0" cellpadding="10">
