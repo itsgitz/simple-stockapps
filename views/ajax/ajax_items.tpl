@@ -87,7 +87,7 @@ function appFormAddItemsHandler() {
 	// using current date and time on "date-of-entry" value when loaded
 	var waktuBaru = new Date();	// new date object
 	var tahun = waktuBaru.getFullYear(),	// full year (ex: 2017)
-		bulan = waktuBaru.getMonth(),		// month (ex: 10)
+		bulan = waktuBaru.getMonth() + 1,		// month (ex: 10)
 		tanggal = waktuBaru.getDate()		// date (ex: 01 or 12)
 	var jam = waktuBaru.getHours(),
 		menit = waktuBaru.getMinutes();
@@ -107,7 +107,6 @@ function appFormAddItemsHandler() {
 	if (menit < 10) {
 		menit = "0" + menit;
 	}
-
 	var currentJam = jam + ":" + menit;
 	var currentTanggal = tahun + "-" + bulan + "-" + tanggal; // 
 
@@ -123,9 +122,10 @@ function appFormAddItemsHandler() {
 		var itemLimitation = $("input.item-limitation").val(); // item limitation
 		var itemUnit = $("input.item-unit").val();  // item unit, such as "Packs"
 		var dateOfEntry = $("input.date-of-entry").val(); // date of entry
-		var timePeriod = $("input.time-period").val();  // 
-		var typeofTimePeriod = $("select.select-time-period"); 
-		var itemOwner = $("input.item-owner").val();
+		var timePeriod = $("input.time-period").val();  // time period
+		var typeofTimePeriod = $("select.select-time-period").val(); // type day, month, or week
+		var itemOwner = $("input.item-owner").val(); // item owner
+		var itemLocation = $("select.select-location").val(); // item location
 
 		// regular expression --> YYYY-MM-DD hh:mm
 		var regularExpressionForDatetime = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})$/;
@@ -134,15 +134,10 @@ function appFormAddItemsHandler() {
 		// itemExpired is optional value, user could blank this out
 		// if value is null or empty, then system will change it with "-" string
 		if (!timePeriod) {
-			timePeriod = "";
-			typeofTimePeriod = "";
+			timePeriod = 0;
 		}
 
-		if (!itemOwner) {
-			itemOwner = "-"
-		} 
-
-		if (itemName && itemModel && itemQuantity && itemLimitation && itemUnit && dateOfEntry && itemOwner) {
+		if (itemName && itemModel && itemQuantity && itemLimitation && itemUnit && dateOfEntry && itemOwner && itemLocation) {
 			$.ajax({
 				url: "/items",
 				method: "POST",
@@ -157,6 +152,7 @@ function appFormAddItemsHandler() {
 					time_period: timePeriod,	// how long the item could be in stagging (if not null)
 					typeof_time_period: typeofTimePeriod,	// send type of time period such as Day(s), Week(s), Month(s)
 					item_owner: itemOwner,	// send item owner data
+					item_location: itemLocation, // send item location
 					form_request: "ADD"	// send what kind of request
 				},
 				success: function(response) {
@@ -170,6 +166,8 @@ function appFormAddItemsHandler() {
 				}
 			});
 			addItemForm[0].reset();
+		} else {
+			alert("It looks like there was empty value at the one of form :(");
 		}
 	});
 }
@@ -199,6 +197,7 @@ function appFormAddItemsHandler() {
 		color: #2c3e50;
 		padding: 11px;
 		font-weight: 500;
+		font-size: 90%;
 	}
 	div#app-side-nav ul a:hover {
 		background-color: #D8D8D8;
@@ -213,6 +212,7 @@ function appFormAddItemsHandler() {
 	}
 	div#app-add-content {
 		display: none;
+		padding-left: 45px;
 	}
 	div#app-remove-content {
 		display: none;
@@ -250,6 +250,18 @@ function appFormAddItemsHandler() {
 	div#app-add-content input[type="number"].time-period {
 		width: 150px;
 		background-color: none;
+		padding: 9px;
+	}
+	select {
+		-webkit-appearance:none;
+		-o-appearance: none;
+		-moz-appearance: none;
+		-ms-appearance: none;
+		appearance: none;
+	}
+	/* CAUTION: IE hackery ahead */
+	select::-ms-expand { 
+	    display: none; /* remove default arrow on ie10 and ie11 */
 	}
 	select.select-time-period {
 		border: none;
@@ -258,7 +270,17 @@ function appFormAddItemsHandler() {
 		border-bottom: solid 1px #1abc9c;
 		width: 196px;
 	}
+	select.select-location {
+		border: none;
+		outline: none;
+		padding: 9px;
+		border-bottom: solid 1px #1abc9c;
+		width: 350px;
+	}
 	select.select-time-period:hover {
+		cursor: pointer;
+	}
+	select.select-location:hover {
 		cursor: pointer;
 	}
 	.row:after {
@@ -318,39 +340,48 @@ function appFormAddItemsHandler() {
 <!-- Add item content -->
 <div id="app-add-content">
 	<form class="app-form-add">
-		<div class=".row">
+		<div class="row">
 			<input class="item-name" type="text" placeholder="Item Name" required="">
 			<label class="app-input-note"> <i>*Example: Cat-6A UTP Cable</i></label>
 		</div><br>
-		<div class=".row">
+		<div class="row">
 			<input class="item-model" type="text" placeholder="Model/Brand" required=""> <label class="app-input-note"><i>*Example: AMP Connect</i></label>
 		</div><br>
-		<div class=".row">
+		<div class="row">
 			<input class="item-quantity" type="number" placeholder="Quantity" min="1" required="">&nbsp;<input class="item-limitation" type="number" placeholder="Limitation" min="1" required="">
 		</div><br>
-		<div class=".row">
+		<div class="row">
 			<input class="item-unit" type="text" placeholder="Item Unit" required=""> <label class="app-input-note"><i>*Example: Roll, Packs, etc.</i></label>
 		</div><br>
-		<div class=".row">
-			<div class=".row">
+		<div class="row">
+			<div class="row">
 				<label style="font-size: 90%; padding: 10px; color: #2980b9;">Date of Entry</label>
 			</div>
-			<div class=".row">
+			<div class="row">
 				<input class="date-of-entry" type="text" placeholder="YYYY-MM-DD hh:mm" required=""> <label class="app-input-note"><i>*Example: 2017-08-10 16:00 (Use 24 Hours Format)</i></label>
 			</div>
 		</div><br>
-		<div class=".row">
+		<div class="row">
 			<input class="time-period" type="number" placeholder="Time Period">
 			<select class="select-time-period">
-				<option value="day" selected>Day(s)</option>
-				<option value="month">Month(s)</option>
-				<option value="week">Week(s)</option>
+				<option value="" selected="">-- Time --</option>
+				<option value="Day(s)">Day(s)</option>
+				<option value="Month(s)">Month(s)</option>
+				<option value="Week(s)">Week(s)</option>
 			</select> <label class="app-input-note"><i style="color: blue;">Optional or you could blank this out</i></label>
 		</div><br>
-		<div class=".row">
+		<div class="row">
 			<input class="item-owner" type="text" placeholder="Owner" required="">
 		</div><br>
-		<div class=".row">
+		<div class="row">
+			<select class="select-location" required="">
+				<option value="" selected="">-- Location --</option>
+				<option value="DC TBS 1st Floor">DC TBS 1st Floor</option>
+				<option value="DC TBS 2nd Floor">DC TBS 2nd Floor</option>
+				<option value="DC TBS 3rd Floor"> DC TBS 3rd Floor</option>
+			</select>
+		</div> <br>
+		<div class="row">
 			<input type="submit" value="Submit Data">
 		</div>
 	</form>
