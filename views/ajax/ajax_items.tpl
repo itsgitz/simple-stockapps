@@ -5,7 +5,7 @@
 
 <div id="app-ajax-items">
 	<h3>Items Management</h3>
-	<span style="text-align: justify;"><i style="font-size: 90%;">You could add, remove (Administrator privilege), or request items (Operator privilege), Please choose one of navigation options below.</i></span>
+	<span style="text-align: justify;"><i style="font-size: 90%;">You could add or remove (Administrator privilege) items, Please choose one of navigation options below.</i></span>
 
 	[[ template "side_navigation". ]]
 	<div id="app-form-wrapper">
