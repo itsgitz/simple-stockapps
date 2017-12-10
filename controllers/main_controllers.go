@@ -12,6 +12,7 @@ import (
 	"encoding/json"
 	"html/template"
 	"simple_stockapps/models"
+	"simple_stockapps/generator"
 
 	// http session using kataras
 	"github.com/kataras/go-sessions"
@@ -247,14 +248,18 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 				time_period := r.Form["time_period"][0]	// time period to insert (integer)
 				typeof_time_period := r.Form["typeof_time_period"][0]	// days, week, month (varchar)
 				item_owner := r.Form["item_owner"][0] // item owner to insert (varchar)
+				item_location := r.Form["item_location"][0] //
 
-				log.Println(item_name, item_model, item_quantity, item_limitation, item_unit, date_of_entry, time_period, typeof_time_period, item_owner)
+				// create item_id using generator package
+				item_id := generator.GenerateID()
+				owner_id := generator.GenerateOwnerID()
+				log.Println("item_id:", item_id)
+				log.Println("owner_id:", owner_id)
+				//log.Println(item_name, item_model, item_quantity, item_limitation, item_unit, date_of_entry, time_period, typeof_time_period, item_owner)
+				models.ModelsInsertData(item_name, item_model, item_quantity, item_limitation, item_unit, date_of_entry, time_period, typeof_time_period, item_owner, item_location, "table")
 			break
 			case "REMOVE":
 				log.Println("REMOVE GOBLOG!")
-			break
-			case "REQUEST":
-				log.Println("REQUEST GOBLOG!")
 			break
 			}
 		} else {
