@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"time"
+	"strconv"
 	//"reflect"
 	"net/http"
 	"encoding/json"
@@ -249,6 +250,32 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 				typeof_time_period := r.Form["typeof_time_period"][0]	// days, week, month (varchar)
 				item_owner := r.Form["item_owner"][0] // item owner to insert (varchar)
 				item_location := r.Form["item_location"][0] //
+
+				// if time period is null or it's zero value,
+				// it will create new variable called str_time_prd that contains string value as "NONE"
+				var number_of_days int
+				var str_time_prd string
+				var item_expired string
+
+				if time_period == 0 && typeof_time_period == "0" {
+					str_time_prd = "NONE"
+					item_expired = "0000-00-00 00:00:00"
+				// else, it will create item_expired
+				} else {
+					// select days according to type of time period
+					switch(typeof_time_period) {
+						case "Day(s)": number_of_days, _ = strconv.Atoi(time_period) 
+						break
+						case "Week(s)": number_of_days, _ = strconv.Atoi(time_period) * 7
+						break
+						case "Month(s)": number_of_days, _ = strconv.Atoi(time_period) * 30
+					}
+					// time now initial
+					now := time.Now()
+					time_to_add := time.Hour * 24 * (number_of_days - 1) // add time to create date expired / determine range of days
+					str_time_prd = time_period + " " + typeof_time_period
+					item_ex
+				}
 
 				// create item_id using generator package
 				item_id := generator.GenerateID()

@@ -135,6 +135,7 @@ function appFormAddItemsHandler() {
 		// if value is null or empty, then system will change it with "-" string
 		if (!timePeriod) {
 			timePeriod = 0;
+			typeofTimePeriod = "0";
 		}
 
 		if (itemName && itemModel && itemQuantity && itemLimitation && itemUnit && dateOfEntry && itemOwner && itemLocation) {
@@ -364,7 +365,6 @@ function appFormAddItemsHandler() {
 		<div class="row">
 			<input class="time-period" type="number" placeholder="Time Period">
 			<select class="select-time-period">
-				<option value="" selected="">-- Time --</option>
 				<option value="Day(s)">Day(s)</option>
 				<option value="Month(s)">Month(s)</option>
 				<option value="Week(s)">Week(s)</option>
@@ -409,11 +409,6 @@ function appFormAddItemsHandler() {
 		<li>
 			<a class="item-remove" href="javascript:void(0)">
 				Remove <div class="arrow-right"></div>
-			</a>
-		</li>
-		<li>
-			<a class="request-item" href="javascript:void(0)">
-				Request <div class="arrow-right"></div>
 			</a>
 		</li>
 	</ul>
