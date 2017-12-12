@@ -251,39 +251,64 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 				item_owner := r.Form["item_owner"][0] // item owner to insert (varchar)
 				item_location := r.Form["item_location"][0] //
 
+				item_quantity_int, _ := strconv.Atoi(item_quantity)
+				item_limitation_int, _ := strconv.Atoi(item_limitation)
+
 				// if time period is null or it's zero value,
 				// it will create new variable called str_time_prd that contains string value as "NONE"
 				var number_of_days int
 				var str_time_prd string
 				var item_expired string
+				var item_status string
 
-				if time_period == 0 && typeof_time_period == "0" {
+				if item_quantity_int > item_limitation_int {
+					item_status = "Available"
+				} else {
+					item_status = "Limited"
+				}
+
+				// select days according to type of time period
+				number_of_days, _ = strconv.Atoi(time_period)
+
+				if time_period == "0" && typeof_time_period == "0" {
 					str_time_prd = "NONE"
 					item_expired = "0000-00-00 00:00:00"
 				// else, it will create item_expired
 				} else {
-					// select days according to type of time period
 					switch(typeof_time_period) {
-						case "Day(s)": number_of_days, _ = strconv.Atoi(time_period) 
+						case "Day(s)": number_of_days = number_of_days
 						break
-						case "Week(s)": number_of_days, _ = strconv.Atoi(time_period) * 7
+						case "Week(s)": number_of_days = number_of_days * 7
 						break
-						case "Month(s)": number_of_days, _ = strconv.Atoi(time_period) * 30
+						case "Month(s)": number_of_days = number_of_days * 30
+						break
 					}
 					// time now initial
 					now := time.Now()
-					time_to_add := time.Hour * 24 * (number_of_days - 1) // add time to create date expired / determine range of days
-					str_time_prd = time_period + " " + typeof_time_period
-					item_ex
+					time_duration := time.Duration(number_of_days)	// convert integer to time.Duration datatype
+					time_to_add := time.Hour * 24 * (time_duration) // add time to create date expired / determine range of days
+					adding_time := now.Add(time_to_add)
+					// split string, thus we could only put one value (time)
+					time_split := generator.GenerateTimeSplit(date_of_entry)
+					item_expired = fmt.Sprintf("%s %s", adding_time.Format("2006-01-02"), time_split)
+					str_time_prd = time_period + " " + typeof_time_period // Ex: 2 Day(s)
 				}
 
 				// create item_id using generator package
+				// DOOOONNNNNNEEEEE
 				item_id := generator.GenerateID()
 				owner_id := generator.GenerateOwnerID()
-				log.Println("item_id:", item_id)
-				log.Println("owner_id:", owner_id)
+				//log.Println("item_id:", item_id)
+				//log.Println("owner_id:", owner_id)
+				//log.Println("number_of_days:", number_of_days)
+				//log.Println("str_time_prd:", str_time_prd)
+				//log.Println("item_expired:", item_expired)
 				//log.Println(item_name, item_model, item_quantity, item_limitation, item_unit, date_of_entry, time_period, typeof_time_period, item_owner)
-				models.ModelsInsertData(item_name, item_model, item_quantity, item_limitation, item_unit, date_of_entry, time_period, typeof_time_period, item_owner, item_location, "table")
+				
+				errModels := models.ModelsInsertDataItems(item_id, item_name, item_model, item_limitation, item_quantity, item_unit, date_of_entry, str_time_prd, item_expired, item_owner, owner_id, item_location, item_status)
+				if errModels != nil {
+					log.Println(errModels)
+				}
 			break
 			case "REMOVE":
 				log.Println("REMOVE GOBLOG!")
