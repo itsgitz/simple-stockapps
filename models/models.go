@@ -75,12 +75,32 @@ func ModelsReadLogin(username, password string) bool {
 	return isExists
 }
 
+// get and read owner_id
+func ModelsReadOwnerID(item_owner string) bool, string {
+	var isExists bool
+	var owner_id string
+
+	x, err := db.Queryx("SELECT exists (SELECT owner_id FROM items WHERE item_owner=?)", item_owner)
+	for x.Next() {
+		x.Scan(&isExists)
+	}
+	defer x.Close()
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	err = db.Select()
+
+	return isExists
+}
+
 // ModelsSelectFromItems function used for display the table of database content
 // the function will return all values in `items` table
 func ModelsSelectFromItems() []Items_Columns {
 	items_value := []Items_Columns{}
 
-	err = db.Select(&items_value, "SELECT * FROM items")
+	err = db.Select(&items_value, "SELECT * FROM items WHERE item_owner='PT Aplikanusa Lintasarta'")
 	if err != nil {
 		log.Println("[!] ERROR: ModelsSelectFromItems:", err)
 	}

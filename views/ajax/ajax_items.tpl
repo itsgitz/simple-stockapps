@@ -138,11 +138,11 @@ function appFormAddItemsHandler() {
 			typeofTimePeriod = "0";
 		}
 
-		if (itemQuantity == 0 || itemQuantity <= itemLimitation) {
+		if (itemQuantity == 0 || itemQuantity < itemLimitation) {
 			alert("item quantity and limitation couldn't be 0, or item quantity couldn't be less than item limitation");
 		}
 
-		if (itemName && itemModel && itemQuantity > 0 && itemLimitation > 0 && itemQuantity > itemLimitation && itemUnit && dateOfEntry && itemOwner && itemLocation) {
+		if (itemName && itemModel || itemQuantity > 0 || itemLimitation > 0 || itemQuantity == itemLimitation && itemUnit && dateOfEntry && itemOwner && itemLocation) {
 			$.ajax({
 				url: "/items",
 				method: "POST",

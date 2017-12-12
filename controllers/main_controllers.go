@@ -298,12 +298,6 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 				// DOOOONNNNNNEEEEE
 				item_id := generator.GenerateID()
 				owner_id := generator.GenerateOwnerID()
-				//log.Println("item_id:", item_id)
-				//log.Println("owner_id:", owner_id)
-				//log.Println("number_of_days:", number_of_days)
-				//log.Println("str_time_prd:", str_time_prd)
-				//log.Println("item_expired:", item_expired)
-				//log.Println(item_name, item_model, item_quantity, item_limitation, item_unit, date_of_entry, time_period, typeof_time_period, item_owner)
 				
 				errModels := models.ModelsInsertDataItems(item_id, item_name, item_model, item_limitation, item_quantity, item_unit, date_of_entry, str_time_prd, item_expired, item_owner, owner_id, item_location, item_status)
 				if errModels != nil {
