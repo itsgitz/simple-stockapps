@@ -18,7 +18,11 @@ func GenerateOwnerID() string {
 	return fmt.Sprintf("%d%d", now.Year(), now.Nanosecond())
 }
 
-func GenerateTimeSplit(date string) []string {
-	split := strings.Split(date, " ")
-	return split[1]
+// split date string by "space" character such as:
+// 2017-10-10 00:00:00
+// it will return []string value like ["2017-10-10", "00:00:00"]
+// but we only put one second data of slice, it is "00:00:00"
+func GenerateTimeSplit(date string) string {
+	time_split := strings.Split(date, " ")
+	return time_split[1]
 }
