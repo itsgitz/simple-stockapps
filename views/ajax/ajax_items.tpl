@@ -138,7 +138,11 @@ function appFormAddItemsHandler() {
 			typeofTimePeriod = "0";
 		}
 
-		if (itemName && itemModel && itemQuantity && itemLimitation && itemUnit && dateOfEntry && itemOwner && itemLocation) {
+		if (itemQuantity == 0 || itemQuantity <= itemLimitation) {
+			alert("item quantity and limitation couldn't be 0, or item quantity couldn't be less than item limitation");
+		}
+
+		if (itemName && itemModel && itemQuantity > 0 && itemLimitation > 0 && itemQuantity > itemLimitation && itemUnit && dateOfEntry && itemOwner && itemLocation) {
 			$.ajax({
 				url: "/items",
 				method: "POST",
@@ -168,7 +172,7 @@ function appFormAddItemsHandler() {
 			});
 			addItemForm[0].reset();
 		} else {
-			alert("It looks like there was empty value at the one of form :(");
+			alert("It looks like there was empty or wrong value at the one of form :(");
 		}
 	});
 }
