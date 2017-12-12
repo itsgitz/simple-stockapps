@@ -104,6 +104,18 @@ func ModelsSelectFromUserLogin(username string) []User_Login {
 
 // using this function could used for inserting data into database with spesific table
 // in parameter
-func ModelsInsertData(data ...string) {
+// parameter: (table_name, data)
+func ModelsInsertDataItems(data ...string) error {
+	sql_query := `INSERT INTO items (item_id, item_name, item_model, 
+		item_limitation, item_quantity, item_unit, date_of_entry, item_time_period, 
+		item_expired, item_owner, owner_id, item_location, item_status) 
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+	`
+	x, err := db.Queryx(sql_query, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12])
+	defer x.Close()
+	return err
+}
+
+func ModelsInsertDataTest(data ...string) {
 	log.Println(data)
 }
