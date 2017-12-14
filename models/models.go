@@ -6,6 +6,7 @@
 package models
 
 import (
+	"fmt"
 	"log"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/go-sql-driver/mysql"
@@ -76,9 +77,8 @@ func ModelsReadLogin(username, password string) bool {
 }
 
 // get and read owner_id
-func ModelsReadOwnerID(item_owner string) bool, string {
+func ModelsReadOwnerID(item_owner string) bool {
 	var isExists bool
-	var owner_id string
 
 	x, err := db.Queryx("SELECT exists (SELECT owner_id FROM items WHERE item_owner=?)", item_owner)
 	for x.Next() {
@@ -90,9 +90,15 @@ func ModelsReadOwnerID(item_owner string) bool, string {
 		log.Println(err)
 	}
 
-	err = db.Select()
-
 	return isExists
+}
+
+func ModelsGetOwnerID(item_owner string) []Items_Columns {
+	owner_id := []Items_Columns{}
+	query := fmt.Sprintf("SELECT owner_id FROM items WHERE item_owner=%s LIMIT 1", item_owner)
+	err = db.Select(&owner_id, query)
+
+	return owner_id
 }
 
 // ModelsSelectFromItems function used for display the table of database content

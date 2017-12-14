@@ -48,6 +48,6 @@ INSERT INTO `items` (
 	`item_unit`, `date_of_entry`, `item_time_period`, `item_expired`, `item_owner`, `owner_id`, `item_location`,
 	`item_status`
 ) VALUES (
-	'001', 'Cat-7 UTP Cable', 'AMP Connect', 5, 10, 'Cable Roll', '2017-11-11', '2 Days',
-	'2017-11-13', 'PT APLIKANUSA LINTASARTA', '0091202898120', 'DC TBS 1st Floor', 'Available'
+	'001', 'Cat-7 UTP Cable', 'AMP Connect', 5, 10, 'Cable Roll', '2017-11-11', 'None',
+	'0000-00-00', 'PT APLIKANUSA LINTASARTA', '0091202898120', 'DC TBS 1st Floor', 'Available'
 );

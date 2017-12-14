@@ -271,7 +271,7 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 				number_of_days, _ = strconv.Atoi(time_period)
 
 				if time_period == "0" && typeof_time_period == "0" {
-					str_time_prd = "NONE"
+					str_time_prd = "None"
 					item_expired = "0000-00-00 00:00:00"
 				// else, it will create item_expired
 				} else {
