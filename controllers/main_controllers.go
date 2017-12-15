@@ -296,9 +296,22 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 
 				// create item_id using generator package
 				// DOOOONNNNNNEEEEE
+				var owner_id string
 				item_id := generator.GenerateID()
-				owner_id := generator.GenerateOwnerID()
-				
+				//owner_id := generator.GenerateOwnerID()
+
+				// first is check that item_owner has their owner_id
+				//log.Println(models.ModelsReadOwnerID(item_owner)) // true/false
+				//log.Println(models.ModelsGetOwnerID(item_owner)) // existing owner id
+				//models.ModelsInsertDataTest(item_id, item_name, item_model, item_limitation, item_quantity, item_unit, date_of_entry, str_time_prd, item_expired, item_owner, owner_id, item_location, item_status)
+
+				ownerIdIsExists := models.ModelsReadOwnerID(item_owner)
+				if ownerIdIsExists {
+					owner_id = models.ModelsGetOwnerID(item_owner) 
+				} else {
+					owner_id = generator.GenerateOwnerID()
+				}
+
 				errModels := models.ModelsInsertDataItems(item_id, item_name, item_model, item_limitation, item_quantity, item_unit, date_of_entry, str_time_prd, item_expired, item_owner, owner_id, item_location, item_status)
 				if errModels != nil {
 					log.Println(errModels)
