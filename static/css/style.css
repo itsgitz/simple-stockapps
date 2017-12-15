@@ -91,9 +91,9 @@ div#app-table-box {
 	overflow-x: auto;
 }
 div#app-table-box table {
-	width: 100%;
 	text-align: center;
 	font-size: 80%;
+	width: 75%;
 }
 table.app-table {
 	border:1px solid #DDD;
@@ -101,13 +101,3 @@ table.app-table {
 tr:nth-child(even) {
 	background-color: #F2F2F2;
 }
-
-/* Footer style */
-/*div#app-footer {
-	position: absolute;
-}
-/* end of footer style */
-
-/* Sub Navigation */
-
-/* end of sub */

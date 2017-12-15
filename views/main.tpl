@@ -55,10 +55,6 @@
 		<th>Model/Brand</th>
 		<th>Quantity</th>
 		<th>Item Unit</th>
-		<th>Date of Entry</th>
-		<tH>Time Period</tH>
-		<th>Expired</th>
-		<th>Owner</th>
 		<th>Status</th>
 		<th>Action</th>
 
@@ -69,10 +65,6 @@
 				<td>[[$value.Item_model]]</td>
 				<td>[[$value.Item_quantity]]</td>
 				<td>[[$value.Item_unit]]</td>
-				<td>[[$value.Date_of_entry]]</td>
-				<td>[[$value.Item_time_period]]</td>
-				<td>[[$value.Item_expired]]</td>
-				<td>[[$value.Item_owner]]</td>
 				<td>[[$value.Item_status]]</td>
 				<td><a href="/pick_up/[[$value.Item_id]]">Pick Up</a></td>
 			</tr>

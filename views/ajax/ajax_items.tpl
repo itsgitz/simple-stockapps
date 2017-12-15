@@ -448,7 +448,7 @@ function appFormAddItemsHandler() {
 		</li>
 		<li>
 			<a class="item-remove" href="javascript:void(0)">
-				Remove <div class="arrow-right"></div>
+				Edit or Remove <div class="arrow-right"></div>
 			</a>
 		</li>
 	</ul>
