@@ -6,7 +6,7 @@
 package models
 
 import (
-	"fmt"
+	//"fmt"
 	"log"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/go-sql-driver/mysql"
@@ -93,10 +93,17 @@ func ModelsReadOwnerID(item_owner string) bool {
 	return isExists
 }
 
-func ModelsGetOwnerID(item_owner string) []Items_Columns {
-	owner_id := []Items_Columns{}
-	query := fmt.Sprintf("SELECT owner_id FROM items WHERE item_owner=%s LIMIT 1", item_owner)
-	err = db.Select(&owner_id, query)
+func ModelsGetOwnerID(item_owner string) string {
+	var owner_id string
+	ex, err := db.Queryx("SELECT owner_id FROM items WHERE item_owner=? LIMIT 1", item_owner)
+	if err != nil {
+		log.Println(err)
+	}
+	defer ex.Close()
+
+	for ex.Next() {
+		ex.Scan(&owner_id)
+	}
 
 	return owner_id
 }
