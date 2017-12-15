@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `items` (
 	`item_time_period` VARCHAR(32) NOT NULL,
 	`item_expired` DATETIME NOT NULL,
 	`item_owner` VARCHAR(254) NOT NULL,
-	`owner_id` VARCHAR(16) NOT NULL,
+	`owner_id` VARCHAR(32) NOT NULL,
 	`item_location` VARCHAR(32) NOT NULL,
 	`item_status` VARCHAR(32) NOT NULL
 );
@@ -49,5 +49,5 @@ INSERT INTO `items` (
 	`item_status`
 ) VALUES (
 	'001', 'Cat-7 UTP Cable', 'AMP Connect', 5, 10, 'Cable Roll', '2017-11-11', 'None',
-	'0000-00-00', 'PT APLIKANUSA LINTASARTA', '0091202898120', 'DC TBS 1st Floor', 'Available'
+	'0000-00-00', 'PT Aplikanusa Lintasarta', '0091202898120', 'DC TBS 1st Floor', 'Available'
 );
