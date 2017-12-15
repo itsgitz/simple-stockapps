@@ -60,9 +60,7 @@
 		<th>Expired</th>
 		<th>Owner</th>
 		<th>Status</th>
-		[[ if .HtmlUserIsLoggedIn ]]
-		<th colspan="2">Action</th>
-		[[ end ]]
+		<th>Action</th>
 
 		[[ range $index, $value := .HtmlTableValueFromItems ]]
 			<tr>
@@ -76,10 +74,7 @@
 				<td>[[$value.Item_expired]]</td>
 				<td>[[$value.Item_owner]]</td>
 				<td>[[$value.Item_status]]</td>
-				[[ if $.HtmlUserIsLoggedIn ]]
 				<td><a href="/pick_up/[[$value.Item_id]]">Pick Up</a></td>
-				<td><a href="/edit/[[$value.Item_id]]">Edit</a></td>
-				[[ end ]]
 			</tr>
 		[[ end ]]
 	</table>
