@@ -138,11 +138,48 @@ function appFormAddItemsHandler() {
 			typeofTimePeriod = "0";
 		}
 
-		if (itemQuantity == 0 || itemQuantity < itemLimitation) {
-			alert("item quantity and limitation couldn't be 0, or item quantity couldn't be less than item limitation");
-		}
-
-		if (itemName && itemModel || itemQuantity > 0 || itemLimitation > 0 || itemQuantity == itemLimitation && itemUnit && dateOfEntry && itemOwner && itemLocation) {
+		var alertBox = $("div#app-alert-add-bar");
+		if (!itemName) {
+			alertBox.html("<div>Item Name is empty or null</div>");
+			alertBox.hide();
+			alertBox.fadeIn(200);
+		} else if (!itemModel) {
+			alertBox.html("<div>Item Model/Brand is empty or null</div>");
+			alertBox.hide();
+			alertBox.fadeIn(200);
+		} else if (!itemQuantity || !itemLimitation) {
+			alertBox.html("<div>Item Quantity or Limitation is empty or null</div>");
+			alertBox.hide();
+			alertBox.fadeIn(200);
+		} else if (parseInt(itemQuantity == 0) || parseInt(itemLimitation) == 0) {
+			alertBox.html("<div>Item Quantity or Limitation couldn't zero</div>");
+			alertBox.hide();
+			alertBox.fadeIn(200);
+		} else if (parseInt(itemLimitation) > parseInt(itemQuantity)) {
+			alertBox.html("<div>Item Quantity couldn't be less than Item Limitation</div>");
+			alertBox.hide();
+			alertBox.fadeIn(200);
+		} else if (!itemUnit) {
+			alertBox.html("<div>Item Unit is empty or null</div>");
+			alertBox.hide();
+			alertBox.fadeIn(200);			
+		} else if (!dateOfEntry) {
+			alertBox.html("<div>Date of entry is empty or not null</div>");
+			alertBox.hide();
+			alertBox.fadeIn(200);			
+		} else if (!resultFormValidation) {
+			alertBox.html("<div>Wrong date form validation!</div>");
+			alertBox.hide();
+			alertBox.fadeIn(200);
+		} else if (!itemOwner) {
+			alertBox.html("<div>Item Owner is empty or not null</div>");
+			alertBox.hide();
+			alertBox.fadeIn(200);
+		} else if (!itemLocation) {
+			alertBox.html("<div>Item Location is empty or null</div>");
+			alertBox.hide();
+			alertBox.fadeIn(200);
+		} else {
 			$.ajax({
 				url: "/items",
 				method: "POST",
@@ -171,8 +208,6 @@ function appFormAddItemsHandler() {
 				}
 			});
 			addItemForm[0].reset();
-		} else {
-			alert("It looks like there was empty or wrong value at the one of form :(");
 		}
 	});
 }
@@ -344,41 +379,42 @@ function appFormAddItemsHandler() {
 [[ define "add_box" ]]
 <!-- Add item content -->
 <div id="app-add-content">
+	<div id="app-alert-add-bar"></div>
 	<form class="app-form-add">
 		<div class="row">
-			<input class="item-name" type="text" placeholder="Item Name" required="">
+			<input class="item-name" type="text" placeholder="Item Name">
 			<label class="app-input-note"> <i>*Example: Cat-6A UTP Cable</i></label>
 		</div><br>
 		<div class="row">
-			<input class="item-model" type="text" placeholder="Model/Brand" required=""> <label class="app-input-note"><i>*Example: AMP Connect</i></label>
+			<input class="item-model" type="text" placeholder="Model/Brand" > <label class="app-input-note"><i>*Example: AMP Connect</i></label>
 		</div><br>
 		<div class="row">
-			<input class="item-quantity" type="number" placeholder="Quantity" min="1" required="">&nbsp;<input class="item-limitation" type="number" placeholder="Limitation" min="1" required="">
+			<input class="item-quantity" type="number" placeholder="Quantity" min="1">&nbsp;<input class="item-limitation" type="number" placeholder="Limitation" min="1">
 		</div><br>
 		<div class="row">
-			<input class="item-unit" type="text" placeholder="Item Unit" required=""> <label class="app-input-note"><i>*Example: Roll, Packs, etc.</i></label>
+			<input class="item-unit" type="text" placeholder="Item Unit"> <label class="app-input-note"><i>*Example: Roll, Packs, etc.</i></label>
 		</div><br>
 		<div class="row">
 			<div class="row">
 				<label style="font-size: 90%; padding: 10px; color: #2980b9;">Date of Entry</label>
 			</div>
 			<div class="row">
-				<input class="date-of-entry" type="text" placeholder="YYYY-MM-DD hh:mm" required=""> <label class="app-input-note"><i>*Example: 2017-08-10 16:00 (Use 24 Hours Format)</i></label>
+				<input class="date-of-entry" type="text" placeholder="YYYY-MM-DD hh:mm"> <label class="app-input-note"><i>*Example: 2017-08-10 16:00 (Use 24 Hours Format)</i></label>
 			</div>
 		</div><br>
 		<div class="row">
 			<input class="time-period" type="number" placeholder="Time Period">
 			<select class="select-time-period">
 				<option value="Day(s)">Day(s)</option>
-				<option value="Month(s)">Month(s)</option>
 				<option value="Week(s)">Week(s)</option>
+				<option value="Month(s)">Month(s)</option>
 			</select> <label class="app-input-note"><i style="color: blue;">Optional or you could blank this out</i></label>
 		</div><br>
 		<div class="row">
-			<input class="item-owner" type="text" placeholder="Owner" required="">
+			<input class="item-owner" type="text" placeholder="Owner">
 		</div><br>
 		<div class="row">
-			<select class="select-location" required="">
+			<select class="select-location">
 				<option value="" selected="">-- Location --</option>
 				<option value="DC TBS 1st Floor">DC TBS 1st Floor</option>
 				<option value="DC TBS 2nd Floor">DC TBS 2nd Floor</option>
