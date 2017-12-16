@@ -219,17 +219,29 @@ function appFormAddItemsHandler() {
 
 [[ define "style" ]]
 <style>
+	div#app-ajax-items {
+		padding: 20px;
+		width: 100%;
+		position: absolute;
+		left: 0;
+		right: 0;
+		display: table;
+	}
 	.clear {
 		clear:both;
 	}
 	/* Vertical navigation style */
 	div#app-side-nav {
+		position: fixed;
+		z-index: 1;
+		left: 0;
 		display: table-cell;
 		padding-top: 25px;
 		position: absolute;
 		left: 10px;
 		height: 100%;
 		border-radius: 5px;
+		overflow-x: hidden;
 	}
 	div#app-side-nav ul {
 		list-style-type: none;
@@ -253,13 +265,18 @@ function appFormAddItemsHandler() {
 	/* form wrapper style */
 	div#app-form-wrapper {
 		display: table;
-		margin: 0;
-		position: absolute;
-
+		margin-left: 210px;
+		padding: 0px 10px;
 	}
 	div#app-add-content {
 		display: none;
 		padding-top: 20px;
+		padding-left: 10px;
+		padding-bottom: 25px;
+		position: absolute;
+		left: 225px;
+		right: 10px;
+		overflow: hidden;
 	}
 	/* end of wrapepr style */
 
@@ -267,7 +284,7 @@ function appFormAddItemsHandler() {
 	div#app-add-content input[type="text"] {
 		outline: none;
 		border: none;
-		border-bottom: solid 1px #95a5a6;
+		border-bottom: solid 1px #bdc3c7;
 		padding: 10px;
 		width: 350px;
 	}
@@ -288,7 +305,7 @@ function appFormAddItemsHandler() {
 		padding: 10px;
 		padding-left: 10px;
 		width: 174px;
-		border-bottom: solid 1px #95a5a6;
+		border-bottom: solid 1px #bdc3c7;
 		outline: none;
 	}
 	div#app-add-content input[type="number"].time-period {
@@ -311,14 +328,14 @@ function appFormAddItemsHandler() {
 		border: none;
 		outline: none;
 		padding: 9px;
-		border-bottom: solid 1px #95a5a6;
+		border-bottom: solid 1px #bdc3c7;
 		width: 196px;
 	}
 	select.select-location {
 		border: none;
 		outline: none;
 		padding: 9px;
-		border-bottom: solid 1px #95a5a6;
+		border-bottom: solid 1px #bdc3c7;
 		width: 350px;
 	}
 	select.select-time-period:hover {
@@ -382,8 +399,9 @@ function appFormAddItemsHandler() {
 	div#app-remove-content {
 		display: none;
 		padding-top: 0px;
-		padding-left: 50px;
-		margin: auto;
+		position: absolute;
+		left: 225px;
+		right: 10px;
 		overflow: hidden;
 	}
 	div#app-search-form-box ul {
@@ -397,33 +415,36 @@ function appFormAddItemsHandler() {
 		float: left;
 	}
 	div#app-search-form-box {
-		padding-left: 5px;
+		padding-left: 15px;
 		padding-top: 10px;
 		display: inline;
 		float: left;
-		background-color: #ecf0f1;
-		border-radius: 5px;
-		border: solid 1px #ddd;
+		width: 100%;
+		border-bottom: solid 1px #ddd;
 	}
 	input.app-search {
 		background-image: url(/img/searchicon.png);
-		background-size: 20px;
-		background-position: 10px 12px;
+		background-size: 12px;
+		background-position: 10px 10px;
 		background-repeat: no-repeat;
-		width: 250px;
+		width: 350px;
 		padding-left: 40px;
-		padding-top: 15px;
-		padding-bottom: 15px;
+		padding-top: 10px;
+		padding-bottom: 10px;
 		font-size: 12px;
 		border: solid 1px #ddd;
 		margin-bottom: 12px;
 		border-radius: 5px;
+		outline: none;
 	}
 	select.select-searchby {
-		padding: 15px;
+		padding: 10px;
 		border-radius: 5px;
 		border: solid 1px #ddd;
 		color: #95a5a6;
+	}
+	select.select-searchby:hover {
+		cursor: pointer;
 	}
 	/* end of remove box */
 
@@ -515,19 +536,25 @@ function appFormAddItemsHandler() {
 [[ define "remove_box" ]]
 <!-- Remove item content -->
 <div id="app-remove-content">
-	<div id="app-search-form-box">
+	<div id="app-search-form-box" class="row">
 		<ul>
 			<li>
 				<input class="app-search" type="text" placeholder="Search for ...">
 			</li>
 			<li>
 				<select class="select-searchby">
-					<option value="name">Name</option>
-					<option value="model">Model</option>
-					<option value="date">Date</option>
+					<option value="item_name">Name</option>
+					<option value="item_model">Model</option>
+					<option value="date_of_entry">Date</option>
+					<option value="item_unit">Item Unit</option>
 				</select>
 			</li>
 		</ul>
+	</div>
+	<div id="app-remove-table" class="row">
+		<table>
+			<th></th>
+		</table>
 	</div>
 </div>
 <!-- -->
