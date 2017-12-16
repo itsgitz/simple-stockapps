@@ -10,7 +10,9 @@
 	[[ template "side_navigation". ]]
 	<div id="app-form-wrapper">
 		[[ template "welcome_box". ]]
+		<div class="clear"></div>
 		[[ template "add_box". ]]
+		<div class="clear"></div>
 		[[ template "remove_box". ]]
 	</div>
 </div>
@@ -217,8 +219,12 @@ function appFormAddItemsHandler() {
 
 [[ define "style" ]]
 <style>
+	.clear {
+		clear:both;
+	}
 	/* Vertical navigation style */
 	div#app-side-nav {
+		display: table-cell;
 		padding-top: 25px;
 		position: absolute;
 		left: 10px;
@@ -246,16 +252,14 @@ function appFormAddItemsHandler() {
 
 	/* form wrapper style */
 	div#app-form-wrapper {
+		display: table;
+		margin: 0;
 		position: absolute;
-		left: 220px;
-		padding: 15px;
+
 	}
 	div#app-add-content {
 		display: none;
-		padding-left: 45px;
-	}
-	div#app-remove-content {
-		display: none;
+		padding-top: 20px;
 	}
 	/* end of wrapepr style */
 
@@ -263,7 +267,7 @@ function appFormAddItemsHandler() {
 	div#app-add-content input[type="text"] {
 		outline: none;
 		border: none;
-		border-bottom: solid 1px #1abc9c;
+		border-bottom: solid 1px #95a5a6;
 		padding: 10px;
 		width: 350px;
 	}
@@ -284,7 +288,7 @@ function appFormAddItemsHandler() {
 		padding: 10px;
 		padding-left: 10px;
 		width: 174px;
-		border-bottom: solid 1px #1abc9c;
+		border-bottom: solid 1px #95a5a6;
 		outline: none;
 	}
 	div#app-add-content input[type="number"].time-period {
@@ -307,14 +311,14 @@ function appFormAddItemsHandler() {
 		border: none;
 		outline: none;
 		padding: 9px;
-		border-bottom: solid 1px #1abc9c;
+		border-bottom: solid 1px #95a5a6;
 		width: 196px;
 	}
 	select.select-location {
 		border: none;
 		outline: none;
 		padding: 9px;
-		border-bottom: solid 1px #1abc9c;
+		border-bottom: solid 1px #95a5a6;
 		width: 350px;
 	}
 	select.select-time-period:hover {
@@ -344,6 +348,85 @@ function appFormAddItemsHandler() {
 	}
 	/* end of Add Items Content style */
 
+	/* Alert style */
+	div#app-alert-add-bar {
+		position: fixed;
+		top: 0;
+		left: 20%;
+		right: 20%;
+		background-color: #2c3e50;
+		color: #FFFFFF;
+		text-align: center;
+		padding: 5px;
+		display: none;
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
+	}
+	span.app-close {
+		color: #FFFFFF;
+		float: right;
+		font-size: 28px;
+		font-weight: bold;
+	}
+	/* End of alert style */
+
+	/* Welcome box style */
+	div#app-welcome-box {
+		padding-top: 20px;
+		padding-left: 50px;
+		color: #34495e;
+	}
+	/* end of welcome box */
+
+	/* Remove box */
+	div#app-remove-content {
+		display: none;
+		padding-top: 0px;
+		padding-left: 50px;
+		margin: auto;
+		overflow: hidden;
+	}
+	div#app-search-form-box ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+	}
+	div#app-search-form-box ul li {
+		display: inline;
+		padding: 2px;
+		float: left;
+	}
+	div#app-search-form-box {
+		padding-left: 5px;
+		padding-top: 10px;
+		display: inline;
+		float: left;
+		background-color: #ecf0f1;
+		border-radius: 5px;
+		border: solid 1px #ddd;
+	}
+	input.app-search {
+		background-image: url(/img/searchicon.png);
+		background-size: 20px;
+		background-position: 10px 12px;
+		background-repeat: no-repeat;
+		width: 250px;
+		padding-left: 40px;
+		padding-top: 15px;
+		padding-bottom: 15px;
+		font-size: 12px;
+		border: solid 1px #ddd;
+		margin-bottom: 12px;
+		border-radius: 5px;
+	}
+	select.select-searchby {
+		padding: 15px;
+		border-radius: 5px;
+		border: solid 1px #ddd;
+		color: #95a5a6;
+	}
+	/* end of remove box */
+
 	/* Media query when screen resolution > 1280px */
 	/*@media only screen and (min-width: 1600px) {
 		/* Add Items Content Style */
@@ -372,7 +455,7 @@ function appFormAddItemsHandler() {
 <!-- Just Welcome :D -->
 [[ define "welcome_box" ]]
 <div id="app-welcome-box">
-	<h1>Please select the menu :)</h1>
+	<h2>Please select the menu :)</h2>
 </div>
 [[ end ]]
 
@@ -432,7 +515,20 @@ function appFormAddItemsHandler() {
 [[ define "remove_box" ]]
 <!-- Remove item content -->
 <div id="app-remove-content">
-	<h1>Remove!</h1>
+	<div id="app-search-form-box">
+		<ul>
+			<li>
+				<input class="app-search" type="text" placeholder="Search for ...">
+			</li>
+			<li>
+				<select class="select-searchby">
+					<option value="name">Name</option>
+					<option value="model">Model</option>
+					<option value="date">Date</option>
+				</select>
+			</li>
+		</ul>
+	</div>
 </div>
 <!-- -->
 [[ end ]]

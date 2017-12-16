@@ -1,5 +1,5 @@
 * { box-sizing: border-box; }
-body { font-family: "arial", sans-serif; margin: auto; }
+body { font-family: "arial", sans-serif; margin: 0; }
 
 /* Main container */
 div#app-container {
