@@ -165,7 +165,14 @@ type Items struct {
 func (this *MainController) AppJSONItemsData(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	values := models.ModelsSelectFromItems()
+	values, err := models.ModelsSelectFromItems()
+
+	if err != nil {
+		errMsg := "[!] ERROR: in ModelsSelectFromItems(), Database Server: " + err.Error() + " Please contact the Administrator: anggit.ginanjar@lintasarta.co.id a.k.a AQX Tamvan :)"
+		http.Error(w, errMsg, http.StatusInternalServerError)
+
+	}
+
 	x := make([]Items, len(values))
 
 	for i:=0; i<len(values); i++ {

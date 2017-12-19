@@ -69,7 +69,6 @@ function appTableHandler() {
 		success: function(res) {
 			var isLoggedIn = $("div#app-user-islogged-in").text();
 			console.log("Logged In is: " + isLoggedIn);
-
 			var tableMonitoring = "<table class='app-table' border='0' cellpadding='10' cellspacing='0'>";
 				tableMonitoring += "  <th>No.</th>";
 				tableMonitoring += "  <th>Name</th>";
@@ -103,6 +102,10 @@ function appTableHandler() {
 		},
 		beforeSend: function(res) {
 			$("div#app-table-box").html("<h2 style='color: #7f8c8d; padding: 50px;'>Loading please wait ...</h2>");
+		},
+		error: function(res) {
+			console.log(res.responseText);
+			$("div#app-table-box").html("<p style='color: #7f8c8d; padding: 30px; text-align:justify;'>"+res.responseText+"</p>");
 		}
 	});
 }

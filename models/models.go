@@ -124,7 +124,7 @@ func ModelsSearchForItems(search, cat string) []Items_Columns {
 
 // ModelsSelectFromItems function used for display the table of database content
 // the function will return all values in `items` table
-func ModelsSelectFromItems() []Items_Columns {
+func ModelsSelectFromItems() ([]Items_Columns, error) {
 	items_value := []Items_Columns{}
 
 	err = db.Select(&items_value, "SELECT * FROM items WHERE item_owner='PT Aplikanusa Lintasarta' ORDER BY date_of_entry ASC")
@@ -132,7 +132,7 @@ func ModelsSelectFromItems() []Items_Columns {
 		log.Println("[!] ERROR: ModelsSelectFromItems:", err)
 	}
 
-	return items_value
+	return items_value, err
 }
 
 func ModelsSelectFromUserLogin(username string) []User_Login {
