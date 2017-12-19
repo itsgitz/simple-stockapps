@@ -39,7 +39,8 @@ CREATE TABLE IF NOT EXISTS `items` (
 	`item_owner` VARCHAR(254) NOT NULL,
 	`owner_id` VARCHAR(32) NOT NULL,
 	`item_location` VARCHAR(32) NOT NULL,
-	`item_status` VARCHAR(32) NOT NULL
+	`item_status` VARCHAR(32) NOT NULL,
+	`added_by` VARCHAR(64) NOT NULL
 );
 
 -- Default values for items table
@@ -49,5 +50,5 @@ INSERT INTO `items` (
 	`item_status`
 ) VALUES (
 	'001', 'Cat-7 UTP Cable', 'AMP Connect', 5, 10, 'Cable Roll', '2017-11-11', 'None',
-	'0000-00-00', 'PT Aplikanusa Lintasarta', '0091202898120', 'DC TBS 1st Floor', 'Available'
+	'0000-00-00', 'PT Aplikanusa Lintasarta', '0091202898120', 'DC TBS 1st Floor', 'Available', 'Anggit Muhamad Ginanjar'
 );
