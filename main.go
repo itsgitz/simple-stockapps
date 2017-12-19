@@ -35,6 +35,10 @@ func main() {
 	router.HandleFunc("/reports", main_ctrl.AppReports)
 	router.HandleFunc("/users", main_ctrl.AppUsers)
 
+	// JSON
+	router.HandleFunc("/json_get_items", main_ctrl.AppJSONItemsData)
+	router.HandleFunc("/json_search_items", main_ctrl.AppJSONSearchData)
+
 	// defining http middleware using negroni method
 	middleware := negroni.Classic()
 	middleware.Use(negroni.NewStatic(http.Dir("static"))) // initialization static file
