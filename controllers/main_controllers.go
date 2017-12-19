@@ -160,6 +160,7 @@ type Items struct {
 	Owner_id			string  `json:"owner_id"`
 	Item_location		string  `json:"item_location"`
 	Item_status			string  `json:"item_status"`
+	Added_by			string  `json:"added_by"`
 }
 
 func (this *MainController) AppJSONItemsData(w http.ResponseWriter, r *http.Request) {
@@ -189,6 +190,7 @@ func (this *MainController) AppJSONItemsData(w http.ResponseWriter, r *http.Requ
 		x[i].Owner_id = values[i].Owner_id
 		x[i].Item_location = values[i].Item_location
 		x[i].Item_status = values[i].Item_status
+		x[i].Added_by = values[i].Added_by
 	}
 
 	outgoingJSON, err := json.Marshal(x)
@@ -232,6 +234,7 @@ func (this *MainController) AppJSONSearchData(w http.ResponseWriter, r *http.Req
 				item_to_json[i].Owner_id = item_results[i].Owner_id
 				item_to_json[i].Item_location = item_results[i].Item_location
 				item_to_json[i].Item_status = item_results[i].Item_status
+				item_to_json[i].Added_by = item_results[i].Added_by
 			}
 		} else if len(item_results) == 0 {
 			item_to_json[0].Item_name = "Not found"
@@ -315,7 +318,6 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 			if err != nil { log.Println("[!] ERROR:", err) }
 			fmt.Fprint(w, string(outgoingJSON))
 		} else {
-
 			// template file
 			ajax_items_filename := "views/ajax/ajax_items.tpl"
 			tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
@@ -335,7 +337,7 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 			// print the request
 			//log.Println(r.Form)
 			form_request := r.Form["form_request"][0]
-
+			// print user fullname
 			switch(form_request) {
 			case "ADD":
 				// Add items request
@@ -412,7 +414,8 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 					owner_id = generator.GenerateOwnerID()
 				}
 
-				errModels := models.ModelsInsertDataItems(item_id, item_name, item_model, item_limitation, item_quantity, item_unit, date_of_entry, str_time_prd, item_expired, item_owner, owner_id, item_location, item_status)
+				// inserting all of data
+				errModels := models.ModelsInsertDataItems(item_id, item_name, item_model, item_limitation, item_quantity, item_unit, date_of_entry, str_time_prd, item_expired, item_owner, owner_id, item_location, item_status, user_fullname_session)
 				if errModels != nil {
 					log.Println(errModels)
 				}
@@ -432,6 +435,39 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 			if err != nil { log.Println(err) }
 			fmt.Fprintf(w, string(json_message_session_timedout))
 		}
+	}
+}
+
+// Remove data from item table in database
+func (this *MainController) AppJSONRemoveItem(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	if r.Method == "GET" {
+		http.Error(w, "NOT FOUND BRAAY", http.StatusNotFound)
+	} else if r.Method == "POST" {
+		// get the item_id that will be removed by Administrator
+		get_item_id := r.Form["item_id"][0]
+		//log.Println(get_item_id) // item_id
+		// remove item using ModelsRemoveDataItem()
+		err := models.ModelsRemoveDataItem(get_item_id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		} else {
+			w.Header().Set("Content-Type", "application/json")
+			dataJson := struct{
+				Redirect  bool  `json:"redirect"`
+				Message   string  `json:"message"`
+			}{
+				Redirect: true,
+				Message: "Succefull removing item!",
+			}
+			sendJson, err := json.Marshal(dataJson)
+			if err != nil {
+				log.Println(err)
+			}
+			fmt.Fprintf(w, string(sendJson))
+		}
+	} else {
+		http.Error(w, "BAD REQUEST COYY", http.StatusBadRequest)
 	}
 }
 
