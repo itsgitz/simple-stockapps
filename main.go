@@ -38,6 +38,8 @@ func main() {
 	// JSON
 	router.HandleFunc("/json_get_items", main_ctrl.AppJSONItemsData)
 	router.HandleFunc("/json_search_items", main_ctrl.AppJSONSearchData)
+	// remove item url
+	router.HandleFunc("/json_remove_item", main_ctrl.AppJSONRemoveItem)
 
 	// defining http middleware using negroni method
 	middleware := negroni.Classic()
