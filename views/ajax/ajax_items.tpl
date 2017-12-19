@@ -257,6 +257,7 @@ function appFormRemoveOrEditItemsHandler() {
 						resultTable += "  <th>Date Expired</th>";
 						resultTable += "  <th>Owner</th>";
 						resultTable += "  <th>Location</th>";
+						resultTable += "  <th>Added by</th>";
 						resultTable += "  <th>Status</th>";
 						resultTable += "  <th colspan='2'>Action</th>";
 
@@ -273,6 +274,7 @@ function appFormRemoveOrEditItemsHandler() {
 							resultTable += "    <td>"+ res[i].item_expired +"</td>";
 							resultTable += "    <td>"+ res[i].item_owner +"</td>";
 							resultTable += "    <td>"+ res[i].item_location +"</td>";
+							resultTable += "    <td>"+ res[i].added_by +"</td>";
 							resultTable += "    <td>"+ res[i].item_status +"</td>";
 							resultTable += "    <td><button class='action-button app-edit' value='"+res[i].item_id+"'>Edit</button></td>";
 							resultTable += "    <td><button class='action-button app-remove' value='"+ res[i].item_id +"' data-item-name='"+res[i].item_name+"' data-item-owner='"+res[i].item_owner+"' data-item-location='"+res[i].item_location+"'>Remove</button></td>";
@@ -344,6 +346,37 @@ function appFormRemoveOrEditItemsHandler() {
 						}
 						$("button.remove-no").click(function() {
 							jqueryGetModal.fadeOut(300);
+						});
+
+						// when yes button clicked, it will send ajax request with post method
+						// send the item_id that has selected
+						// proccessing in the server and if success, it will send feedback such as json
+						// message
+						$("button.remove-yes").click(function() {
+							console.log(btnValue);
+							$.ajax({
+								url: "/json_remove_item",
+								async: true,
+								method: "POST",
+								data: {
+									item_id: btnValue
+								},
+								success: function(res) {
+									console.log(res);
+									// if success, show 
+									if (res.redirect) {
+										$("div.tbl-content-modal").html("<p style='font-weight: bold; color: #3498db;'>"+res.message+" Redirect in 3 seconds</p>");
+										setTimeout(function() {
+											window.location = "/";
+										}, 3000);
+										window.onclick = function(e) {
+											if (e.target == modal) {
+												jqueryGetModal.css("display", "block");
+											}
+										}
+									}
+								}
+							});
 						});
 					});
 					$("div#app-loading-bar").css("display", "none");
@@ -802,9 +835,10 @@ function appFormRemoveOrEditItemsHandler() {
 				<select class="select-searchby">
 					<option value="item_name">Name</option>
 					<option value="item_model">Model</option>
-					<option value="date_of_entry">Date</option>
+					<option value="date_of_entry">Date &amp; Times</option>
 					<option value="item_unit">Item Unit</option>
 					<option value="item_owner">Owner</option>
+					<option value="added_by">Added by</option>
 				</select>
 			</li>
 		</ul>
