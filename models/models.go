@@ -27,6 +27,7 @@ type Items_Columns struct{
 	Owner_id			string
 	Item_location		string
 	Item_status			string
+	Added_by			string
 }
 
 // user_login table in database
@@ -155,10 +156,10 @@ func ModelsSelectFromUserLogin(username string) []User_Login {
 func ModelsInsertDataItems(data ...string) error {
 	sql_query := `INSERT INTO items (item_id, item_name, item_model, 
 		item_limitation, item_quantity, item_unit, date_of_entry, item_time_period, 
-		item_expired, item_owner, owner_id, item_location, item_status) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		item_expired, item_owner, owner_id, item_location, item_status, added_by) 
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`
-	x, err := db.Queryx(sql_query, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12])
+	x, err := db.Queryx(sql_query, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13])
 	defer x.Close()
 	return err
 }
