@@ -6,7 +6,7 @@
 package models
 
 import (
-	//"fmt"
+	"fmt"
 	"log"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/go-sql-driver/mysql"
@@ -108,12 +108,26 @@ func ModelsGetOwnerID(item_owner string) string {
 	return owner_id
 }
 
+// Searching item using this function
+func ModelsSearchForItems(search, cat string) []Items_Columns {
+	items_value := []Items_Columns{}
+
+	// search by category
+	// example
+	// SELECT * FROM items WHERE cat LIKE %search%; 
+	search = "%"+search+"%"
+	query := fmt.Sprintf("SELECT * FROM items WHERE %s LIKE ? ORDER BY date_of_entry ASC", cat)
+	err = db.Select(&items_value, query, search)
+
+	return items_value
+}
+
 // ModelsSelectFromItems function used for display the table of database content
 // the function will return all values in `items` table
 func ModelsSelectFromItems() []Items_Columns {
 	items_value := []Items_Columns{}
 
-	err = db.Select(&items_value, "SELECT * FROM items WHERE item_owner='PT Aplikanusa Lintasarta'")
+	err = db.Select(&items_value, "SELECT * FROM items WHERE item_owner='PT Aplikanusa Lintasarta' ORDER BY date_of_entry ASC")
 	if err != nil {
 		log.Println("[!] ERROR: ModelsSelectFromItems:", err)
 	}
@@ -145,6 +159,13 @@ func ModelsInsertDataItems(data ...string) error {
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`
 	x, err := db.Queryx(sql_query, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12])
+	defer x.Close()
+	return err
+}
+
+// ModelsRemoveDataItem() is function that used for remove an item with the given ID
+func ModelsRemoveDataItem(item_id string) error {
+	x, err := db.Queryx("DELETE FROM items WHERE item_id=?", item_id)
 	defer x.Close()
 	return err
 }
