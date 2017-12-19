@@ -31,7 +31,6 @@ var (
 		DisableSubdomainPersistence: false,
 	})
 	nav_tpl_filename = "views/navigation.tpl"
-	footer_tpl_filename = "views/footer.tpl"
 )
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -110,13 +109,11 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 	// html template data
 	html_data := struct{
 		HtmlTitle             		string
-		HtmlTableValueFromItems		[]models.Items_Columns
 		HtmlUserIsLoggedIn			bool
 		HtmlUserFullName			string
 	}{}
 
 	html_data.HtmlTitle = "Simple StockApps"
-	html_data.HtmlTableValueFromItems = models.ModelsSelectFromItems()
 
 	// if username session is not null or user has already logged in into system
 	if len(username_session) != 0 {
@@ -136,7 +133,7 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 
 	// template file
 	tpl_filename := "views/main.tpl"
-	tpl, err := template.New("").Funcs(funcMap).Delims("[[", "]]").ParseFiles(tpl_filename, nav_tpl_filename, footer_tpl_filename)
+	tpl, err := template.New("").Funcs(funcMap).Delims("[[", "]]").ParseFiles(tpl_filename, nav_tpl_filename)
 	if err != nil {
 		log.Println("[!] ERROR:", err)
 	}
@@ -144,6 +141,102 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 	err = tpl.ExecuteTemplate(w, "main_layout", html_data)
 	if err != nil {
 		log.Println("[!] ERROR:", err)
+	}
+}
+
+// get the json data from items table in database
+// response = application/json
+type Items struct {
+	Item_id				string  `json:"item_id"`
+	Item_name			string  `json:"item_name"`
+	Item_model			string  `json:"item_model"`
+	Item_limitation		int     `json:"item_limitation"`
+	Item_quantity		int     `json:"item_quantity"`
+	Item_unit 			string  `json:"item_unit"`
+	Date_of_entry		string  `json:"date_of_entry"`
+	Item_time_period	string  `json:"item_time_period"`
+	Item_expired		string  `json:"item_expired"`
+	Item_owner			string  `json:"item_owner"`
+	Owner_id			string  `json:"owner_id"`
+	Item_location		string  `json:"item_location"`
+	Item_status			string  `json:"item_status"`
+}
+
+func (this *MainController) AppJSONItemsData(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	values := models.ModelsSelectFromItems()
+	x := make([]Items, len(values))
+
+	for i:=0; i<len(values); i++ {
+		x[i].Item_id = values[i].Item_id
+		x[i].Item_name = values[i].Item_name
+		x[i].Item_model = values[i].Item_model
+		x[i].Item_quantity = values[i].Item_quantity
+		x[i].Item_limitation = values[i].Item_limitation
+		x[i].Item_unit = values[i].Item_unit
+		x[i].Date_of_entry = values[i].Date_of_entry
+		x[i].Item_time_period = values[i].Item_time_period
+		x[i].Item_expired = values[i].Item_expired
+		x[i].Item_owner = values[i].Item_owner
+		x[i].Owner_id = values[i].Owner_id
+		x[i].Item_location = values[i].Item_location
+		x[i].Item_status = values[i].Item_status
+	}
+
+	outgoingJSON, err := json.Marshal(x)
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println(len(values))
+	fmt.Fprintf(w, string(outgoingJSON))
+}
+
+// Searching item in database then create JSON datatype from item_results
+func (this *MainController) AppJSONSearchData(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	if r.Method == "POST" {
+		w.Header().Set("Content-Type", "application/json")
+		search := r.Form["search_value"][0]
+		category := r.Form["category"][0]
+		var item_to_json []Items
+
+		item_results := models.ModelsSearchForItems(search, category)
+
+		if len(item_results) > 0 {
+			item_to_json = make([]Items, len(item_results))
+		} else {
+			item_to_json = make([]Items, 1)
+		}
+
+		if len(item_results) > 0 {
+			// fill the json value from item_results (search query)
+			for i:=0; i<len(item_results); i++ {
+				item_to_json[i].Item_id = item_results[i].Item_id
+				item_to_json[i].Item_name = item_results[i].Item_name
+				item_to_json[i].Item_model = item_results[i].Item_model
+				item_to_json[i].Item_limitation = item_results[i].Item_limitation
+				item_to_json[i].Item_quantity = item_results[i].Item_quantity
+				item_to_json[i].Item_unit = item_results[i].Item_unit
+				item_to_json[i].Date_of_entry = item_results[i].Date_of_entry
+				item_to_json[i].Item_time_period = item_results[i].Item_time_period
+				item_to_json[i].Item_expired = item_results[i].Item_expired
+				item_to_json[i].Item_owner = item_results[i].Item_owner
+				item_to_json[i].Owner_id = item_results[i].Owner_id
+				item_to_json[i].Item_location = item_results[i].Item_location
+				item_to_json[i].Item_status = item_results[i].Item_status
+			}
+		} else if len(item_results) == 0 {
+			item_to_json[0].Item_name = "Not found"
+		}
+
+		outgoingJSON, err := json.Marshal(item_to_json)
+		if err != nil {
+			log.Println(err)
+		}
+		fmt.Fprintf(w, string(outgoingJSON))
+	} else {
+		fmt.Fprintf(w, "NOT FOUND BRAY!!")
 	}
 }
 
@@ -177,7 +270,7 @@ func (this *MainController) AppNavbarMainPage(w http.ResponseWriter, r *http.Req
 
 	// template
 	tpl_filename := "views/ajax/ajax_navbar.tpl"
-	tpl, err := template.New("").Delims("[[", "]]").ParseFiles(tpl_filename, nav_tpl_filename, footer_tpl_filename)
+	tpl, err := template.New("").Delims("[[", "]]").ParseFiles(tpl_filename, nav_tpl_filename)
 	if err != nil {
 		log.Println("[!] ERROR:", err)
 	}
