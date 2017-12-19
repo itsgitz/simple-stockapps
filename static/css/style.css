@@ -41,14 +41,14 @@ div.app-modal-content {
 	text-align: center;
 }
 h2.app-login-header {
-	color: #3498db;
+	color: #7f8c8d;
 	padding: 5px;
 	border-radius: 5px;
 	font-weight: 500;
 }
 input.input-text {
 	border: none;
-	border-bottom: solid 1px #2ecc71;
+	border-bottom: solid 1px #95a5a6;
 	outline: none;
 	padding: 10px;
 	width: 50%;

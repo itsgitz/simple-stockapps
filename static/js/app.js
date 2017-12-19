@@ -24,6 +24,8 @@ function appLoginHandler() {
 	// close login popup
 	closeButton.click(function() {
 		loginPopupBox.fadeOut(300);
+		loginForm[0].reset();
+		$("div.app-login-alert").hide();
 	});
 
 	// login form for prevent default
@@ -48,7 +50,9 @@ function appLoginHandler() {
 					if (jsonLoginDataAuth.Message) {
 						window.location = jsonLoginDataAuth.Redirect_Url;
 					} else {
-						$("div.app-login-alert").html("<b>Incorrect username or password!</b>");
+						$("div.app-login-alert").html("<b>Incorrect username or password!</b><br><br>");
+						$("div.app-login-alert").hide();
+						$("div.app-login-alert").fadeIn("300");
 					}
 				}
 			});
@@ -58,7 +62,52 @@ function appLoginHandler() {
 }
 
 // appTableHandler for handling table items
-function appTableHandler() {/*
+function appTableHandler() {
+	$.ajax({
+		url: "/json_get_items",
+		async: true,
+		success: function(res) {
+			var isLoggedIn = $("div#app-user-islogged-in").text();
+			console.log("Logged In is: " + isLoggedIn);
+
+			var tableMonitoring = "<table class='app-table' border='0' cellpadding='10' cellspacing='0'>";
+				tableMonitoring += "  <th>No.</th>";
+				tableMonitoring += "  <th>Name</th>";
+				tableMonitoring += "  <th>Model/Brand</th>";
+				tableMonitoring += "  <th>Quantity</th>";
+				tableMonitoring += "  <th>Limitation</th>";
+				tableMonitoring += "  <th>Item Unit</th>";
+				tableMonitoring += "  <th>Status</th>";
+				if (isLoggedIn == "true") {
+					tableMonitoring += "  <th>Action</th>";
+				}
+
+			for (var i=0; i<res.length; i++) {
+				tableMonitoring += "  <tr>";
+				tableMonitoring += "    <td>"+ (i+1) +"</td>";
+				tableMonitoring += "    <td>"+ res[i].item_name +"</td>";
+				tableMonitoring += "    <td>"+ res[i].item_model +"</td>";
+				tableMonitoring += "    <td>"+ res[i].item_quantity +"</td>";
+				tableMonitoring += "    <td>"+ res[i].item_limitation +"</td>";
+				tableMonitoring += "    <td>"+ res[i].item_unit +"</td>";
+				tableMonitoring += "    <td>"+ res[i].item_status +"</td>";
+				if (isLoggedIn == "true") {
+					tableMonitoring += "    <td><a href='/pick_up/"+res[i].item_id+"'>Pick Up</a></td>";
+				}
+				tableMonitoring += "  </tr>";
+			}
+			tableMonitoring += "</table>";
+
+			// print the table in app-table-box
+			document.getElementById("app-table-box").innerHTML = tableMonitoring;
+		},
+		beforeSend: function(res) {
+			$("div#app-table-box").html("<h2 style='color: #7f8c8d; padding: 50px;'>Loading please wait ...</h2>");
+		}
+	});
+}
+
+/*
 	var ws = new WebSocket('ws://127.0.0.1:8080/ws');
 	ws.onopen = function() {
 		console.log("Connection Open");
@@ -78,4 +127,3 @@ function appTableHandler() {/*
 		});
 			ws.send(json_msg);
 	});*/
-}

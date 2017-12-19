@@ -2,7 +2,7 @@
 
 [[ template "script". ]]
 [[ template "style". ]]
-
+[[ template "loading_bar". ]]
 <div id="app-ajax-items">
 	<h3>Items Management</h3>
 	<span style="text-align: justify;"><i style="font-size: 90%;">You could add or remove (Administrator privilege) items, Please choose one of navigation options below.</i></span>
@@ -79,7 +79,10 @@ $(document).ready(function() {
 
 	// handling request from form add items
 	appFormAddItemsHandler();
+	appFormRemoveOrEditItemsHandler();
 });
+
+
 
 // add items handler
 function appFormAddItemsHandler() {
@@ -214,6 +217,147 @@ function appFormAddItemsHandler() {
 	});
 }
 
+// Remove or edit function handler
+function appFormRemoveOrEditItemsHandler() {
+	// Create table
+	var resultTable;
+	var searchInput = $("input.app-search");
+
+	searchInput.keyup(function() {
+		var selectCategory = $("select.select-searchby");
+		var searchValue = $(this).val();
+		var categoryValue = selectCategory.val();
+
+		if (searchValue == " " || !searchValue) {
+			//console.log("Empty");
+			searchValue = "Empty";
+		}
+
+		if (searchValue !== "Empty") {
+			$.ajax({
+				async: true,
+				url: "/json_search_items",
+				method: "POST",
+				data: {
+					search_value: searchValue,
+					category: categoryValue
+				},
+				success: function(res) {
+					var resultTable;
+					if (res[0].item_name !== "Not found") {
+						resultTable = "<table class='result-table' cellpadding='10' cellspacing='0' border='0'>";
+						resultTable += "  <th>No.</th>";
+						resultTable += "  <th>Name</th>";
+						resultTable += "  <th>Model/Brand</th>";
+						resultTable += "  <th>Quantity</th>";
+						resultTable += "  <th>Limitation</th>";
+						resultTable += "  <th>Item Unit</th>";
+						resultTable += "  <th>Date of Entry</th>";
+						resultTable += "  <th>Time Period</th>";
+						resultTable += "  <th>Date Expired</th>";
+						resultTable += "  <th>Owner</th>";
+						resultTable += "  <th>Location</th>";
+						resultTable += "  <th>Status</th>";
+						resultTable += "  <th colspan='2'>Action</th>";
+
+						for (var i=0; i<res.length; i++) {
+							resultTable += "  <tr>";
+							resultTable += "    <td>"+ (i+1) +"</td>";
+							resultTable += "    <td>"+ res[i].item_name +"</td>";
+							resultTable += "    <td>"+ res[i].item_model +"</td>";
+							resultTable += "    <td>"+ res[i].item_quantity +"</td>";
+							resultTable += "    <td>"+ res[i].item_limitation +"</td>";
+							resultTable += "    <td>"+ res[i].item_unit +"</td>";
+							resultTable += "    <td>"+ res[i].date_of_entry +"</td>";
+							resultTable += "    <td>"+ res[i].item_time_period +"</td>";
+							resultTable += "    <td>"+ res[i].item_expired +"</td>";
+							resultTable += "    <td>"+ res[i].item_owner +"</td>";
+							resultTable += "    <td>"+ res[i].item_location +"</td>";
+							resultTable += "    <td>"+ res[i].item_status +"</td>";
+							resultTable += "    <td><button class='action-button app-edit' value='"+res[i].item_id+"'>Edit</button></td>";
+							resultTable += "    <td><button class='action-button app-remove' value='"+ res[i].item_id +"' data-item-name='"+res[i].item_name+"' data-item-owner='"+res[i].item_owner+"' data-item-location='"+res[i].item_location+"'>Remove</button></td>";
+							resultTable += "  </tr>";
+						}
+
+						resultTable += "</table>";
+						document.getElementById("remove-result").innerHTML = resultTable;
+						$("div#remove-result").hide();
+						$("div#remove-result").fadeIn(300);
+					} else {
+						$("div#remove-result").html("<div class='not-found'><h2>Not Found :(</h2></div>");
+						$("div#remove-result").hide();
+						$("div#remove-result").fadeIn(300);
+					}
+					var editButton = $("button.app-edit");
+					var removeButton = $("button.app-remove");
+
+					// when action button clicked
+					// opening popup edit form if edit is clicked
+					// opening popup quetion form if remove is clicked
+					editButton.click(function() {
+						var btnValue = $(this).val();
+						console.log("Edit Item ID: " + btnValue);
+					});
+
+					removeButton.click(function() {
+						var btnValue = $(this).val();
+						var btnItemNameAttr = $(this).attr("data-item-name");
+						var btnItemOwnerAttr = $(this).attr("data-item-owner");
+						var btnItemLocation = $(this).attr("data-item-location");
+
+						console.log("Remove Item ID: " + btnValue);
+
+						// show modal / popup
+						var jqueryGetModal = $("div#prompt-remove-alert");
+						var modal = document.getElementById("prompt-remove-alert");
+						jqueryGetModal.fadeIn(300);
+
+						// show the prompt
+						var modalContent = "<div class='tbl-content-modal'><label style='font-weight: bold; color: #c0392b;'>Are you sure want to remove this item?</label><br><br>";
+						modalContent += "<table cellpadding='10px' cellspacing='0' style='border: solid 1px #ddd;'>";
+						modalContent += "<tr>";
+						modalContent += "  <td>ID</td>";
+						modalContent += "  <td>"+btnValue+"</td>";
+						modalContent += "</tr><tr>";
+						modalContent += "  <td>Name</td>";
+						modalContent += "  <td>"+btnItemNameAttr+"</td>";
+						modalContent += "</tr><tr>";
+						modalContent += "  <td>Owner</td>";
+						modalContent += "  <td>"+btnItemOwnerAttr+"</td>";
+						modalContent += "</tr><tr>";
+						modalContent += "  <td>Location</td>";
+						modalContent += "  <td>"+btnItemLocation+"</td>";
+						modalContent += "</tr>";
+						modalContent += "</table><br><br>";
+						modalContent += "<div class='remove-box-btn' style='text-align: center;'>";
+						modalContent += "<button class='remove-prompt-action remove-yes'>Yes</button>&nbsp;<button class='remove-prompt-action remove-no'>No</button>";
+						modalContent += "</div>";
+						modalContent += "</div>";
+
+						$("div.remove-modal-content").html(modalContent);
+
+						window.onclick = function(e) {
+							if (e.target == modal) {
+								//modal.style.display = "none";
+								jqueryGetModal.fadeOut(300);
+							}
+						}
+						$("button.remove-no").click(function() {
+							jqueryGetModal.fadeOut(300);
+						});
+					});
+					$("div#app-loading-bar").css("display", "none");
+				},
+				beforeSend: function() {
+					$("div#app-loading-bar").css("display", "block");
+				}
+			});
+		} else {
+			$("div#remove-result").html("<div class='not-found'><h2>Searching items ...</h2></div>");
+		}
+	});
+}
+
 </script>
 [[ end ]]
 
@@ -284,7 +428,7 @@ function appFormAddItemsHandler() {
 	div#app-add-content input[type="text"] {
 		outline: none;
 		border: none;
-		border-bottom: solid 1px #bdc3c7;
+		border-bottom: solid 1px #95a5a6;
 		padding: 10px;
 		width: 350px;
 	}
@@ -305,13 +449,13 @@ function appFormAddItemsHandler() {
 		padding: 10px;
 		padding-left: 10px;
 		width: 174px;
-		border-bottom: solid 1px #bdc3c7;
+		border-bottom: solid 1px #95a5a6;
 		outline: none;
 	}
 	div#app-add-content input[type="number"].time-period {
 		width: 150px;
 		background-color: none;
-		padding: 9px;
+		padding: 10px;
 	}
 	select {
 		-webkit-appearance:none;
@@ -328,14 +472,14 @@ function appFormAddItemsHandler() {
 		border: none;
 		outline: none;
 		padding: 9px;
-		border-bottom: solid 1px #bdc3c7;
+		border-bottom: solid 1px #95a5a6;
 		width: 196px;
 	}
 	select.select-location {
 		border: none;
 		outline: none;
-		padding: 9px;
-		border-bottom: solid 1px #bdc3c7;
+		padding: 10px;
+		border-bottom: solid 1px #95a5a6;
 		width: 350px;
 	}
 	select.select-time-period:hover {
@@ -420,31 +564,141 @@ function appFormAddItemsHandler() {
 		display: inline;
 		float: left;
 		width: 100%;
-		border-bottom: solid 1px #ddd;
+		border-bottom: solid 1px #95a5a6;
 	}
 	input.app-search {
 		background-image: url(/img/searchicon.png);
 		background-size: 12px;
-		background-position: 10px 10px;
+		background-position: 7px 7px;
 		background-repeat: no-repeat;
 		width: 350px;
 		padding-left: 40px;
-		padding-top: 10px;
-		padding-bottom: 10px;
+		padding-top: 5px;
+		padding-bottom: 5px;
 		font-size: 12px;
-		border: solid 1px #ddd;
+		border: solid 1px #95a5a6;
 		margin-bottom: 12px;
 		border-radius: 5px;
 		outline: none;
 	}
 	select.select-searchby {
-		padding: 10px;
+		padding: 4px;
 		border-radius: 5px;
-		border: solid 1px #ddd;
+		border: solid 1px #95a5a6;
 		color: #95a5a6;
+		text-align: center;
 	}
 	select.select-searchby:hover {
 		cursor: pointer;
+	}
+
+	div#remove-result {
+		overflow-x: auto;
+		padding: 10px;
+	}
+	div#remove-result .result-table {
+		text-align: center;
+		font-size: 80%;
+		border: solid 1px #ddd;
+	}
+	tr:nth-child(even) {
+		background-color: #F2F2F2;
+	}
+	div.remove-welcome-box {
+		color: #2c3e50;
+		padding-top: 20px;
+		padding-left: 25px;
+		padding: 35px;
+	}
+	.not-found {
+		color: #2c3e50;
+		padding-top: 20px;
+		padding-left: 25px;
+		padding: 35px;
+	}
+
+	/* action button */
+	button.action-button {
+		border: solid 1px #FFFFFF;
+		padding: 5px;
+		padding-left: 15px;
+		padding-right: 15px;
+		color: #FFFFFF;
+		border-radius: 5px;
+	}
+	button.app-remove {
+		background-color: #c0392b;
+	}
+	button.app-edit {
+		background-color: #2980b9;
+	}
+	button.app-remove:hover {
+		background-color: #FFFFFF;
+		border: solid 1px #c0392b;
+		color: #c0392b;
+	}
+	button.app-edit:hover {
+		background-color: #FFFFFF;
+		border: solid 1px #2980b9;
+		color: #2980b9;
+	}
+	button.action-button:hover {
+		cursor: pointer;
+	}
+	div#app-loading-bar {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		background-color: #34495e;
+		padding: 2px;
+	}
+	div#prompt-remove-alert {
+		display: none;
+		position: fixed;
+		z-index: 1;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		background-color: rgb(0,0,0);
+		background-color: rgba(0,0,0,0.4); 
+	}
+	div.remove-modal-content {
+		background-color: #FEFEFE;
+		margin: 15% auto;
+		padding: 20px;
+		border: solid 1px #888;
+		width: 70%;
+		border-radius: 5px;
+		box-shadow: 1px 2px 2px #888888;
+	}
+	div.tbl-content-modal {
+		overflow-x: auto;
+	}
+	div.tbl-content-modal table {
+		width: 100%;
+	}
+	button.remove-prompt-action {
+		border: none;
+		color: #FFFFFF;
+		padding-top: 8px;
+		padding-bottom: 8px;
+		padding-left: 25px;
+		padding-right: 25px;
+		border-radius: 2px;
+		font-weight: 700;
+	}
+	button.remove-prompt-action:hover {
+		cursor: pointer;
+	}
+	button.remove-yes {
+		background-color: #27ae60;
+	}
+	button.remove-no {
+		background-color: #e74c3c;
 	}
 	/* end of remove box */
 
@@ -480,6 +734,10 @@ function appFormAddItemsHandler() {
 </div>
 [[ end ]]
 
+[[ define "loading_bar" ]]
+<div id="app-loading-bar"></div>
+[[ end ]]
+
 [[ define "add_box" ]]
 <!-- Add item content -->
 <div id="app-add-content">
@@ -487,23 +745,22 @@ function appFormAddItemsHandler() {
 	<form class="app-form-add">
 		<div class="row">
 			<input class="item-name" type="text" placeholder="Item Name">
-			<label class="app-input-note"> <i>*Example: Cat-6A UTP Cable</i></label>
 		</div><br>
 		<div class="row">
-			<input class="item-model" type="text" placeholder="Model/Brand" > <label class="app-input-note"><i>*Example: AMP Connect</i></label>
+			<input class="item-model" type="text" placeholder="Model/Brand">
 		</div><br>
 		<div class="row">
 			<input class="item-quantity" type="number" placeholder="Quantity" min="1">&nbsp;<input class="item-limitation" type="number" placeholder="Limitation" min="1">
 		</div><br>
 		<div class="row">
-			<input class="item-unit" type="text" placeholder="Item Unit"> <label class="app-input-note"><i>*Example: Roll, Packs, etc.</i></label>
+			<input class="item-unit" type="text" placeholder="Item Unit">
 		</div><br>
 		<div class="row">
 			<div class="row">
 				<label style="font-size: 90%; padding: 10px; color: #2980b9;">Date of Entry</label>
 			</div>
 			<div class="row">
-				<input class="date-of-entry" type="text" placeholder="YYYY-MM-DD hh:mm"> <label class="app-input-note"><i>*Example: 2017-08-10 16:00 (Use 24 Hours Format)</i></label>
+				<input class="date-of-entry" type="text" placeholder="YYYY-MM-DD hh:mm">
 			</div>
 		</div><br>
 		<div class="row">
@@ -512,7 +769,7 @@ function appFormAddItemsHandler() {
 				<option value="Day(s)">Day(s)</option>
 				<option value="Week(s)">Week(s)</option>
 				<option value="Month(s)">Month(s)</option>
-			</select> <label class="app-input-note"><i style="color: blue;">Optional or you could blank this out</i></label>
+			</select>
 		</div><br>
 		<div class="row">
 			<input class="item-owner" type="text" placeholder="Owner">
@@ -547,17 +804,27 @@ function appFormAddItemsHandler() {
 					<option value="item_model">Model</option>
 					<option value="date_of_entry">Date</option>
 					<option value="item_unit">Item Unit</option>
+					<option value="item_owner">Owner</option>
 				</select>
 			</li>
 		</ul>
+	</div><br><br><br>
+	<div id="remove-result" class="row">
+		<div class="remove-welcome-box">
+			<h2>The results are here ...</h2>
+		</div>
 	</div>
-	<div id="app-remove-table" class="row">
-		<table>
-			<th></th>
-		</table>
-	</div>
+	<br><br><br><br>
+	[[ template "remove_modal". ]]
 </div>
 <!-- -->
+[[ end ]]
+
+[[ define "remove_modal" ]]
+<div id="prompt-remove-alert">
+	<div class="remove-modal-content">
+	</div>
+</div>
 [[ end ]]
 
 [[ define "side_navigation" ]]
