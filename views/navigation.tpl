@@ -39,10 +39,10 @@
 
 [[ define "user_profile" ]]
 <div id="app-user-profile-nav">
-	<a class="app-dropdown-btn" href="">
+	<a class="app-dropdown-btn" href=''>
 		&nbsp;[[.HtmlUserFullName]]&nbsp;
 	</a>
-	<div class="app-dropdown-content">
+	<div id='this-dropdown' class="app-dropdown-content">
 		<a href="/settings">Settings</a>
 		<a href="/logout">Logout</a>
 	</div>
@@ -54,8 +54,8 @@
 	$(document).ready(function() {
 		$("a.app-dropdown-btn").click(function(e) {
 			e.preventDefault();
-			$("div.app-dropdown-content").slideToggle(300);
-		});
+			$("div.app-dropdown-content").slideToggle(200);
+		}); 
 	});
 </script>
 [[ end ]]
@@ -126,6 +126,7 @@
 		text-align: left;
 		color: #000000;
 	}
+	.dropdown-show {display:block;}
 	/* end of profile button */
 
 	/* logo style */

@@ -161,6 +161,7 @@ type Items struct {
 	Item_location		string  `json:"item_location"`
 	Item_status			string  `json:"item_status"`
 	Added_by			string  `json:"added_by"`
+	Redirect 			bool    `json:"redirect"`
 }
 
 func (this *MainController) AppJSONItemsData(w http.ResponseWriter, r *http.Request) {
@@ -203,41 +204,53 @@ func (this *MainController) AppJSONItemsData(w http.ResponseWriter, r *http.Requ
 
 // Searching item in database then create JSON datatype from item_results
 func (this *MainController) AppJSONSearchData(w http.ResponseWriter, r *http.Request) {
+	// get session
+	sess := session.Start(w, r)
+	username_session := sess.GetString("user_name")
+	log.Println("Session length:", len(username_session))
+
 	r.ParseForm()
 	if r.Method == "POST" {
-		w.Header().Set("Content-Type", "application/json")
-		search := r.Form["search_value"][0]
-		category := r.Form["category"][0]
 		var item_to_json []Items
+		// check if user session not terminate
+		// if user has terminate their session, send json messagea redirect
+		if len(username_session) > 0 {
+			w.Header().Set("Content-Type", "application/json")
+			search := r.Form["search_value"][0]
+			category := r.Form["category"][0]
 
-		item_results := models.ModelsSearchForItems(search, category)
+			// search items from models
+			item_results := models.ModelsSearchForItems(search, category)
 
-		if len(item_results) > 0 {
-			item_to_json = make([]Items, len(item_results))
-		} else {
-			item_to_json = make([]Items, 1)
-		}
-
-		if len(item_results) > 0 {
-			// fill the json value from item_results (search query)
-			for i:=0; i<len(item_results); i++ {
-				item_to_json[i].Item_id = item_results[i].Item_id
-				item_to_json[i].Item_name = item_results[i].Item_name
-				item_to_json[i].Item_model = item_results[i].Item_model
-				item_to_json[i].Item_limitation = item_results[i].Item_limitation
-				item_to_json[i].Item_quantity = item_results[i].Item_quantity
-				item_to_json[i].Item_unit = item_results[i].Item_unit
-				item_to_json[i].Date_of_entry = item_results[i].Date_of_entry
-				item_to_json[i].Item_time_period = item_results[i].Item_time_period
-				item_to_json[i].Item_expired = item_results[i].Item_expired
-				item_to_json[i].Item_owner = item_results[i].Item_owner
-				item_to_json[i].Owner_id = item_results[i].Owner_id
-				item_to_json[i].Item_location = item_results[i].Item_location
-				item_to_json[i].Item_status = item_results[i].Item_status
-				item_to_json[i].Added_by = item_results[i].Added_by
+			if len(item_results) > 0 {
+				item_to_json = make([]Items, len(item_results))
+			} else {
+				item_to_json = make([]Items, 1)
 			}
-		} else if len(item_results) == 0 {
-			item_to_json[0].Item_name = "Not found"
+
+			if len(item_results) > 0 {
+				// fill the json value from item_results (search query)
+				for i:=0; i<len(item_results); i++ {
+					item_to_json[i].Item_id = item_results[i].Item_id
+					item_to_json[i].Item_name = item_results[i].Item_name
+					item_to_json[i].Item_model = item_results[i].Item_model
+					item_to_json[i].Item_limitation = item_results[i].Item_limitation
+					item_to_json[i].Item_quantity = item_results[i].Item_quantity
+					item_to_json[i].Item_unit = item_results[i].Item_unit
+					item_to_json[i].Date_of_entry = item_results[i].Date_of_entry
+					item_to_json[i].Item_time_period = item_results[i].Item_time_period
+					item_to_json[i].Item_expired = item_results[i].Item_expired
+					item_to_json[i].Item_owner = item_results[i].Item_owner
+					item_to_json[i].Owner_id = item_results[i].Owner_id
+					item_to_json[i].Item_location = item_results[i].Item_location
+					item_to_json[i].Item_status = item_results[i].Item_status
+					item_to_json[i].Added_by = item_results[i].Added_by
+				}
+			} else if len(item_results) == 0 {
+				item_to_json[0].Item_name = "Not found"
+			}
+		} else if len(username_session) == 0 {
+			http.Error(w, "Session has timed out :(", http.StatusBadRequest)
 		}
 
 		outgoingJSON, err := json.Marshal(item_to_json)
@@ -245,6 +258,7 @@ func (this *MainController) AppJSONSearchData(w http.ResponseWriter, r *http.Req
 			log.Println(err)
 		}
 		fmt.Fprintf(w, string(outgoingJSON))
+		log.Println(string(outgoingJSON))
 	} else {
 		fmt.Fprintf(w, "NOT FOUND BRAY!!")
 	}
@@ -420,9 +434,6 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 					log.Println(errModels)
 				}
 			break
-			case "REMOVE":
-				log.Println("REMOVE GOBLOG!")
-			break
 			}
 		} else {
 			w.Header().Set("Content-Type", "application/json")
@@ -458,7 +469,7 @@ func (this *MainController) AppJSONRemoveItem(w http.ResponseWriter, r *http.Req
 				Message   string  `json:"message"`
 			}{
 				Redirect: true,
-				Message: "Succefull removing item!",
+				Message: "Successful removing item!",
 			}
 			sendJson, err := json.Marshal(dataJson)
 			if err != nil {

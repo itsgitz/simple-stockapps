@@ -20,9 +20,9 @@ function appAjaxController() {
 			var url = "/" + event.state.page;
 			appAjaxRequestPage(url);
 			switch(event.state.page) {
-				case "items": $("title").text("Items Management - Simple StockApps"); break;
+				case "items": $("title").text("Items Dashboard - Simple StockApps"); break;
 				case "reports": $("title").text("History - Simple StockApps"); break;
-				case "users": $("title").text("Users Management - Simple StockApps"); break
+				case "users": $("title").text("Users Dashboard - Simple StockApps"); break;
 			}
 		}
 	}
@@ -33,13 +33,13 @@ function appAjaxController() {
 		switch(getUrlFromHash) {
 			// change title
 			case "/items":
-				$("title").text("Items Management - Simple StockApps");
+				$("title").text("Items Dashboard - Simple StockApps");
 				break;
 			case "/reports":
 				$("title").text("History - Simple StockApps");
 				break;
 			case "/users":
-				$("title").text("Users Management - Simple StockApps");
+				$("title").text("Users Dashboard - Simple StockApps");
 				break;
 		}
 		var getStateFromUrl = getUrlFromHash.substring(1);

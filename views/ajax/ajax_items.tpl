@@ -4,7 +4,7 @@
 [[ template "style". ]]
 [[ template "loading_bar". ]]
 <div id="app-ajax-items">
-	<h3>Items Management</h3>
+	<h3>Items Dashboard</h3>
 	<span style="text-align: justify;"><i style="font-size: 90%;">You could add or remove (Administrator privilege) items, Please choose one of navigation options below.</i></span>
 
 	[[ template "side_navigation". ]]
@@ -207,7 +207,7 @@ function appFormAddItemsHandler() {
 						alert("Session login has timed out :(");
 						window.location ="/";
 					} else {
-						alert("Successfuly inserting data!");
+						alert("Successful inserting data!");
 						window.location = "/";	
 					}
 				}
@@ -244,6 +244,7 @@ function appFormRemoveOrEditItemsHandler() {
 				},
 				success: function(res) {
 					var resultTable;
+
 					if (res[0].item_name !== "Not found") {
 						resultTable = "<table class='result-table' cellpadding='10' cellspacing='0' border='0'>";
 						resultTable += "  <th>No.</th>";
@@ -276,7 +277,7 @@ function appFormRemoveOrEditItemsHandler() {
 							resultTable += "    <td>"+ res[i].item_location +"</td>";
 							resultTable += "    <td>"+ res[i].added_by +"</td>";
 							resultTable += "    <td>"+ res[i].item_status +"</td>";
-							resultTable += "    <td><button class='action-button app-edit' value='"+res[i].item_id+"'>Edit</button></td>";
+							resultTable += "    <td><button class='action-button app-edit' value='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-model='"+res[i].item_model+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-unit='"+res[i].item_unit+"' data-time-period='"+res[i].item_time_period+"' data-item-owner='"+res[i].item_owner+"' data-item-location='"+res[i].item_location+"' data-date-entry='"+res[i].date_of_entry+"' data-item-expired='"+res[i].item_expired+"' data-added-by='"+res[i].added_by+"' data-item-status='"+res[i].item_status+"'>Edit</button></td>";
 							resultTable += "    <td><button class='action-button app-remove' value='"+ res[i].item_id +"' data-item-name='"+res[i].item_name+"' data-item-owner='"+res[i].item_owner+"' data-item-location='"+res[i].item_location+"'>Remove</button></td>";
 							resultTable += "  </tr>";
 						}
@@ -297,8 +298,114 @@ function appFormRemoveOrEditItemsHandler() {
 					// opening popup edit form if edit is clicked
 					// opening popup quetion form if remove is clicked
 					editButton.click(function() {
-						var btnValue = $(this).val();
-						console.log("Edit Item ID: " + btnValue);
+						var itemThisId = $(this).val(), // item_id
+						    itemThisName = $(this).attr("data-item-name"), // item_name
+						    itemThisModel = $(this).attr("data-item-model"), // item_model
+						    itemThisQuantity = $(this).attr("data-item-quantity"), // item_quantity
+						    itemThisLimitation = $(this).attr("data-item-limitation"), // item_limittaion
+						    itemThisUnit = $(this).attr("data-item-unit"), // item_unit
+						    itemThisOwner = $(this).attr("data-item-owner"), // item_owner
+						    itemThisLocation = $(this).attr("data-item-location"); // item_location
+						    itemThisDateEntry = $(this).attr("data-date-entry"); // date_of_entry
+						    itemThisTimePeriod = $(this).attr("data-time-period"); // item_time_period
+						    itemThisExpired = $(this).attr("data-item-expired"); // item_expired
+						    itemThisAddedBy = $(this).attr("data-added-by"); // added_by
+						    itemThisStatus = $(this).attr("data-item-status"); // item_status
+
+						// show the modal/popup
+						var jqueryGetModal = $("div#prompt-edit-modal");
+						var modal = document.getElementById("prompt-edit-modal");
+						jqueryGetModal.fadeIn(300);
+						window.onclick = function(e) {
+							if (e.target == modal) {
+								//modal.style.display = "none";
+								jqueryGetModal.fadeOut(300);
+							}
+						}
+						// table content for modal/popup
+						var editContent = "<div class='tbl-content-modal'>";
+						editContent += "<label style='font-weight: bold; color: #2980b9;'>Edit Items</label><br><br>";
+						editContent += "<table cellpadding='10px' cellspacing='0' style='border: solid 1px #ddd;'>";
+						editContent += "<tr>";
+						editContent += "  <td>ID</td>";
+						editContent += "  <td>"+itemThisId+"</td>";
+						editContent += "</tr>";
+						editContent += "<tr>";
+						editContent += "  <td>Name</td>";
+						editContent += "  <td><input class='edit-table' type='text' placeholder='Name' value='"+itemThisName+"'></td>";
+						editContent += "</tr>";
+						editContent += "<tr>";
+						editContent += "  <td>Model/Brand</td>";
+						editContent += "  <td><input class='edit-table' type='text' placeholder='Model/Brand' value='"+itemThisModel+"'></td>";
+						editContent += "</tr>";
+						editContent += "<tr>";
+						editContent += "  <td>Quantity</td>";
+						editContent += "  <td><input class='edit-table' type='number' placeholder='Quantity' value='"+parseInt(itemThisQuantity)+"' min='1'></td>";
+						editContent += "</tr>";
+						editContent += "<tr>";
+						editContent += "  <td>Limitation</td>";
+						editContent += "  <td><input class='edit-table' type='number' placeholder='Limitation' value='"+parseInt(itemThisLimitation)+"' min='1'></td>";
+						editContent += "</tr>";
+						editContent += "<tr>";
+						editContent += "  <td>Item Unit</td>";
+						editContent += "  <td><input class='edit-table' type='text' placeholder='Item Unit' value='"+itemThisUnit+"'></td>";
+						editContent += "</tr>";
+						editContent += "<tr>";
+						editContent += "  <td>Date of Entry</td>";
+						editContent += "  <td>"+itemThisDateEntry+"</td>";
+						editContent += "</tr>";
+						editContent += "<tr>";
+						editContent += "  <td>Time Period</td>";
+						// if time period is string, change the value to number
+						if (itemThisTimePeriod == "None") {
+							itemThisTimePeriod = "0";
+						}
+
+						editContent += "  <td><input class='edit-table' type='number' placeholder='Time Period' value='"+parseInt(itemThisTimePeriod)+"'>";
+						editContent += "    <select class='edit-period'>";
+						editContent += "       <option value='Day(s)'>Day(s)</option>";
+						editContent += "       <option value='Week(s)'>Week(s)</option>";
+						editContent += "       <option value='Month(s)'>Month(s)</option>";
+						editContent += "    </select>";
+						editContent += "  </td>";
+						editContent += "</tr>";
+						editContent += "<tr>";
+						editContent += "  <td>Date Expired</td>";
+						editContent += "  <td>"+itemThisExpired+"</td>";
+						editContent += "</tr>";
+						editContent += "<tr>";
+						editContent += "  <td>Owner</td>";
+						editContent += "  <td><input class='edit-table' type='text' placeholder='Owner' value='"+itemThisOwner+"'></td>";
+						editContent += "</tr>";
+						editContent += "<tr>";
+						editContent += "  <td>Location</td>";
+						editContent += "  <td>";
+						editContent += "    <select class='edit-location'>";
+						editContent += "       <option value=''>-- Location --</option>";
+						editContent += "       <option value='DC TBS 1st Floor'>DC TBS 1st Floor</option>";
+						editContent += "       <option value='DC TBS 2nd Floor'>DC TBS 2nd Floor</option>";
+						editContent += "       <option value='DC TBS 3rd Floor'>DC TBS 3rd Floor</option>";
+						editContent += "    </select>";
+						editContent += "  </td>";
+						editContent += "</tr>";
+						editContent += "<tr>";
+						editContent += "  <td>Added by</td>";
+						editContent += "  <td>"+itemThisAddedBy+"</td>";
+						editContent += "</tr>";
+						editContent += "<tr>";
+						editContent += "  <td>Status</td>";
+						editContent += "  <td>"+itemThisStatus+"</td>";
+						editContent += "</tr>";
+						editContent += "</table>";
+						editContent += "</div>";
+						editContent += "<div style='text-align: center;'>";
+						editContent += "   <br><br><button class='remove-prompt-action edit-update'>Update</button> <button class='remove-prompt-action cancel-update'>Cancel</button>";
+						editContent += "</div>";
+
+						$("div.edit-modal-content").html(editContent);
+						$("button.cancel-update").click(function() {
+							jqueryGetModal.fadeOut(200);
+						});
 					});
 
 					removeButton.click(function() {
@@ -306,8 +413,6 @@ function appFormRemoveOrEditItemsHandler() {
 						var btnItemNameAttr = $(this).attr("data-item-name");
 						var btnItemOwnerAttr = $(this).attr("data-item-owner");
 						var btnItemLocation = $(this).attr("data-item-location");
-
-						console.log("Remove Item ID: " + btnValue);
 
 						// show modal / popup
 						var jqueryGetModal = $("div#prompt-remove-alert");
@@ -365,9 +470,9 @@ function appFormRemoveOrEditItemsHandler() {
 									console.log(res);
 									// if success, show 
 									if (res.redirect) {
-										$("div.tbl-content-modal").html("<p style='font-weight: bold; color: #3498db;'>"+res.message+" Redirect in 3 seconds</p>");
+										$("div.tbl-content-modal").html("<p style='padding: 10px; font-weight: bold; color: #3498db;'>"+res.message+" Please wait ... </p>");
 										setTimeout(function() {
-											window.location = "/";
+											jqueryGetModal.fadeOut(300);
 										}, 3000);
 										window.onclick = function(e) {
 											if (e.target == modal) {
@@ -383,6 +488,12 @@ function appFormRemoveOrEditItemsHandler() {
 				},
 				beforeSend: function() {
 					$("div#app-loading-bar").css("display", "block");
+				},
+				error: function(res) {
+					if (res.status == 400) {
+						alert(res.responseText);
+						window.location = "/";
+					}
 				}
 			});
 		} else {
@@ -453,7 +564,7 @@ function appFormRemoveOrEditItemsHandler() {
 		position: absolute;
 		left: 225px;
 		right: 10px;
-		overflow: hidden;
+		overflow-x: auto;
 	}
 	/* end of wrapepr style */
 
@@ -687,6 +798,18 @@ function appFormRemoveOrEditItemsHandler() {
 		background-color: #34495e;
 		padding: 2px;
 	}
+	div#prompt-edit-modal {
+		display: none;
+		position: fixed;
+		z-index: 1;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		background-color: rgb(0,0,0);
+		background-color: rgba(0,0,0,0.4);	
+	}
 	div#prompt-remove-alert {
 		display: none;
 		position: fixed;
@@ -702,6 +825,15 @@ function appFormRemoveOrEditItemsHandler() {
 	div.remove-modal-content {
 		background-color: #FEFEFE;
 		margin: 15% auto;
+		padding: 20px;
+		border: solid 1px #888;
+		width: 70%;
+		border-radius: 5px;
+		box-shadow: 1px 2px 2px #888888;
+	}
+	div.edit-modal-content {
+		background-color: #FEFEFE;
+		margin: 10% auto;
 		padding: 20px;
 		border: solid 1px #888;
 		width: 70%;
@@ -731,6 +863,12 @@ function appFormRemoveOrEditItemsHandler() {
 		background-color: #27ae60;
 	}
 	button.remove-no {
+		background-color: #e74c3c;
+	}
+	button.edit-update {
+		background-color: #27ae60;
+	}
+	button.cancel-update {
 		background-color: #e74c3c;
 	}
 	/* end of remove box */
@@ -849,17 +987,24 @@ function appFormRemoveOrEditItemsHandler() {
 		</div>
 	</div>
 	<br><br><br><br>
+	[[ template "edit_modal". ]]
 	[[ template "remove_modal". ]]
 </div>
 <!-- -->
 [[ end ]]
 
-[[ define "remove_modal" ]]
-<div id="prompt-remove-alert">
-	<div class="remove-modal-content">
-	</div>
+[[ define "edit_modal" ]]
+<div id="prompt-edit-modal">
+	<div class="edit-modal-content"></div>
 </div>
 [[ end ]]
+
+[[ define "remove_modal" ]]
+<div id="prompt-remove-alert">
+	<div class="remove-modal-content"></div>
+</div>
+[[ end ]]
+
 
 [[ define "side_navigation" ]]
 <br><br>

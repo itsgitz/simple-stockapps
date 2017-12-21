@@ -105,7 +105,7 @@ function appTableHandler() {
 		},
 		error: function(res) {
 			console.log(res.responseText);
-			$("div#app-table-box").html("<p style='color: #7f8c8d; padding: 30px; text-align:justify;'>"+res.responseText+"</p>");
+			$("div#app-table-box").html("<p style='color: #7f8c8d; padding: 30px; text-align:left;'>"+res.responseText+"</p>");
 		}
 	});
 }
