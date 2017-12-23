@@ -145,43 +145,43 @@ function appFormAddItemsHandler() {
 
 		var alertBox = $("div#app-alert-add-bar");
 		if (!itemName) {
-			alertBox.html("<div>Item Name is empty or null</div>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Name is empty or null</div><br>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else if (!itemModel) {
-			alertBox.html("<div>Item Model/Brand is empty or null</div>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Model/Brand is empty or null</div><br>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else if (!itemQuantity || !itemLimitation) {
-			alertBox.html("<div>Item Quantity or Limitation is empty or null</div>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Quantity or Limitation is empty or null</div><br>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else if (parseInt(itemQuantity == 0) || parseInt(itemLimitation) == 0) {
-			alertBox.html("<div>Item Quantity or Limitation couldn't zero</div>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Quantity or Limitation couldn't zero</div><br>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else if (parseInt(itemLimitation) > parseInt(itemQuantity)) {
-			alertBox.html("<div>Item Quantity couldn't be less than Item Limitation</div>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Quantity couldn't be less than Item Limitation</div><br>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else if (!itemUnit) {
-			alertBox.html("<div>Item Unit is empty or null</div>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Unit is empty or null</div><br>");
 			alertBox.hide();
 			alertBox.fadeIn(200);			
 		} else if (!dateOfEntry) {
-			alertBox.html("<div>Date of entry is empty or not null</div>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Date of entry is empty or not null</div><br>");
 			alertBox.hide();
 			alertBox.fadeIn(200);			
 		} else if (!resultFormValidation) {
-			alertBox.html("<div>Wrong date form validation!</div>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Wrong date form validation!</div><br>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else if (!itemOwner) {
-			alertBox.html("<div>Item Owner is empty or not null</div>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Owner is empty or not null</div><br>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else if (!itemLocation) {
-			alertBox.html("<div>Item Location is empty or null</div>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Location is empty or null</div><br>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else {
@@ -214,6 +214,9 @@ function appFormAddItemsHandler() {
 			});
 			addItemForm[0].reset();
 		}
+		$("span.close-alert").click(function(e) {
+			$("div#app-alert-add-bar").fadeOut(100);
+		});
 	});
 }
 
@@ -322,37 +325,38 @@ function appFormRemoveOrEditItemsHandler() {
 								jqueryGetModal.fadeOut(300);
 							}
 						}
+
 						// table content for modal/popup
-						var editContent = "<div class='tbl-content-modal'>";
-						editContent += "<label style='font-weight: bold; color: #2980b9;'>Edit Items</label><br><br>";
-						editContent += "<table cellpadding='10px' cellspacing='0' style='border: solid 1px #ddd;'>";
+						var editContent = "<div class='tbl-content-modal edit-box'>";
+						editContent += "<label style='font-weight: bold; color: #2980b9; font-size: 15px;'>Edit Items</label><br><br>";
+						editContent += "<table class='table-form-edit' cellpadding='8px' cellspacing='0' style='border: solid 1px #ddd;'>";
 						editContent += "<tr>";
 						editContent += "  <td>ID</td>";
-						editContent += "  <td>"+itemThisId+"</td>";
+						editContent += "  <td><lable style='padding-left:10px;'>"+itemThisId+"</lable></td>";
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Name</td>";
-						editContent += "  <td><input class='edit-table' type='text' placeholder='Name' value='"+itemThisName+"'></td>";
+						editContent += "  <td><input class='edit-table edit-name' type='text' placeholder='Name' value='"+itemThisName+"'></td>";
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Model/Brand</td>";
-						editContent += "  <td><input class='edit-table' type='text' placeholder='Model/Brand' value='"+itemThisModel+"'></td>";
+						editContent += "  <td><input class='edit-table edit-model' type='text' placeholder='Model/Brand' value='"+itemThisModel+"'></td>";
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Quantity</td>";
-						editContent += "  <td><input class='edit-table' type='number' placeholder='Quantity' value='"+parseInt(itemThisQuantity)+"' min='1'></td>";
+						editContent += "  <td><input class='edit-table edit-quantity' type='number' placeholder='Quantity' value='"+parseInt(itemThisQuantity)+"' min='1'></td>";
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Limitation</td>";
-						editContent += "  <td><input class='edit-table' type='number' placeholder='Limitation' value='"+parseInt(itemThisLimitation)+"' min='1'></td>";
+						editContent += "  <td><input class='edit-table edit-limitation' type='number' placeholder='Limitation' value='"+parseInt(itemThisLimitation)+"' min='1'></td>";
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Item Unit</td>";
-						editContent += "  <td><input class='edit-table' type='text' placeholder='Item Unit' value='"+itemThisUnit+"'></td>";
+						editContent += "  <td><input class='edit-table edit-unit' type='text' placeholder='Item Unit' value='"+itemThisUnit+"'></td>";
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Date of Entry</td>";
-						editContent += "  <td>"+itemThisDateEntry+"</td>";
+						editContent += "  <td><lable style='padding-left:10px;'>"+itemThisDateEntry+"</label></td>";
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Time Period</td>";
@@ -361,8 +365,8 @@ function appFormRemoveOrEditItemsHandler() {
 							itemThisTimePeriod = "0";
 						}
 
-						editContent += "  <td><input class='edit-table' type='number' placeholder='Time Period' value='"+parseInt(itemThisTimePeriod)+"'>";
-						editContent += "    <select class='edit-period'>";
+						editContent += "  <td><input class='edit-table edit-time-period' type='number' placeholder='Time Period' value='"+parseInt(itemThisTimePeriod)+"'>";
+						editContent += "    <select class='edit-period edit-type-period'>";
 						editContent += "       <option value='Day(s)'>Day(s)</option>";
 						editContent += "       <option value='Week(s)'>Week(s)</option>";
 						editContent += "       <option value='Month(s)'>Month(s)</option>";
@@ -371,11 +375,11 @@ function appFormRemoveOrEditItemsHandler() {
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Date Expired</td>";
-						editContent += "  <td>"+itemThisExpired+"</td>";
+						editContent += "  <td><lable style='padding-left:10px;'>"+itemThisExpired+"</lable></td>";
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Owner</td>";
-						editContent += "  <td><input class='edit-table' type='text' placeholder='Owner' value='"+itemThisOwner+"'></td>";
+						editContent += "  <td><input class='edit-table edit-owner' type='text' placeholder='Owner' value='"+itemThisOwner+"'></td>";
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Location</td>";
@@ -390,11 +394,11 @@ function appFormRemoveOrEditItemsHandler() {
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Added by</td>";
-						editContent += "  <td>"+itemThisAddedBy+"</td>";
+						editContent += "  <td><lable style='padding-left:10px;'>"+itemThisAddedBy+"</label></td>";
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Status</td>";
-						editContent += "  <td>"+itemThisStatus+"</td>";
+						editContent += "  <td><lable style='padding-left:10px;'>"+itemThisStatus+"</label></td>";
 						editContent += "</tr>";
 						editContent += "</table>";
 						editContent += "</div>";
@@ -403,6 +407,7 @@ function appFormRemoveOrEditItemsHandler() {
 						editContent += "</div>";
 
 						$("div.edit-modal-content").html(editContent);
+						$("input[placeholder='Name']").focus();
 						$("button.cancel-update").click(function() {
 							jqueryGetModal.fadeOut(200);
 						});
@@ -507,6 +512,13 @@ function appFormRemoveOrEditItemsHandler() {
 
 [[ define "style" ]]
 <style>
+	.close-alert {
+		font-size: 28px; float: right;
+		padding: 15px;
+	}
+	.close-alert:hover {
+		cursor: pointer;
+	}
 	div#app-ajax-items {
 		padding: 20px;
 		width: 100%;
@@ -574,12 +586,12 @@ function appFormRemoveOrEditItemsHandler() {
 		border: none;
 		border-bottom: solid 1px #95a5a6;
 		padding: 10px;
-		width: 350px;
+		width: 100%;
 	}
 	div#app-add-content input[type="submit"] {
 		border: none;
 		padding: 5px;
-		width: 350px;
+		width: 100%;
 		background-color: #c0392b;
 		color: #F2F2F2;
 		border-radius: 5px;
@@ -592,15 +604,21 @@ function appFormRemoveOrEditItemsHandler() {
 		border: none;
 		padding: 10px;
 		padding-left: 10px;
-		width: 174px;
 		border-bottom: solid 1px #95a5a6;
 		outline: none;
 	}
+	div#app-add-content input[type="number"].item-quantity {
+		width: 100%;
+	}
+	div#app-add-content input[type="number"].item-limitation {
+		width: 100%;
+	}
 	div#app-add-content input[type="number"].time-period {
-		width: 150px;
+		width: 100%;
 		background-color: none;
 		padding: 10px;
 	}
+
 	select {
 		-webkit-appearance:none;
 		-o-appearance: none;
@@ -615,16 +633,16 @@ function appFormRemoveOrEditItemsHandler() {
 	select.select-time-period {
 		border: none;
 		outline: none;
-		padding: 9px;
+		padding: 10px;
 		border-bottom: solid 1px #95a5a6;
-		width: 196px;
+		width: 100%;
 	}
 	select.select-location {
 		border: none;
 		outline: none;
 		padding: 10px;
 		border-bottom: solid 1px #95a5a6;
-		width: 350px;
+		width: 100%;
 	}
 	select.select-time-period:hover {
 		cursor: pointer;
@@ -661,8 +679,7 @@ function appFormRemoveOrEditItemsHandler() {
 		right: 20%;
 		background-color: #2c3e50;
 		color: #FFFFFF;
-		text-align: center;
-		padding: 5px;
+		padding: 2px;
 		display: none;
 		border-bottom-left-radius: 5px;
 		border-bottom-right-radius: 5px;
@@ -833,7 +850,7 @@ function appFormRemoveOrEditItemsHandler() {
 	}
 	div.edit-modal-content {
 		background-color: #FEFEFE;
-		margin: 10% auto;
+		margin: 5% auto;
 		padding: 20px;
 		border: solid 1px #888;
 		width: 70%;
@@ -873,28 +890,58 @@ function appFormRemoveOrEditItemsHandler() {
 	}
 	/* end of remove box */
 
-	/* Media query when screen resolution > 1280px */
-	/*@media only screen and (min-width: 1600px) {
-		/* Add Items Content Style */
-	/*	div#app-add-content input[type="text"] {
-			width: 500px;
+	/* Edit Modal Content */
+
+	input.edit-table[type="text"], input.edit-table[type="number"] {
+		border: none;
+		border-bottom: solid 1px #95a5a6;
+		padding: 10px;
+		outline: none;
+		width: 300px;
+	}
+	input.edit-time-period[type='number'] {
+		width: 200px;
+	}
+	table.table-form-edit tr:nth-child(even) {
+		background-color: #FFFFFF;
+	}
+	table.table-form-add tr:nth-child(even) {
+		background-color: #FFFFFF;
+	}
+	input.edit-table {
+		font-size: 90%;
+	}
+	select.edit-period {
+		border: none;
+		border-bottom: solid 1px #95a5a6;
+		padding: 9px;
+		width: 100px;
+		outline: none;
+	}
+	select.edit-location {
+		border: none;
+		border-bottom: solid 1px #95a5a6;
+		padding: 9px;
+		width: 300px;
+		outline: none;
+	}
+	div.edit-box {
+		font-size: 80%;
+	}
+	/* end of edit modal content */
+
+	@media only screen and (max-width: 550px) {
+		div#app-side-nav {
+			display: none;
 		}
-		div#app-add-content input[type="submit"] {
-			width: 500px;
+		div#app-form-wrapper {
+			margin: 5%;
 		}
-		div#app-add-content input[type="number"] {
-			width: 500px;
+		div#app-add-content {
+			position: absolute;
+			left: 10px;
 		}
-		div#app-add-content input[type="number"].time-period {
-			width: 350px;
-		}
-		select.select-time-period {
-			width: 148px;
-		}
-		select.select-time-period:hover {
-			cursor: pointer;
-		}
-	}*/
+	}
 </style>
 [[ end ]]
 
@@ -914,48 +961,53 @@ function appFormRemoveOrEditItemsHandler() {
 <div id="app-add-content">
 	<div id="app-alert-add-bar"></div>
 	<form class="app-form-add">
-		<div class="row">
-			<input class="item-name" type="text" placeholder="Item Name">
-		</div><br>
-		<div class="row">
-			<input class="item-model" type="text" placeholder="Model/Brand">
-		</div><br>
-		<div class="row">
-			<input class="item-quantity" type="number" placeholder="Quantity" min="1">&nbsp;<input class="item-limitation" type="number" placeholder="Limitation" min="1">
-		</div><br>
-		<div class="row">
-			<input class="item-unit" type="text" placeholder="Item Unit">
-		</div><br>
-		<div class="row">
-			<div class="row">
-				<label style="font-size: 90%; padding: 10px; color: #2980b9;">Date of Entry</label>
-			</div>
-			<div class="row">
-				<input class="date-of-entry" type="text" placeholder="YYYY-MM-DD hh:mm">
-			</div>
-		</div><br>
-		<div class="row">
-			<input class="time-period" type="number" placeholder="Time Period">
-			<select class="select-time-period">
-				<option value="Day(s)">Day(s)</option>
-				<option value="Week(s)">Week(s)</option>
-				<option value="Month(s)">Month(s)</option>
-			</select>
-		</div><br>
-		<div class="row">
-			<input class="item-owner" type="text" placeholder="Owner">
-		</div><br>
-		<div class="row">
-			<select class="select-location">
-				<option value="" selected="">-- Location --</option>
-				<option value="DC TBS 1st Floor">DC TBS 1st Floor</option>
-				<option value="DC TBS 2nd Floor">DC TBS 2nd Floor</option>
-				<option value="DC TBS 3rd Floor"> DC TBS 3rd Floor</option>
-			</select>
-		</div> <br>
-		<div class="row">
-			<input type="submit" value="Submit Data">
-		</div>
+		<table class='table-form-add' cellpadding='8px' cellspacing='0'>
+			<tr>
+				<td><input class="item-name" type="text" placeholder="Item Name"></td>
+			</tr>
+			<tr>
+				<td><input class="item-model" type="text" placeholder="Model/Brand"></td>
+			</tr>
+			<tr>
+				<td><input class="item-quantity" type="number" placeholder="Quantity" min="1">&nbsp;<input class="item-limitation" type="number" placeholder="Limitation" min="1"></td>
+			</tr>
+			<tr>
+				<td><input class="item-unit" type="text" placeholder="Item Unit"></td>
+			</tr>
+			<tr>
+				<td><label style="font-size: 90%; padding: 5px; color: #2980b9;">Date of Entry</label></td>
+			</tr>
+			<tr>
+				<td><input class="date-of-entry" type="text" placeholder="YYYY-MM-DD hh:mm"></td>
+			</tr>
+			<tr>
+				<td>
+					<input class="time-period" type="number" placeholder="Time Period">
+					<select class="select-time-period">
+						<option value="Day(s)">Day(s)</option>
+						<option value="Week(s)">Week(s)</option>
+						<option value="Month(s)">Month(s)</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><input class="item-owner" type="text" placeholder="Owner"><td>
+			</tr>
+			<tr>
+				<td>
+					<select class="select-location">
+						<option value="" selected="">-- Location --</option>
+						<option value="DC TBS 1st Floor">DC TBS 1st Floor</option>
+						<option value="DC TBS 2nd Floor">DC TBS 2nd Floor</option>
+						<option value="DC TBS 3rd Floor"> DC TBS 3rd Floor</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="Submit Data"></td>
+			</tr>
+		</table>
+		<br>
 	</form>
 </div><br><br>
 <!-- -->
