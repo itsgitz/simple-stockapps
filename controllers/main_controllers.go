@@ -258,7 +258,6 @@ func (this *MainController) AppJSONSearchData(w http.ResponseWriter, r *http.Req
 			log.Println(err)
 		}
 		fmt.Fprintf(w, string(outgoingJSON))
-		log.Println(string(outgoingJSON))
 	} else {
 		fmt.Fprintf(w, "NOT FOUND BRAY!!")
 	}

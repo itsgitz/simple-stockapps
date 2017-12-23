@@ -935,11 +935,15 @@ function appFormRemoveOrEditItemsHandler() {
 			display: none;
 		}
 		div#app-form-wrapper {
-			margin: 5%;
+			margin: 0%;
 		}
 		div#app-add-content {
 			position: absolute;
 			left: 10px;
+			right: 10px;
+		}
+		div#app-welcome-box {
+			padding: 0;
 		}
 	}
 </style>
