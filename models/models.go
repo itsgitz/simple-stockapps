@@ -109,6 +109,20 @@ func ModelsGetOwnerID(item_owner string) string {
 	return owner_id
 }
 
+// print number of table rows
+func ModelsPrintItemsTableRows() int {
+	var number_of_rows int
+	x, err := db.Queryx("SELECT COUNT(*) FROM items")
+	if err != nil {
+		log.Println(err)
+	}
+	defer x.Close()
+	for x.Next() {
+		x.Scan(&number_of_rows)
+	}
+	return number_of_rows
+}
+
 // Searching item using this function
 func ModelsSearchForItems(search, cat string) []Items_Columns {
 	items_value := []Items_Columns{}
