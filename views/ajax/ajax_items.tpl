@@ -332,7 +332,8 @@ function appFormRemoveOrEditItemsHandler() {
 						editContent += "<table class='table-form-edit' cellpadding='8px' cellspacing='0' style='border: solid 1px #ddd;'>";
 						editContent += "<tr>";
 						editContent += "  <td>ID</td>";
-						editContent += "  <td><lable style='padding-left:10px;'>"+itemThisId+"</lable></td>";
+						editContent += "  <input class='edit-id' type='text' value='"+itemThisId+"' style='display: none;'></span>";
+						editContent += "  <td><label style='padding-left:10px;'>"+itemThisId+"</label></td>";
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Name</td>";
@@ -356,7 +357,7 @@ function appFormRemoveOrEditItemsHandler() {
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Date of Entry</td>";
-						editContent += "  <td><lable style='padding-left:10px;'>"+itemThisDateEntry+"</label></td>";
+						editContent += "  <td><label style='padding-left:10px;'>"+itemThisDateEntry+"</label></td>";
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Time Period</td>";
@@ -375,7 +376,7 @@ function appFormRemoveOrEditItemsHandler() {
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Date Expired</td>";
-						editContent += "  <td><lable style='padding-left:10px;'>"+itemThisExpired+"</lable></td>";
+						editContent += "  <td><label style='padding-left:10px;'>"+itemThisExpired+"</label></td>";
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Owner</td>";
@@ -394,11 +395,11 @@ function appFormRemoveOrEditItemsHandler() {
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Added by</td>";
-						editContent += "  <td><lable style='padding-left:10px;'>"+itemThisAddedBy+"</label></td>";
+						editContent += "  <td><label style='padding-left:10px;'>"+itemThisAddedBy+"</label></td>";
 						editContent += "</tr>";
 						editContent += "<tr>";
 						editContent += "  <td>Status</td>";
-						editContent += "  <td><lable style='padding-left:10px;'>"+itemThisStatus+"</label></td>";
+						editContent += "  <td><label style='padding-left:10px;'>"+itemThisStatus+"</label></td>";
 						editContent += "</tr>";
 						editContent += "</table>";
 						editContent += "</div>";
@@ -410,6 +411,25 @@ function appFormRemoveOrEditItemsHandler() {
 						$("input[placeholder='Name']").focus();
 						$("button.cancel-update").click(function() {
 							jqueryGetModal.fadeOut(200);
+						});
+
+						// get the value from edit modal
+						$("button.edit-update").click(function() {
+							//console.log("test");
+							// get the current value
+							var editId = $("input.edit-id").val();
+							var editedName = $("input.edit-name").val();
+							var editedModel = $("input.edit-model").val();
+							var editedQuantity = $("input.edit-quantity").val();
+							var editedLimitation = $("input.edit-limitation").val();
+							var editedUnit = $("input.edit-unit").val();
+							var editedTimePeriod = $("input.edit-time-period").val();
+							var editedTypePeriod = $("select.edit-type-period").val();
+							var editedOwner = $("input.edit-owner").val();
+							var editedLocation = $("select.edit-location").val();
+
+							console.log("I get this:"); 
+							console.log(editId, editedName, editedModel, editedQuantity, editedLimitation, editedUnit, editedTimePeriod, editedTypePeriod, editedOwner, editedLocation);
 						});
 					});
 
@@ -924,6 +944,9 @@ function appFormRemoveOrEditItemsHandler() {
 		padding: 9px;
 		width: 300px;
 		outline: none;
+	}
+	select.edit-location:hover, .edit-period:hover {
+		cursor: pointer;
 	}
 	div.edit-box {
 		font-size: 80%;

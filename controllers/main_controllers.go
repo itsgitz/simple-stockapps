@@ -198,7 +198,6 @@ func (this *MainController) AppJSONItemsData(w http.ResponseWriter, r *http.Requ
 	if err != nil {
 		log.Println(err)
 	}
-	log.Println(len(values))
 	fmt.Fprintf(w, string(outgoingJSON))
 }
 
@@ -620,4 +619,8 @@ func (this *MainController) AppLogout(w http.ResponseWriter, r *http.Request) {
 	sess.Delete("user_name")
 	session.Destroy(w, r)
 	http.Redirect(w, r, "/", 302)
+}
+
+func (this *MainController) AppCountTableRows() {
+	log.Println(models.ModelsPrintTableRows())
 }
