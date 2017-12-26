@@ -10,9 +10,7 @@
 	[[ template "side_navigation". ]]
 	<div id="app-form-wrapper">
 		[[ template "welcome_box". ]]
-		<div class="clear"></div>
 		[[ template "add_box". ]]
-		<div class="clear"></div>
 		[[ template "remove_box". ]]
 	</div>
 </div>
@@ -428,8 +426,71 @@ function appFormRemoveOrEditItemsHandler() {
 							var editedOwner = $("input.edit-owner").val();
 							var editedLocation = $("select.edit-location").val();
 
-							console.log("I get this:"); 
-							console.log(editId, editedName, editedModel, editedQuantity, editedLimitation, editedUnit, editedTimePeriod, editedTypePeriod, editedOwner, editedLocation);
+							// check if value is not empty
+							var editAlertModal = document.getElementById("app-edit-alert");
+							var jqueryGetEditModal = $("div#app-edit-alert");
+							// if item name is empty
+							if (!editedName) {
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Name is empty!</div>";
+								jqueryGetEditModal.hide();
+								jqueryGetEditModal.fadeIn(200);
+							} else if (!editedModel) {
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Model/Brand is empty!</div>";
+								jqueryGetEditModal.hide();
+								jqueryGetEditModal.fadeIn(200);
+							} else if (!editedQuantity) {
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Quantity is empty!</div>";
+								jqueryGetEditModal.hide();
+								jqueryGetEditModal.fadeIn(200);
+							} else if (!editedLimitation) {
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Limitation is empty!</div>";
+								jqueryGetEditModal.hide();
+								jqueryGetEditModal.fadeIn(200);
+							} else if (parseInt(editedLimitation) > parseInt(editedQuantity)) {
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item quantity couldn't be less than item limitation!</div>";
+								jqueryGetEditModal.hide();
+								jqueryGetEditModal.fadeIn(200);
+							} else if (!editedUnit) {
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item unit is empty!</div>";
+								jqueryGetEditModal.hide();
+								jqueryGetEditModal.fadeIn(200);
+							} else if (!editedOwner) {
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item owner is empty!</div>";
+								jqueryGetEditModal.hide();
+								jqueryGetEditModal.fadeIn(200);
+							} else if (!editedLocation) {
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Location is empty!</div>";
+								jqueryGetEditModal.hide();
+								jqueryGetEditModal.fadeIn(200);
+							} else {
+								console.log("I get this:"); 
+								console.log(editId, editedName, editedModel, editedQuantity, editedLimitation, editedUnit, editedTimePeriod, editedTypePeriod, editedOwner, editedLocation);
+								$.ajax({
+									url: "/json_update_item",
+									async: true,
+									method: "POST",
+									data: {
+										item_id: editId,
+										item_name: editedName,
+										item_model: editedModel,
+										item_quantity: editedQuantity,
+										item_limitation: editedLimitation,
+										item_unit: editedUnit,
+										time_period: editedTimePeriod,
+										type_period: editedTypePeriod,
+										item_owner: editedOwner,
+										item_location: editedLocation
+									},
+									success: function(res) {
+										console.log("Successful update data");
+									}
+								});
+							}
+
+							// on close alert clicked
+							$("span.close-alert").click(function() {
+								jqueryGetEditModal.fadeOut(200);
+							});
 						});
 					});
 
@@ -951,6 +1012,17 @@ function appFormRemoveOrEditItemsHandler() {
 	div.edit-box {
 		font-size: 80%;
 	}
+	div#app-edit-alert {
+		display: none;
+		position: fixed;
+		z-index: 1;
+		top: 0;
+		left: 35%;
+		right: 35%;
+		background-color: #e74c3c;
+		color: #FFFFFF;
+		border-radius: 3px;
+	}
 	/* end of edit modal content */
 
 	@media only screen and (max-width: 550px) {
@@ -1074,6 +1146,7 @@ function appFormRemoveOrEditItemsHandler() {
 
 [[ define "edit_modal" ]]
 <div id="prompt-edit-modal">
+	<div id="app-edit-alert"></div>
 	<div class="edit-modal-content"></div>
 </div>
 [[ end ]]
