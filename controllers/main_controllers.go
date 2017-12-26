@@ -164,10 +164,10 @@ type Items struct {
 	Redirect 			bool    `json:"redirect"`
 }
 
-func (this *MainController) AppJSONItemsData(w http.ResponseWriter, r *http.Request) {
+func (this *MainController) AppJSONOurItemsData(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	values, err := models.ModelsSelectFromItems()
+	values, err := models.ModelsSelectFromOurItems()
 
 	if err != nil {
 		errMsg := "[!] ERROR: in ModelsSelectFromItems(), Database Server: " + err.Error() + " Please contact the Administrator: anggit.ginanjar@lintasarta.co.id a.k.a AQX Tamvan :)"
@@ -447,6 +447,27 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (this *MainController) AppJSONUpdateItem(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	if r.Method == "GET" {
+		http.Error(w, "NOT FOUND :(", http.StatusNotFound)
+	} else if r.Method == "POST" {
+		// get all data
+		item_id := r.Form["item_id"][0]
+		item_name := r.Form["item_name"][0]
+		item_model := r.Form["item_model"][0]
+		item_quantity := r.Form["item_quantity"][0]
+		item_limitation := r.Form["item_limitation"][0]
+		item_unit := r.Form["item_unit"][0]
+		time_period := r.Form["time_period"][0]
+		type_period := r.Form["type_period"][0]
+		item_owner := r.Form["item_owner"][0]
+		item_location := r.Form["item_location"][0]
+
+		log.Println(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, time_period, type_period, item_owner, item_location)
+	}
+}
+
 // Remove data from item table in database
 func (this *MainController) AppJSONRemoveItem(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
@@ -619,8 +640,4 @@ func (this *MainController) AppLogout(w http.ResponseWriter, r *http.Request) {
 	sess.Delete("user_name")
 	session.Destroy(w, r)
 	http.Redirect(w, r, "/", 302)
-}
-
-func (this *MainController) AppCountTableRows() {
-	log.Println(models.ModelsPrintTableRows())
 }
