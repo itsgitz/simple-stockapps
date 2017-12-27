@@ -180,9 +180,17 @@ func ModelsInsertDataItems(data ...string) error {
 	return err
 }
 
-// ModelsRemoveDataItem() is function that used for remove an item with the given ID
+// ModelsRemoveDataItem() is function that used for removing an item with the given ID
 func ModelsRemoveDataItem(item_id string) error {
 	x, err := db.Queryx("DELETE FROM items WHERE item_id=?", item_id)
+	defer x.Close()
+	return err
+}
+
+// ModelsUpdateDataItem() is function that used for updating an item with the given ID
+//func ModelsUpdateDataItem(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, item_time_period, item_expired, item_owner, item_location, item_status string) error {
+func ModelsUpdateDataItem(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, item_time_period, item_expired, item_owner, item_status string) error { 
+	x, err := db.Queryx("UPDATE items SET item_name=?, item_model=?, item_quantity=?, Item_limitation=?, item_unit=?, item_time_period=?, item_expired=?, item_owner=?, item_status=? WHERE item_id=?", item_name, item_model, item_quantity, item_limitation, item_unit, item_time_period, item_expired, item_owner, item_status, item_id)
 	defer x.Close()
 	return err
 }
