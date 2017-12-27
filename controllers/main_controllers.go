@@ -206,7 +206,6 @@ func (this *MainController) AppJSONSearchData(w http.ResponseWriter, r *http.Req
 	// get session
 	sess := session.Start(w, r)
 	username_session := sess.GetString("user_name")
-	log.Println("Session length:", len(username_session))
 
 	r.ParseForm()
 	if r.Method == "POST" {
@@ -447,6 +446,7 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// update data item
 func (this *MainController) AppJSONUpdateItem(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	if r.Method == "GET" {
@@ -463,8 +463,79 @@ func (this *MainController) AppJSONUpdateItem(w http.ResponseWriter, r *http.Req
 		type_period := r.Form["type_period"][0]
 		item_owner := r.Form["item_owner"][0]
 		item_location := r.Form["item_location"][0]
+		date_of_entry := r.Form["date_of_entry"][0]
 
+		//log.Println(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, time_period, type_period, item_owner, item_location)
+		// convert to integer datatype
+		item_quantity_int, _ := strconv.Atoi(item_quantity)
+		item_limitation_int, _ := strconv.Atoi(item_limitation)
+		var item_status string
+		var number_of_days int
+		var str_time_prd string
+		var item_expired string
+
+		// determine item status according to item quantity and item limitation comparison
+		if item_quantity_int > item_limitation_int {
+			item_status = "Available"
+		} else {
+			item_status = "Limited"
+		}
+
+		// select days according to type of time period
+		number_of_days, _ = strconv.Atoi(time_period)
+
+		if time_period == "0" && type_period == "0" {
+			str_time_prd = "None"
+			item_expired = "0000-00-00 00:00:00"
+		// else, it will create item_expired
+		} else {
+			switch(type_period) {
+			case "Day(s)": number_of_days = number_of_days
+			break
+			case "Week(s)": number_of_days = number_of_days * 7
+			break
+			case "Month(s)": number_of_days = number_of_days * 30
+			break
+			}
+
+			// Create date time expired .......
+			// time now initial
+			dateSplitSpace := generator.GenerateDateSplit(date_of_entry)
+			tahun, bulan, tanggal := generator.GenerateDateSplitByDash(dateSplitSpace)
+
+			date_entry := time.Date(tahun, time.Month(bulan), tanggal, 0, 0, 0, 0, time.UTC)
+			time_duration := time.Duration(number_of_days)	// convert integer to time.Duration datatype
+			time_to_add := time.Hour * 24 * (time_duration) // add time to create date expired / determine range of days
+			adding_time := date_entry.Add(time_to_add)
+			// split string, thus we could only put one value (time)
+			time_split := generator.GenerateTimeSplit(date_of_entry)
+			item_expired = fmt.Sprintf("%s %s", adding_time.Format("2006-01-02"), time_split)
+			str_time_prd = time_period + " " + type_period // Ex: 2 Day(s)
+		}
+		//log.Println(dateSplitSpace, tahun, bulan, tanggal)
 		log.Println(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, time_period, type_period, item_owner, item_location)
+		log.Println("New data:", date_of_entry, item_status, str_time_prd, item_expired)
+
+		// func ModelsUpdateDataItem(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, item_time_period, item_expired, item_owner, item_location, item_status string) error
+		// here ... we could updating data in items table
+		errUpdate := models.ModelsUpdateDataItem(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, str_time_prd, item_expired, item_owner, item_status)
+		if errUpdate != nil {
+			http.Error(w, errUpdate.Error(), http.StatusInternalServerError)
+		} else {
+			w.Header().Set("Content-Type", "application/json")
+			dataJson := struct{
+				Redirect  bool  `json:"redirect"`
+				Message   string  `json:"message"`
+			}{
+				Redirect: true,
+				Message: "Successful updating item!",
+			}
+			sendJson, err := json.Marshal(dataJson)
+			if err != nil {
+				log.Println(err)
+			}
+			fmt.Fprintf(w, string(sendJson))
+		}
 	}
 }
 
