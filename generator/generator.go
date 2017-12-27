@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 	"strings"
+	"strconv"
 )
 
 // generate item ID number as random number using nanosecond
@@ -25,4 +26,22 @@ func GenerateOwnerID() string {
 func GenerateTimeSplit(date string) string {
 	time_split := strings.Split(date, " ")
 	return time_split[1]
+}
+
+func GenerateDateSplit(date string) string {
+	time_split := strings.Split(date, " ")
+	return time_split[0]
+}
+
+// spliting datetime use by "-" character
+// 2017-10-10 00:00:00
+// first spliting it by "space" character ["2017-10-10", "00:00:00"]
+// then spliting it to ===> ["2017", "10", "10"]
+func GenerateDateSplitByDash(date_splited string) (int, int, int) {
+	time_split := strings.Split(date_splited, "-")
+	year, _ := strconv.Atoi(time_split[0])
+	month, _ := strconv.Atoi(time_split[1])
+	day, _ := strconv.Atoi(time_split[2])
+	
+	return year, month, day
 }
