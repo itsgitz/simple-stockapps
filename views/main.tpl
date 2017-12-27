@@ -49,4 +49,5 @@
 [[ define "table_monitor" ]]
 <div id="app-user-islogged-in" style="display: none;">[[ .HtmlUserIsLoggedIn ]]</div>
 <div id="app-table-box"></div><br><br>
+<div id="app-modal-pickup-container"></div>
 [[ end ]]

@@ -1,3 +1,27 @@
+// configure the websocket
+var ws = new WebSocket('ws://192.168.43.56:8080/ws');
+ws.onopen = function() {
+	console.log("WebSocket connection opened!");
+}
+ws.onerror = function(error) {
+	alert('WebSocket' + error);
+}
+ws.onmessage = function(e) {
+	var msg = JSON.parse(e.data)
+	var tableBox = $("div#app-table-box");
+	console.log(msg);
+	switch(msg.Kode) {
+		case "#001-pick-up":
+			tableBox.load(" #app-table-box", function() {
+				appTableHandler();
+				tableBox.hide();
+				tableBox.fadeIn(300);
+			});
+		break;
+	}
+}
+
+
 // jQuery.3.2.1
 $(document).ready(function() {
 	////////// Main Page ///////////////////
@@ -63,13 +87,14 @@ function appLoginHandler() {
 
 // appTableHandler for handling table items
 function appTableHandler() {
+	// AJAX Request
 	$.ajax({
 		url: "/json_get_items",
 		async: true,
 		success: function(res) {
 			var isLoggedIn = $("div#app-user-islogged-in").text();
 			console.log("Logged In is: " + isLoggedIn);
-			var tableMonitoring = "<table class='app-table' border='0' cellpadding='12' cellspacing='0'>";
+			var tableMonitoring = "<table id='app-table' class='app-table' border='0' cellpadding='12' cellspacing='0'>";
 				tableMonitoring += "  <th>No.</th>";
 				tableMonitoring += "  <th>Name</th>";
 				tableMonitoring += "  <th>Model/Brand</th>";
@@ -91,7 +116,7 @@ function appTableHandler() {
 				tableMonitoring += "    <td>"+ res[i].item_unit +"</td>";
 				tableMonitoring += "    <td>"+ res[i].item_status +"</td>";
 				if (isLoggedIn == "true") {
-					tableMonitoring += "    <td><a id='app-pick-btn' href='/pick_up/"+res[i].item_id+"'>Pick Up</a></td>";
+					tableMonitoring += "    <td><a id='app-pick-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"'>Pick Up</a></td>";
 				}
 				tableMonitoring += "  </tr>";
 			}
@@ -99,6 +124,103 @@ function appTableHandler() {
 
 			// print the table in app-table-box
 			document.getElementById("app-table-box").innerHTML = tableMonitoring;
+			var pickUpButton = $("a#app-pick-btn");
+
+			pickUpButton.click(function(e) {
+				e.preventDefault();
+				var getItemId = $(this).attr("data-item-id");
+				var getName = $(this).attr("data-item-name");
+				var getQuantity = $(this).attr("data-item-quantity");
+				var getLimitation = $(this).attr("data-item-limitation");
+				var getOwner = $(this).attr("data-item-owner");
+				
+				var pickupModalText;
+				pickupModalText = "<div id='app-pickup-modal'>";
+				pickupModalText += "   <div class='app-pickup-content'>";
+				pickupModalText += "      <div id='tbl-input-content'>";
+				pickupModalText += "         <table cellpadding='5px' cellspacing='0' style='border: solid 1px #ddd; font-size: 80%;'>";
+				pickupModalText += "            <tr colspan='2'><td>Current Data</td></tr>";
+				pickupModalText += "            <tr>";
+				pickupModalText += "               <td>ID</td>";
+				pickupModalText += "               <td>"+getItemId+"</td>";
+				pickupModalText += "            </tr>";
+				pickupModalText += "            <tr>";
+				pickupModalText += "               <td>Name</td>";
+				pickupModalText += "               <td>"+getName+"</td>";
+				pickupModalText += "            </tr>";
+				pickupModalText += "            <tr>";
+				pickupModalText += "               <td>Owner</td>";
+				pickupModalText += "               <td>"+getOwner+"</td>";
+				pickupModalText += "            </tr>";
+				pickupModalText += "            <tr>";
+				pickupModalText += "               <td>Quantity</td>";
+				pickupModalText += "               <td>"+getQuantity+"</td>";
+				pickupModalText += "            </tr>";
+				pickupModalText += "            <tr>";
+				pickupModalText += "               <td>Limitation</td>";
+				pickupModalText += "               <td>"+getLimitation+"</td>";
+				pickupModalText += "            </tr>";
+				pickupModalText += "         </table>";
+				pickupModalText += "         <br><label style='color: #27ae60; font-weight: bold;'>How much do you want to pick?</label><br><br>";
+				pickupModalText += "         <input class='app-howmuch' type='number' placeholder='Quantity'><br><br>";
+				pickupModalText += "         <textarea class='text-notes' rows='3' cols='30' placeholder='Notes'></textarea>";				
+				pickupModalText += "      </div>";
+				pickupModalText += "      <div id='app-pickup-btn-box'>";
+				pickupModalText += "         <br><button class='modal-button pickup-yes'>Pick up</button>&nbsp;<button class='modal-button pickup-close'>Close</button>";
+				pickupModalText += "      </div>";
+				pickupModalText += "   </div>";
+				pickupModalText += "</div>";
+
+				document.getElementById("app-modal-pickup-container").innerHTML = pickupModalText;
+
+				// modal box
+				var pickupModalBox = document.getElementById("app-pickup-modal");
+				var cliseBtn = document.getElementsByClassName("pickup-close")[0];
+				var pickupYes = $("button.pickup-yes");
+
+				// open modal
+				var jqueryGetModalBox = $("div#app-pickup-modal");
+				jqueryGetModalBox.fadeIn(300);
+
+				// close modal if close button clicked
+				jqueryClose = $("button.pickup-close");
+				jqueryClose.click(function() {
+					jqueryGetModalBox.fadeOut(100);
+				});
+
+				// if user clicks anywhere outside of the modal, then close it
+				window.onclick = function(e) {
+					if (e.target == pickupModalBox) {
+						jqueryGetModalBox.fadeOut(100);
+					}
+				}
+
+				pickupYes.click(function () {
+					var itemHowMuch = $("input.app-howmuch").val();
+					var quantityToMin = parseInt(getQuantity - itemHowMuch);
+					console.log(quantityToMin);
+					
+					if (parseInt(itemHowMuch)) {
+						$.ajax({
+							url: "/json_pickup_item",
+							method: "POST",
+							data: {
+								item_id: getItemId,
+								item_quantity_picked: quantityToMin,
+							},
+							async: true,
+							success: function(res) {
+								console.log(res);
+								var json_msg = JSON.stringify({
+									Pesan: getItemId,
+									Kode: "#001-pick-up"
+								});
+								ws.send(json_msg);
+							}
+						});
+					}
+				});
+			});
 		},
 		beforeSend: function(res) {
 			$("div#app-table-box").html("<h2 style='color: #7f8c8d; padding: 50px;'>Loading please wait ...</h2>");
@@ -109,24 +231,3 @@ function appTableHandler() {
 		}
 	});
 }
-
-/*
-	var ws = new WebSocket('ws://127.0.0.1:8080/ws');
-	ws.onopen = function() {
-		console.log("Connection Open");
-	}
-	ws.onerror = function(error) {
-		console.error('WebSocket' + error);
-	}
-	ws.onmessage = function(e) {
-		var msg = JSON.parse(e.data)
-			$("p.app-msg-box").html(msg.Pesan);
-		}
-		// button on click
-	$("button.app-send").click(function() {
-		var msg = $("input.message").val();
-		var json_msg = JSON.stringify({
-			Pesan: msg
-		});
-			ws.send(json_msg);
-	});*/

@@ -36,11 +36,13 @@ var (
 //////////////////////////////////////////////////////////////////////////////////
 // Web Socket
 var upgrader = websocket.Upgrader{
+	CheckOrigin: func (r *http.Request) bool { return true },
 	ReadBufferSize:		1024,
 	WriteBufferSize:	1024,
 }
 type Message struct {
 	Pesan	string 	`json:"Pesan"`
+	Kode	string  `json:"Kode"`
 }
 var clients = make(map[*websocket.Conn]bool)
 var broadcast = make(chan Message)
@@ -57,7 +59,7 @@ func (this *MainController) AppWebSocket(w http.ResponseWriter, r *http.Request)
 	conn, err := upgrader.Upgrade(w, r, nil)
 	defer conn.Close()
 	if err != nil {
-		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
 	// Register new connected client
@@ -68,10 +70,11 @@ func (this *MainController) AppWebSocket(w http.ResponseWriter, r *http.Request)
 		// Read JSON Messages
 		err := conn.ReadJSON(&msg)
 		if err != nil {
-			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			delete(clients, conn)
 			break
 		}
+		log.Println(msg.Pesan, msg.Kode)
 		// send message broadcast
 		broadcast <- msg
 	}
@@ -442,6 +445,34 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 			json_message_session_timedout, err := json.Marshal(responseMessageSessionTimedOut)
 			if err != nil { log.Println(err) }
 			fmt.Fprintf(w, string(json_message_session_timedout))
+		}
+	}
+}
+
+func (this *MainController) AppPickupItem(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	if r.Method == "GET" {
+		http.Error(w, "NOT FOUND :(", http.StatusNotFound)
+	} else if r.Method == "POST" {
+		item_id := r.Form["item_id"][0]
+		item_quantity_picked := r.Form["item_quantity_picked"][0]
+		errPickup := models.ModelsPickupItem(item_id, item_quantity_picked)
+		if errPickup != nil {
+			http.Error(w, errPickup.Error(), http.StatusInternalServerError)
+		} else {
+			w.Header().Set("Content-Type", "application/json")
+			dataJson := struct{
+				Redirect  bool  `json:"redirect"`
+				Message   string  `json:"message"`
+			}{
+				Redirect: true,
+				Message: "Successful Picking Up item!",
+			}
+			sendJson, err := json.Marshal(dataJson)
+			if err != nil {
+				log.Println(err)
+			}
+			fmt.Fprintf(w, string(sendJson))
 		}
 	}
 }
