@@ -103,3 +103,13 @@ table.app-table {
 tr:nth-child(even) {
 	background-color: #F2F2F2;
 }
+
+/* Pickup Button */
+a#app-pick-btn {
+	text-decoration: none;
+	background-color: #2ecc71;
+	color: #F2F2F2;
+	padding: 5px;
+	border-radius: 4px;
+	display: block;
+}

@@ -36,7 +36,7 @@ function appAjaxController() {
 				$("title").text("Items Dashboard - Simple StockApps");
 				break;
 			case "/reports":
-				$("title").text("History - Simple StockApps");
+				$("title").text("History Dashboard - Simple StockApps");
 				break;
 			case "/users":
 				$("title").text("Users Dashboard - Simple StockApps");
@@ -62,7 +62,7 @@ function appAjaxController() {
 		history.pushState(stateObj, "items", "/navbar?#navigate_link=/items");
 
 		// Change HTML Title when link clicked
-		$("title").text("Items Management - Simple StockApps");
+		$("title").text("Items Dashboard - Simple StockApps");
 
 		// load again with ajax
 		appAjaxRequestPage("/items");
@@ -71,7 +71,7 @@ function appAjaxController() {
 	$("a.ajax-reports").click(function() {
 		var stateObj = { page: "reports" };
 		history.pushState(stateObj, "reports", "/navbar?#navigate_link=/reports");
-		$("title").text("History - Simple StockApps");
+		$("title").text("History Dashboard - Simple StockApps");
 		
 		// load again with ajax
 		appAjaxRequestPage("/reports");
@@ -80,7 +80,7 @@ function appAjaxController() {
 	$("a.ajax-users").click(function() {
 		var stateObj = { page: "users" };
 		history.pushState(stateObj, "users", "/navbar?#navigate_link=/users");
-		$("title").text("Users Management - Simple StockApps");
+		$("title").text("Users Dashboard - Simple StockApps");
 
 		// load again with ajax
 		appAjaxRequestPage("/users");

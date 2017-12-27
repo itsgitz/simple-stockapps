@@ -321,6 +321,7 @@ function appFormRemoveOrEditItemsHandler() {
 							if (e.target == modal) {
 								//modal.style.display = "none";
 								jqueryGetModal.fadeOut(300);
+								$("div#app-edit-alert").fadeOut(300);
 							}
 						}
 
@@ -401,7 +402,7 @@ function appFormRemoveOrEditItemsHandler() {
 						editContent += "</tr>";
 						editContent += "</table>";
 						editContent += "</div>";
-						editContent += "<div style='text-align: center;'>";
+						editContent += "<div id='edit-btn-box' style='text-align: center;'>";
 						editContent += "   <br><br><button class='remove-prompt-action edit-update'>Update</button> <button class='remove-prompt-action cancel-update'>Cancel</button>";
 						editContent += "</div>";
 
@@ -426,42 +427,47 @@ function appFormRemoveOrEditItemsHandler() {
 							var editedOwner = $("input.edit-owner").val();
 							var editedLocation = $("select.edit-location").val();
 
+							if (editedTimePeriod == 0 || !editedTimePeriod) {
+								editedTimePeriod = 0;
+								editedTypePeriod = "0";
+							}
+
 							// check if value is not empty
 							var editAlertModal = document.getElementById("app-edit-alert");
-							var jqueryGetEditModal = $("div#app-edit-alert");
+							var jqueryGetAlertEditModal = $("div#app-edit-alert");
 							// if item name is empty
 							if (!editedName) {
 								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Name is empty!</div>";
-								jqueryGetEditModal.hide();
-								jqueryGetEditModal.fadeIn(200);
+								jqueryGetAlertEditModal.hide();
+								jqueryGetAlertEditModal.fadeIn(200);
 							} else if (!editedModel) {
 								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Model/Brand is empty!</div>";
-								jqueryGetEditModal.hide();
-								jqueryGetEditModal.fadeIn(200);
+								jqueryGetAlertEditModal.hide();
+								jqueryGetAlertEditModal.fadeIn(200);
 							} else if (!editedQuantity) {
 								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Quantity is empty!</div>";
-								jqueryGetEditModal.hide();
-								jqueryGetEditModal.fadeIn(200);
+								jqueryGetAlertEditModal.hide();
+								jqueryGetAlertEditModal.fadeIn(200);
 							} else if (!editedLimitation) {
 								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Limitation is empty!</div>";
-								jqueryGetEditModal.hide();
-								jqueryGetEditModal.fadeIn(200);
+								jqueryGetAlertEditModal.hide();
+								jqueryGetAlertEditModal.fadeIn(200);
 							} else if (parseInt(editedLimitation) > parseInt(editedQuantity)) {
 								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item quantity couldn't be less than item limitation!</div>";
-								jqueryGetEditModal.hide();
-								jqueryGetEditModal.fadeIn(200);
+								jqueryGetAlertEditModal.hide();
+								jqueryGetAlertEditModal.fadeIn(200);
 							} else if (!editedUnit) {
 								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item unit is empty!</div>";
-								jqueryGetEditModal.hide();
-								jqueryGetEditModal.fadeIn(200);
+								jqueryGetAlertEditModal.hide();
+								jqueryGetAlertEditModal.fadeIn(200);
 							} else if (!editedOwner) {
 								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item owner is empty!</div>";
-								jqueryGetEditModal.hide();
-								jqueryGetEditModal.fadeIn(200);
+								jqueryGetAlertEditModal.hide();
+								jqueryGetAlertEditModal.fadeIn(200);
 							} else if (!editedLocation) {
 								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Location is empty!</div>";
-								jqueryGetEditModal.hide();
-								jqueryGetEditModal.fadeIn(200);
+								jqueryGetAlertEditModal.hide();
+								jqueryGetAlertEditModal.fadeIn(200);
 							} else {
 								console.log("I get this:"); 
 								console.log(editId, editedName, editedModel, editedQuantity, editedLimitation, editedUnit, editedTimePeriod, editedTypePeriod, editedOwner, editedLocation);
@@ -476,20 +482,36 @@ function appFormRemoveOrEditItemsHandler() {
 										item_quantity: editedQuantity,
 										item_limitation: editedLimitation,
 										item_unit: editedUnit,
+										date_of_entry: itemThisDateEntry,
 										time_period: editedTimePeriod,
 										type_period: editedTypePeriod,
 										item_owner: editedOwner,
 										item_location: editedLocation
 									},
 									success: function(res) {
-										console.log("Successful update data");
+										console.log(res);
+										var editButtonBox = document.getElementById("edit-btn-box");
+
+										editButtonBox.style.display = "none";
+										jqueryGetAlertEditModal.fadeOut(200);
+										$("div.tbl-content-modal").html("<p style='padding: 10px; font-weight: bold; color: #3498db;'>"+res.message+" Please wait ...</p>");
+
+										setTimeout(function() {
+											jqueryGetModal.fadeOut(200);
+										}, 3000);
+
+										window.onclick = function(e) {
+											if (e.target == modal) {
+												jqueryGetModal.css("display", "block");
+											}
+										}
 									}
 								});
 							}
 
 							// on close alert clicked
 							$("span.close-alert").click(function() {
-								jqueryGetEditModal.fadeOut(200);
+								jqueryGetAlertEditModal.fadeOut(200);
 							});
 						});
 					});
@@ -745,10 +767,9 @@ function appFormRemoveOrEditItemsHandler() {
 		  float: right;
 	}
 	/* label note */
-	label.app-input-note {
-		font-size: 80%;
-		padding-left: 15px;
-		color: red;
+	label.label-input {
+		color: #2980b9;
+		padding-right: 25px;
 	}
 	/* end of Add Items Content style */
 
@@ -986,6 +1007,9 @@ function appFormRemoveOrEditItemsHandler() {
 	table.table-form-edit tr:nth-child(even) {
 		background-color: #FFFFFF;
 	}
+	table.table-form-add {
+		font-size: 80%;
+	}
 	table.table-form-add tr:nth-child(even) {
 		background-color: #FFFFFF;
 	}
@@ -1040,6 +1064,14 @@ function appFormRemoveOrEditItemsHandler() {
 		div#app-welcome-box {
 			padding: 0;
 		}
+		div#app-remove-content {
+			position: absolute;
+			left: 10px;
+			right: 10px;
+		}
+		input.app-search {
+			width: 100%;
+		}
 	}
 </style>
 [[ end ]]
@@ -1062,24 +1094,31 @@ function appFormRemoveOrEditItemsHandler() {
 	<form class="app-form-add">
 		<table class='table-form-add' cellpadding='8px' cellspacing='0'>
 			<tr>
+				<td><label class="label-input">Name</label></td>
 				<td><input class="item-name" type="text" placeholder="Item Name"></td>
 			</tr>
 			<tr>
+				<td><label class="label-input">Model</label></td>
 				<td><input class="item-model" type="text" placeholder="Model/Brand"></td>
 			</tr>
 			<tr>
-				<td><input class="item-quantity" type="number" placeholder="Quantity" min="1">&nbsp;<input class="item-limitation" type="number" placeholder="Limitation" min="1"></td>
+				<td><label class="label-input">Quantity</label></td>
+				<td><input class="item-quantity" type="number" placeholder="Quantity" min="1"></td>
 			</tr>
 			<tr>
+				<td><label class="label-input">Limitation</label></td>
+				<td><input class="item-limitation" type="number" placeholder="Limitation" min="1"></td>
+			</tr>
+			<tr>
+				<td><label class="label-input">Item Unit</label></td>
 				<td><input class="item-unit" type="text" placeholder="Item Unit"></td>
 			</tr>
 			<tr>
-				<td><label style="font-size: 90%; padding: 5px; color: #2980b9;">Date of Entry</label></td>
-			</tr>
-			<tr>
+				<td><label class="label-input">Date of Entry</label></td>
 				<td><input class="date-of-entry" type="text" placeholder="YYYY-MM-DD hh:mm"></td>
 			</tr>
 			<tr>
+				<td><label class="label-input">Time Period</label></td>
 				<td>
 					<input class="time-period" type="number" placeholder="Time Period">
 					<select class="select-time-period">
@@ -1090,9 +1129,11 @@ function appFormRemoveOrEditItemsHandler() {
 				</td>
 			</tr>
 			<tr>
+				<td><label class="label-input">Owner</label></td>
 				<td><input class="item-owner" type="text" placeholder="Owner"><td>
 			</tr>
 			<tr>
+				<td><label class="label-input">Location</label></td>
 				<td>
 					<select class="select-location">
 						<option value="" selected="">-- Location --</option>
@@ -1103,7 +1144,7 @@ function appFormRemoveOrEditItemsHandler() {
 				</td>
 			</tr>
 			<tr>
-				<td><input type="submit" value="Submit Data"></td>
+				<td colspan="2"><input type="submit" value="Submit Data"></td>
 			</tr>
 		</table>
 		<br>

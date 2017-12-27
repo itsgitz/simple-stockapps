@@ -69,7 +69,7 @@ function appTableHandler() {
 		success: function(res) {
 			var isLoggedIn = $("div#app-user-islogged-in").text();
 			console.log("Logged In is: " + isLoggedIn);
-			var tableMonitoring = "<table class='app-table' border='0' cellpadding='10' cellspacing='0'>";
+			var tableMonitoring = "<table class='app-table' border='0' cellpadding='12' cellspacing='0'>";
 				tableMonitoring += "  <th>No.</th>";
 				tableMonitoring += "  <th>Name</th>";
 				tableMonitoring += "  <th>Model/Brand</th>";
@@ -91,7 +91,7 @@ function appTableHandler() {
 				tableMonitoring += "    <td>"+ res[i].item_unit +"</td>";
 				tableMonitoring += "    <td>"+ res[i].item_status +"</td>";
 				if (isLoggedIn == "true") {
-					tableMonitoring += "    <td><a href='/pick_up/"+res[i].item_id+"'>Pick Up</a></td>";
+					tableMonitoring += "    <td><a id='app-pick-btn' href='/pick_up/"+res[i].item_id+"'>Pick Up</a></td>";
 				}
 				tableMonitoring += "  </tr>";
 			}
