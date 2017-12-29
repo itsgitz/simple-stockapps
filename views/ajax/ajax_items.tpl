@@ -1015,6 +1015,7 @@ function appFormRemoveOrEditItemsHandler() {
 	}
 	table.table-form-add {
 		font-size: 80%;
+		width: 550px;
 	}
 	table.table-form-add tr:nth-child(even) {
 		background-color: #FFFFFF;
@@ -1078,6 +1079,9 @@ function appFormRemoveOrEditItemsHandler() {
 			right: 10px;
 		}
 		input.app-search {
+			width: 100%;
+		}
+		table.table-form-add {
 			width: 100%;
 		}
 	}

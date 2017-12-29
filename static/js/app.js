@@ -120,7 +120,7 @@ function appTableHandler() {
 				tableMonitoring += "    <td>"+ res[i].item_quantity +"</td>";
 				tableMonitoring += "    <td>"+ res[i].item_limitation +"</td>";
 				tableMonitoring += "    <td>"+ res[i].item_unit +"</td>";
-				tableMonitoring += "    <td>"+ res[i].item_status +"</td>";
+				tableMonitoring += "    <td class='tb-status'>"+ res[i].item_status +"</td>";
 				if (isLoggedIn == "true") {
 					tableMonitoring += "    <td><a id='app-pick-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"'>Pick Up</a></td>";
 				}
@@ -128,12 +128,23 @@ function appTableHandler() {
 			}
 			tableMonitoring += "</table>";
 
+			// print the table in app-table-box
+			document.getElementById("app-table-box").innerHTML = tableMonitoring;
+
 			// give style to status rows
 			// if "Available" has blue background color
 			// if "Limited" has orange background color
+			$("div#app-table-box .tb-status").each(function() {
+				var statusColumnValue = $(this).text();
+				var statusRowsValue = $(".tb-status");
 
-			// print the table in app-table-box
-			document.getElementById("app-table-box").innerHTML = tableMonitoring;
+				switch(statusColumnValue) {
+					case "Available": statusRowsValue.css("color", "#2980b9"); break;
+					case "Limited": statusRowsValue.css("color", "#d35400"); break;
+					case "Not Available": statusRowsValue.css("color", "#c0392b"); break;
+				}
+			});
+
 			var pickUpButton = $("a#app-pick-btn");
 
 			pickUpButton.click(function(e) {
