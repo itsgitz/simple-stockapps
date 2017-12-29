@@ -21,7 +21,6 @@ ws.onmessage = function(e) {
 	}
 }
 
-
 // jQuery.3.2.1
 $(document).ready(function() {
 	////////// Main Page ///////////////////
@@ -29,6 +28,13 @@ $(document).ready(function() {
 	appLoginHandler();
 	// table handler function
 	appTableHandler();
+	var navigationBar = document.getElementById("app-navbar");
+	var jqueryGetSideNotificationBar = $("div#app-side-notif");
+	var jqueryGetTableBox = $("div#app-table-box");
+	if (navigationBar) {
+		jqueryGetSideNotificationBar.css("top", "200px");
+		jqueryGetTableBox.css("top", "200px");
+	}
 });
 
 // Login popup box function
@@ -122,6 +128,10 @@ function appTableHandler() {
 			}
 			tableMonitoring += "</table>";
 
+			// give style to status rows
+			// if "Available" has blue background color
+			// if "Limited" has orange background color
+
 			// print the table in app-table-box
 			document.getElementById("app-table-box").innerHTML = tableMonitoring;
 			var pickUpButton = $("a#app-pick-btn");
@@ -161,9 +171,9 @@ function appTableHandler() {
 				pickupModalText += "               <td>"+getLimitation+"</td>";
 				pickupModalText += "            </tr>";
 				pickupModalText += "         </table>";
-				pickupModalText += "         <br><label style='color: #27ae60; font-weight: bold;'>How much do you want to pick?</label><br><br>";
+				pickupModalText += "         <br><label style='color: #27ae60; font-weight: bold;'>How much do you want to pick up?</label><br><br>";
 				pickupModalText += "         <input class='app-howmuch' type='number' placeholder='Quantity'><br><br>";
-				pickupModalText += "         <textarea class='text-notes' rows='3' cols='30' placeholder='Notes'></textarea>";				
+				pickupModalText += "         <textarea class='text-notes' rows='5' cols='50' placeholder='Notes'></textarea>";				
 				pickupModalText += "      </div>";
 				pickupModalText += "      <div id='app-pickup-btn-box'>";
 				pickupModalText += "         <br><button class='modal-button pickup-yes'>Pick up</button>&nbsp;<button class='modal-button pickup-close'>Close</button>";
@@ -186,37 +196,84 @@ function appTableHandler() {
 				jqueryClose = $("button.pickup-close");
 				jqueryClose.click(function() {
 					jqueryGetModalBox.fadeOut(100);
+					$("div#app-pickup-alert").fadeOut(300);
 				});
 
 				// if user clicks anywhere outside of the modal, then close it
 				window.onclick = function(e) {
 					if (e.target == pickupModalBox) {
 						jqueryGetModalBox.fadeOut(100);
+						$("div#app-pickup-alert").fadeOut(100);
 					}
 				}
 
 				pickupYes.click(function () {
 					var itemHowMuch = $("input.app-howmuch").val();
+
+					var alertPickupMessage;
+					var modalPickupAlert = document.getElementById("app-pickup-alert");
+					var jqueryModalPickupAlert = $("div#app-pickup-alert");
+					var textNotes = $("textarea.text-notes").val();
+
 					var quantityToMin = parseInt(getQuantity - itemHowMuch);
 					console.log(quantityToMin);
-					
+						
 					if (parseInt(itemHowMuch)) {
-						$.ajax({
-							url: "/json_pickup_item",
-							method: "POST",
-							data: {
-								item_id: getItemId,
-								item_quantity_picked: quantityToMin,
-							},
-							async: true,
-							success: function(res) {
-								console.log(res);
-								var json_msg = JSON.stringify({
-									Pesan: getItemId,
-									Kode: "#001-pick-up"
-								});
-								ws.send(json_msg);
-							}
+						if (parseInt(itemHowMuch) < parseInt(getQuantity) && textNotes) {
+							$.ajax({
+								url: "/json_pickup_item",
+								method: "POST",
+								data: {
+									item_id: getItemId,
+									item_quantity_picked: quantityToMin,
+								},
+								async: true,
+								success: function(res) {
+									console.log(res);
+									jqueryModalPickupAlert.fadeOut(300);
+									$("div.app-pickup-content").html("<p style='padding: 10px; font-weight: bold; color: #3498db;'>"+res.message+" Please wait ...</p>");
+									$("div#app-pickup-btn-box").css("display", "none");
+									setTimeout(function() {
+										jqueryGetModalBox.fadeOut(300);
+									}, 3000)
+									// if user clicks anywhere outside of the modal
+									window.onclick = function(e) {
+										if (e.target == pickupModalBox) {
+											$("div#app-pickup-modal").css("display", "block");
+										}
+									}
+									// send json data to through websocket
+									var json_msg = JSON.stringify({
+										Pesan: getItemId,
+										Kode: "#001-pick-up"
+									});
+									ws.send(json_msg);
+								}
+							});
+						} else if (parseInt(itemHowMuch) > parseInt(getQuantity)) {
+							alertPickupMessage = "<span class='close-alert'>&times;</span><br>";
+							alertPickupMessage += "<p>The number of pick up is more than current quantity</p>";
+							jqueryModalPickupAlert.html(alertPickupMessage);
+							jqueryModalPickupAlert.fadeIn(300);
+							$("span.close-alert").click(function() {
+								jqueryModalPickupAlert.fadeOut(300);
+							});
+						} else if (!textNotes) {
+							alertPickupMessage = "<span class='close-alert'>&times;</span><br>";
+							alertPickupMessage += "<p>Notes is empty!</p>";
+							jqueryModalPickupAlert.html(alertPickupMessage);
+							jqueryModalPickupAlert.fadeIn(300);
+							$("span.close-alert").click(function() {
+								jqueryModalPickupAlert.fadeOut(300);
+							});
+						}
+					} else {
+						alertPickupMessage = "<span class='close-alert'>&times;</span><br>";
+						alertPickupMessage += "<p>Please fill the quantity</p>";
+						jqueryModalPickupAlert.html(alertPickupMessage);
+						jqueryModalPickupAlert.fadeIn(300);
+						$("span.close-alert").click(function() {
+							jqueryModalPickupAlert.fadeOut(300);
 						});
 					}
 				});

@@ -143,43 +143,43 @@ function appFormAddItemsHandler() {
 
 		var alertBox = $("div#app-alert-add-bar");
 		if (!itemName) {
-			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Name is empty or null</div><br>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><p>Item Name is empty or null</p>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else if (!itemModel) {
-			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Model/Brand is empty or null</div><br>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><p>Item Model/Brand is empty or null</p>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else if (!itemQuantity || !itemLimitation) {
-			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Quantity or Limitation is empty or null</div><br>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><p>Item Quantity or Limitation is empty or null</p>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else if (parseInt(itemQuantity == 0) || parseInt(itemLimitation) == 0) {
-			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Quantity or Limitation couldn't zero</div><br>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><p>Item Quantity or Limitation couldn't zero</p>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else if (parseInt(itemLimitation) > parseInt(itemQuantity)) {
-			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Quantity couldn't be less than Item Limitation</div><br>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><p>Item Quantity couldn't be less than Item Limitation</p>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else if (!itemUnit) {
-			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Unit is empty or null</div><br>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><p>Item Unit is empty or null</p>");
 			alertBox.hide();
 			alertBox.fadeIn(200);			
 		} else if (!dateOfEntry) {
-			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Date of entry is empty or not null</div><br>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><p>Date of entry is empty or not null</p>");
 			alertBox.hide();
 			alertBox.fadeIn(200);			
 		} else if (!resultFormValidation) {
-			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Wrong date form validation!</div><br>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><p>Wrong date form validation!</p>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else if (!itemOwner) {
-			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Owner is empty or not null</div><br>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><p>Item Owner is empty or not null</p>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else if (!itemLocation) {
-			alertBox.html("<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Location is empty or null</div><br>");
+			alertBox.html("<span class='close-alert'>&times;</span><br><p>Item Location is empty or null</p>");
 			alertBox.hide();
 			alertBox.fadeIn(200);
 		} else {
@@ -437,35 +437,35 @@ function appFormRemoveOrEditItemsHandler() {
 							var jqueryGetAlertEditModal = $("div#app-edit-alert");
 							// if item name is empty
 							if (!editedName) {
-								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Name is empty!</div>";
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><p>Name is empty!</p>";
 								jqueryGetAlertEditModal.hide();
 								jqueryGetAlertEditModal.fadeIn(200);
 							} else if (!editedModel) {
-								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Model/Brand is empty!</div>";
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><p>Model/Brand is empty!</p>";
 								jqueryGetAlertEditModal.hide();
 								jqueryGetAlertEditModal.fadeIn(200);
 							} else if (!editedQuantity) {
-								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Quantity is empty!</div>";
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><p>Item Quantity is empty!</p>";
 								jqueryGetAlertEditModal.hide();
 								jqueryGetAlertEditModal.fadeIn(200);
 							} else if (!editedLimitation) {
-								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item Limitation is empty!</div>";
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><p>Item Limitation is empty!</p>";
 								jqueryGetAlertEditModal.hide();
 								jqueryGetAlertEditModal.fadeIn(200);
 							} else if (parseInt(editedLimitation) > parseInt(editedQuantity)) {
-								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item quantity couldn't be less than item limitation!</div>";
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><p>Item quantity couldn't be less than item limitation!</p>";
 								jqueryGetAlertEditModal.hide();
 								jqueryGetAlertEditModal.fadeIn(200);
 							} else if (!editedUnit) {
-								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item unit is empty!</div>";
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><p>Item unit is empty!</p>";
 								jqueryGetAlertEditModal.hide();
 								jqueryGetAlertEditModal.fadeIn(200);
 							} else if (!editedOwner) {
-								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Item owner is empty!</div>";
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><p>Item owner is empty!</p>";
 								jqueryGetAlertEditModal.hide();
 								jqueryGetAlertEditModal.fadeIn(200);
 							} else if (!editedLocation) {
-								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><div style='text-align: center;'>Location is empty!</div>";
+								editAlertModal.innerHTML = "<span class='close-alert'>&times;</span><br><p>Location is empty!</p>";
 								jqueryGetAlertEditModal.hide();
 								jqueryGetAlertEditModal.fadeIn(200);
 							} else {
@@ -499,7 +499,7 @@ function appFormRemoveOrEditItemsHandler() {
 										setTimeout(function() {
 											jqueryGetModal.fadeOut(200);
 										}, 3000);
-
+										$("div#remove-result").load(" #remove-result");
 										window.onclick = function(e) {
 											if (e.target == modal) {
 												jqueryGetModal.css("display", "block");
@@ -529,7 +529,7 @@ function appFormRemoveOrEditItemsHandler() {
 
 						// show the prompt
 						var modalContent = "<div class='tbl-content-modal'><label style='font-weight: bold; color: #c0392b;'>Are you sure want to remove this item?</label><br><br>";
-						modalContent += "<table cellpadding='10px' cellspacing='0' style='border: solid 1px #ddd;'>";
+						modalContent += "<table class='tbl-remove' cellpadding='10px' cellspacing='0' style='border: solid 1px #ddd;'>";
 						modalContent += "<tr>";
 						modalContent += "  <td>ID</td>";
 						modalContent += "  <td>"+btnValue+"</td>";
@@ -582,6 +582,7 @@ function appFormRemoveOrEditItemsHandler() {
 										setTimeout(function() {
 											jqueryGetModal.fadeOut(300);
 										}, 3000);
+										$("div#remove-result").load(" #remove-result");
 										window.onclick = function(e) {
 											if (e.target == modal) {
 												jqueryGetModal.css("display", "block");
@@ -781,10 +782,12 @@ function appFormRemoveOrEditItemsHandler() {
 		right: 20%;
 		background-color: #2c3e50;
 		color: #FFFFFF;
-		padding: 2px;
+		padding-bottom: 5px;
+		padding-left: 10px;
 		display: none;
 		border-bottom-left-radius: 5px;
 		border-bottom-right-radius: 5px;
+		text-align: center;
 	}
 	span.app-close {
 		color: #FFFFFF;
@@ -810,6 +813,9 @@ function appFormRemoveOrEditItemsHandler() {
 		left: 225px;
 		right: 10px;
 		overflow: hidden;
+	}
+	table.tbl-remove {
+		font-size: 80%;
 	}
 	div#app-search-form-box ul {
 		list-style-type: none;
@@ -943,7 +949,7 @@ function appFormRemoveOrEditItemsHandler() {
 	}
 	div.remove-modal-content {
 		background-color: #FEFEFE;
-		margin: 15% auto;
+		margin: 3% auto;
 		padding: 20px;
 		border: solid 1px #888;
 		width: 70%;
@@ -952,7 +958,7 @@ function appFormRemoveOrEditItemsHandler() {
 	}
 	div.edit-modal-content {
 		background-color: #FEFEFE;
-		margin: 5% auto;
+		margin: 3% auto;
 		padding: 20px;
 		border: solid 1px #888;
 		width: 70%;
@@ -1046,6 +1052,8 @@ function appFormRemoveOrEditItemsHandler() {
 		background-color: #e74c3c;
 		color: #FFFFFF;
 		border-radius: 3px;
+		padding-bottom: 5px;
+		padding-left: 10px;
 	}
 	/* end of edit modal content */
 
@@ -1098,7 +1106,7 @@ function appFormRemoveOrEditItemsHandler() {
 				<td><input class="item-name" type="text" placeholder="Item Name"></td>
 			</tr>
 			<tr>
-				<td><label class="label-input">Model</label></td>
+				<td><label class="label-input">Model/Brand</label></td>
 				<td><input class="item-model" type="text" placeholder="Model/Brand"></td>
 			</tr>
 			<tr>

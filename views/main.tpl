@@ -16,6 +16,7 @@
 			[[ template "login_popup". ]]
 			[[ template "table_monitor". ]]
 		</div>
+		[[ template "side_notification_bar". ]]
 	</body>
 </html>
 [[ end ]]
@@ -48,6 +49,12 @@
 
 [[ define "table_monitor" ]]
 <div id="app-user-islogged-in" style="display: none;">[[ .HtmlUserIsLoggedIn ]]</div>
-<div id="app-table-box"></div><br><br>
+<div id="app-table-box"></div>
+<br><br>
+<div id="app-pickup-alert"></div>
 <div id="app-modal-pickup-container"></div>
+[[ end ]]
+
+[[ define "side_notification_bar" ]]
+<div id="app-side-notif"></div>
 [[ end ]]
