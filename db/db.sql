@@ -13,7 +13,10 @@ CREATE TABLE IF NOT EXISTS `user_login` (
 	`user_email` VARCHAR(64) NOT NULL,			-- E-mail
 	`key` VARCHAR(64) NOT NULL,					-- Key as key while users forgot their password
 	`date_created` DATETIME NOT NULL			-- Date and time when it user was created
-);
+)
+ENGINE=InnoDB
+ROW_FORMAT=COMPRESSED
+KEY_BLOCK_SIZE=8;
 
 -- Default values for user_login table
 INSERT INTO `user_login` (
@@ -41,7 +44,10 @@ CREATE TABLE IF NOT EXISTS `items` (
 	`item_location` VARCHAR(32) NOT NULL,
 	`item_status` VARCHAR(32) NOT NULL,
 	`added_by` VARCHAR(64) NOT NULL
-);
+)
+ENGINE=InnoDB
+ROW_FORMAT=COMPRESSED
+KEY_BLOCK_SIZE=8;
 
 -- Default values for items table
 INSERT INTO `items` (
