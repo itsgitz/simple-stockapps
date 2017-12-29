@@ -449,6 +449,7 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// pickup item function
 func (this *MainController) AppPickupItem(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	if r.Method == "GET" {
@@ -543,13 +544,9 @@ func (this *MainController) AppJSONUpdateItem(w http.ResponseWriter, r *http.Req
 			item_expired = fmt.Sprintf("%s %s", adding_time.Format("2006-01-02"), time_split)
 			str_time_prd = time_period + " " + type_period // Ex: 2 Day(s)
 		}
-		//log.Println(dateSplitSpace, tahun, bulan, tanggal)
-		log.Println(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, time_period, type_period, item_owner, item_location)
-		log.Println("New data:", date_of_entry, item_status, str_time_prd, item_expired)
 
-		// func ModelsUpdateDataItem(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, item_time_period, item_expired, item_owner, item_location, item_status string) error
-		// here ... we could updating data in items table
-		errUpdate := models.ModelsUpdateDataItem(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, str_time_prd, item_expired, item_owner, item_status)
+		// update data
+		errUpdate := models.ModelsUpdateDataItem(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, str_time_prd, item_expired, item_owner, item_location, item_status)
 		if errUpdate != nil {
 			http.Error(w, errUpdate.Error(), http.StatusInternalServerError)
 		} else {
