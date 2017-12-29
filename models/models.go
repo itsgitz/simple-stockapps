@@ -189,8 +189,8 @@ func ModelsRemoveDataItem(item_id string) error {
 
 // ModelsUpdateDataItem() is function that used for updating an item with the given ID
 //func ModelsUpdateDataItem(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, item_time_period, item_expired, item_owner, item_location, item_status string) error {
-func ModelsUpdateDataItem(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, item_time_period, item_expired, item_owner, item_status string) error { 
-	x, err := db.Queryx("UPDATE items SET item_name=?, item_model=?, item_quantity=?, Item_limitation=?, item_unit=?, item_time_period=?, item_expired=?, item_owner=?, item_status=? WHERE item_id=?", item_name, item_model, item_quantity, item_limitation, item_unit, item_time_period, item_expired, item_owner, item_status, item_id)
+func ModelsUpdateDataItem(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, item_time_period, item_expired, item_owner, item_location, item_status string) error { 
+	x, err := db.Queryx("UPDATE items SET item_name=?, item_model=?, item_quantity=?, Item_limitation=?, item_unit=?, item_time_period=?, item_expired=?, item_owner=?, item_location=?, item_status=? WHERE item_id=?", item_name, item_model, item_quantity, item_limitation, item_unit, item_time_period, item_expired, item_owner, item_location, item_status, item_id)
 	defer x.Close()
 	return err
 }
