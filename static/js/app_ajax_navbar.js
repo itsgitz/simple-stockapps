@@ -101,6 +101,10 @@ function appAjaxRequestPage(url) {
 		},
 		beforeSend: function(response) {
 			$("div#app-loading-bar").css("display", "block");
+		},
+		error: function(response) {
+			console.log(response);
+			window.location = "/";
 		}
 	});
 }

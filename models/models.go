@@ -152,6 +152,17 @@ func ModelsSelectFromOurItems() ([]Items_Columns, error) {
 	return items_value, err
 }
 
+// Get all items data
+func ModelsSelectAllItems() ([]Items_Columns, error) {
+	items_value := []Items_Columns{}
+	err = db.Select(&items_value, "SELECT * FROM items ORDER BY date_of_entry ASC")
+	if err != nil {
+		log.Println("[!] ERROR: ModelsSelectAllItems:", err)
+	}
+
+	return items_value, err
+}
+
 func ModelsSelectFromUserLogin(username string) []User_Login {
 	user_login_value := []User_Login{}
 	err = db.Select(&user_login_value, 

@@ -1,27 +1,32 @@
-// configure the websocket
+// jQuery.3.2.1
 var ws = new WebSocket('ws://192.168.43.56:8080/ws');
 ws.onopen = function() {
 	console.log("WebSocket connection opened!");
+}
+ws.onclose = function() {
+	console.log("WebSocket connection closed!");
+	console.log("Ready: " + ws.readyState);
 }
 ws.onerror = function(error) {
 	alert('WebSocket' + error);
 }
 ws.onmessage = function(e) {
-	var msg = JSON.parse(e.data)
+	var msg = JSON.parse(e.data);
 	var tableBox = $("div#app-table-box");
-	console.log(msg);
-	switch(msg.Kode) {
-		case "#001-pick-up":
-			tableBox.load(" #app-table-box", function() {
-				appTableHandler();
-				tableBox.hide();
-				tableBox.fadeIn(300);
-			});
-		break;
+	console.log("Pesan: "+msg.Kode);
+	if (msg) {
+		switch(msg.Kode) {
+			case "#001-pick-up":
+				tableBox.load(" #app-table-box", function() {
+					appTableHandler();
+					tableBox.hide();
+					tableBox.fadeIn(300);
+				});
+			break;
+		}
 	}
 }
 
-// jQuery.3.2.1
 $(document).ready(function() {
 	////////// Main Page ///////////////////
 	// login popup box function
@@ -31,10 +36,13 @@ $(document).ready(function() {
 	var navigationBar = document.getElementById("app-navbar");
 	var jqueryGetSideNotificationBar = $("div#app-side-notif");
 	var jqueryGetTableBox = $("div#app-table-box");
+	var documentWidth = $(document).width();
+	
 	if (navigationBar) {
 		jqueryGetSideNotificationBar.css("top", "200px");
 		jqueryGetTableBox.css("top", "200px");
 	}
+
 });
 
 // Login popup box function
@@ -137,7 +145,7 @@ function appTableHandler() {
 			$("div#app-table-box .tb-status").each(function() {
 				var statusColumnValue = $(this).text();
 				var statusRowsValue = $(".tb-status");
-
+				statusRowsValue.css("font-weight", "bold");
 				switch(statusColumnValue) {
 					case "Available": statusRowsValue.css("color", "#2980b9"); break;
 					case "Limited": statusRowsValue.css("color", "#d35400"); break;
@@ -240,7 +248,6 @@ function appTableHandler() {
 								},
 								async: true,
 								success: function(res) {
-									console.log(res);
 									jqueryModalPickupAlert.fadeOut(300);
 									$("div.app-pickup-content").html("<p style='padding: 10px; font-weight: bold; color: #3498db;'>"+res.message+" Please wait ...</p>");
 									$("div#app-pickup-btn-box").css("display", "none");

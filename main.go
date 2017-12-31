@@ -37,6 +37,7 @@ func main() {
 
 	// JSON
 	router.HandleFunc("/json_get_items", main_ctrl.AppJSONOurItemsData)
+	router.HandleFunc("/json_get_all_items", main_ctrl.AppJSONGetAllItems)
 	router.HandleFunc("/json_search_items", main_ctrl.AppJSONSearchData)
 	// remove item url
 	router.HandleFunc("/json_remove_item", main_ctrl.AppJSONRemoveItem)
@@ -44,6 +45,9 @@ func main() {
 	router.HandleFunc("/json_update_item", main_ctrl.AppJSONUpdateItem)
 	// Pickup item url
 	router.HandleFunc("/json_pickup_item", main_ctrl.AppPickupItem)
+
+	// Handling message concurrency
+	go main_ctrl.HandleMessage()
 
 	// defining http middleware using negroni method
 	middleware := negroni.Classic()
