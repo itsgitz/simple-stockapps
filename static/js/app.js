@@ -1,5 +1,5 @@
 // jQuery.3.2.1
-var ws = new WebSocket('ws://192.168.43.56:8080/ws');
+var ws = new WebSocket('ws://192.168.43.51:8080/ws');
 ws.onopen = function() {
 	console.log("WebSocket connection opened!");
 }
@@ -11,11 +11,10 @@ ws.onerror = function(error) {
 	alert('WebSocket' + error);
 }
 ws.onmessage = function(e) {
-	var msg = JSON.parse(e.data);
 	var tableBox = $("div#app-table-box");
-	console.log("Pesan: "+msg.Kode);
-	if (msg) {
-		switch(msg.Kode) {
+	console.log("Pesan: "+ e.data);
+	if (e.data) {
+		switch(e.data) {
 			case "#001-pick-up":
 				tableBox.load(" #app-table-box", function() {
 					appTableHandler();
@@ -260,12 +259,7 @@ function appTableHandler() {
 											$("div#app-pickup-modal").css("display", "block");
 										}
 									}
-									// send json data to through websocket
-									var json_msg = JSON.stringify({
-										Pesan: getItemId,
-										Kode: "#001-pick-up"
-									});
-									ws.send(json_msg);
+									ws.send("#001-pick-up");
 								}
 							});
 						} else if (parseInt(itemHowMuch) > parseInt(getQuantity)) {

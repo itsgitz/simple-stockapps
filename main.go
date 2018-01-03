@@ -12,6 +12,7 @@ import (
 	"simple_stockapps/controllers"	// custom controllers
 )
 
+
 // main function
 func main() {
 	// router variable initialiation using mux gorilla package
@@ -25,6 +26,7 @@ func main() {
 	router.HandleFunc("/logout", main_ctrl.AppLogout) // routing for "/logout" handler
 
 	// Websocket router/controllers
+	go main_ctrl.RunningWebSocketController()
 	router.HandleFunc("/ws", main_ctrl.AppWebSocket) // routing for web socket handler
 
 	// ajax handler routers
@@ -47,7 +49,7 @@ func main() {
 	router.HandleFunc("/json_pickup_item", main_ctrl.AppPickupItem)
 
 	// Handling message concurrency
-	go main_ctrl.HandleMessage()
+	//go main_ctrl.HandleMessage()
 
 	// defining http middleware using negroni method
 	middleware := negroni.Classic()
