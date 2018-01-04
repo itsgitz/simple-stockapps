@@ -165,7 +165,7 @@
 	input#app-home-searchbar {
 		position: absolute;
 		right: 5px;
-		top: 150px;
+		top: 145px;
 		display: none;
 		background-image: url(/img/searchicon.png);
 		background-size: 12px;
@@ -175,7 +175,7 @@
 		padding-top: 5px;
 		padding-bottom: 5px;
 		font-size: 12px;
-		border: solid 1px #95a5a6;
+		border: none;
 		margin-bottom: 12px;
 		border-radius: 5px;
 		outline: none;

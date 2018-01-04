@@ -1,5 +1,5 @@
 // jQuery.3.2.1
-var ws = new WebSocket('ws://192.168.43.56:8080/ws');
+var ws = new WebSocket('ws://192.168.43.51:8080/ws');
 if (window.WebSocket) {
 	console.log("Your web browser is support websocket");
 } else {
