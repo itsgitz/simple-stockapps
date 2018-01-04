@@ -1,5 +1,5 @@
 // jQuery.3.2.1
-var ws = new WebSocket('ws://192.168.43.51:8080/ws');
+var ws = new WebSocket('ws://10.24.44.59:8080/ws');
 if (window.WebSocket) {
 	console.log("Your web browser is support websocket");
 } else {
@@ -21,10 +21,10 @@ ws.onerror = function(error) {
 }
 ws.onmessage = function(e) {
 	var tableBox = $("div#app-table-box");
-	var parseJSON = JSON.parse(e.data);
-	console.log("Pesan: "+ parseJSON.Kode);
+	//var parseJSON = JSON.parse(e.data);
+	console.log("Pesan: "+ e.data);
 	if (e.data) {
-		switch(parseJSON.Kode) {
+		switch(e.data) {
 			case "#001-pick-up":
 				tableBox.load(" #app-table-box", function() {
 					appTableHandler();
@@ -149,16 +149,10 @@ function appTableHandler() {
 			// give style to status rows
 			// if "Available" has blue background color
 			// if "Limited" has orange background color
-			$("div#app-table-box .tb-status").each(function() {
-				var statusColumnValue = $(this).text();
-				var statusRowsValue = $(".tb-status");
-				statusRowsValue.css("font-weight", "bold");
-				switch(statusColumnValue) {
-					case "Available": statusRowsValue.css("color", "#2980b9"); break;
-					case "Limited": statusRowsValue.css("color", "#d35400"); break;
-					case "Not Available": statusRowsValue.css("color", "#c0392b"); break;
-				}
-			});
+			$("div#app-table-box .tb-status").css("color", "#FFFFFF");
+			$("div#app-table-box .tb-status:contains(Available)").css("background-color", "#2980b9");
+			$("div#app-table-box .tb-status:contains(Limited)").css("background-color", "#d35400");
+			$("div#app-table-box .tb-status:contains(Not Available)").css("background-color", "#c0392b");
 
 			var pickUpButton = $("a#app-pick-btn");
 
@@ -245,12 +239,13 @@ function appTableHandler() {
 					console.log(quantityToMin);
 						
 					if (parseInt(itemHowMuch)) {
-						if (parseInt(itemHowMuch) < parseInt(getQuantity) && textNotes) {
+						if (parseInt(itemHowMuch) < parseInt(getQuantity) && textNotes || parseInt(itemHowMuch) == parseInt(getQuantity)) {
 							$.ajax({
 								url: "/json_pickup_item",
 								method: "POST",
 								data: {
 									item_id: getItemId,
+									item_limitation: getLimitation,
 									item_quantity_picked: quantityToMin,
 								},
 								async: true,
@@ -268,11 +263,7 @@ function appTableHandler() {
 												$("div#app-pickup-modal").css("display", "block");
 											}
 										}
-										var json_msg = JSON.stringify({
-											Kode: "#001-pick-up",
-											Pesan: "Success!"
-										});
-										ws.send(json_msg);
+										ws.send("#001-pick-up");
 									} else {
 										alert("Session has timed out :(");
 										window.location = "/";

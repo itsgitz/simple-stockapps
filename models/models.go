@@ -206,8 +206,8 @@ func ModelsUpdateDataItem(item_id, item_name, item_model, item_quantity, item_li
 	return err
 }
 
-func ModelsPickupItem(item_id string, item_quantity string) error {
-	x, err := db.Queryx("UPDATE items SET item_quantity=? WHERE item_id=?", item_quantity, item_id)
+func ModelsPickupItem(item_id, item_quantity, item_status string) error {
+	x, err := db.Queryx("UPDATE items SET item_quantity=?, item_status=? WHERE item_id=?", item_quantity, item_status, item_id)
 	defer x.Close()
 	return err
 }
