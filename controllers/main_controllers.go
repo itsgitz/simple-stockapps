@@ -434,9 +434,32 @@ func (this *MainController) AppPickupItem(w http.ResponseWriter, r *http.Request
 		http.Error(w, "NOT FOUND :(", http.StatusNotFound)
 	} else if r.Method == "POST" {
 		if len(username_session) > 0 && len(user_fullname_session) > 0 {
+			var item_status string;
 			item_id := r.Form["item_id"][0]
 			item_quantity_picked := r.Form["item_quantity_picked"][0]
-			errPickup := models.ModelsPickupItem(item_id, item_quantity_picked)
+			item_limitation := r.Form["item_limitation"][0]
+			// convert it to integer
+			item_quantity_picked_int, _ := strconv.Atoi(item_quantity_picked)
+			item_limitation_int, _ := strconv.Atoi(item_limitation)
+
+			// determine item status
+			// if item quantity that has picked up by user more than item limitation, then
+			// item_status is "Available"
+			if item_quantity_picked_int > item_limitation_int {
+				item_status = "Available"
+			// else if item qty that has picked up by user is equal with limitation, then
+			// item_status is "Limited"
+			} else if item_quantity_picked_int == item_limitation_int || item_quantity_picked_int < item_limitation_int {
+				item_status = "Limited"
+			// else if item qty that has picked up by user is less than limitation, then
+			// item_status is "Not Available"
+			} 
+
+			if item_quantity_picked_int == 0 {
+				item_status = "Not Available"
+			}
+
+			errPickup := models.ModelsPickupItem(item_id, item_quantity_picked, item_status)
 			if errPickup != nil {
 				http.Error(w, errPickup.Error(), http.StatusInternalServerError)
 			} else {
