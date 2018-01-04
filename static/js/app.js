@@ -1,20 +1,40 @@
 // jQuery.3.2.1
-	var ws = new WebSocket('ws://192.168.43.56/ws');
-	if (window.WebSocket) {
-		console.log("Your web browser is support websocket");
-	} else {
-		console.log("Your web browser doesn't support websocket");
+var ws = new WebSocket('ws://192.168.43.56:8080/ws');
+if (window.WebSocket) {
+	console.log("Your web browser is support websocket");
+} else {
+	console.log("Your web browser doesn't support websocket");
+}
+ws.onopen = function() {
+	console.log("WebSocket connection opened!");
+}
+ws.onclose = function() {
+	console.log("WebSocket connection closed!");
+	console.log("Ready: " + ws.readyState);
+	alert("WebSocket server connection... I'll try to reconnecting in 3s ...");
+	setTimeout(function() {
+		window.location = "/";
+	}, 3000);
+}
+ws.onerror = function(error) {
+	alert('WebSocket' + error);
+}
+ws.onmessage = function(e) {
+	var tableBox = $("div#app-table-box");
+	var parseJSON = JSON.parse(e.data);
+	console.log("Pesan: "+ parseJSON.Kode);
+	if (e.data) {
+		switch(parseJSON.Kode) {
+			case "#001-pick-up":
+				tableBox.load(" #app-table-box", function() {
+					appTableHandler();
+					tableBox.hide();
+					tableBox.fadeIn(300);
+				});
+			break;
+		}
 	}
-	ws.onopen = function() {
-		console.log("WebSocket connection opened!");
-	}
-	ws.onclose = function() {
-		console.log("WebSocket connection closed!");
-		console.log("Ready: " + ws.readyState);
-	}
-	ws.onerror = function(error) {
-		alert('WebSocket' + error);
-	}
+}
 $(function() {
 	////////// Main Page ///////////////////
 	// login popup box function
@@ -29,22 +49,6 @@ $(function() {
 	if (navigationBar) {
 		jqueryGetSideNotificationBar.css("top", "200px");
 		jqueryGetTableBox.css("top", "200px");
-	}
-
-	ws.onmessage = function(e) {
-		var tableBox = $("div#app-table-box");
-		console.log("Pesan: "+ e.data);
-		if (e.data) {
-			switch(e.data) {
-				case "#001-pick-up":
-					tableBox.load(" #app-table-box", function() {
-						appTableHandler();
-						tableBox.hide();
-						tableBox.fadeIn(300);
-					});
-				break;
-			}
-		}
 	}
 });
 
@@ -264,7 +268,11 @@ function appTableHandler() {
 												$("div#app-pickup-modal").css("display", "block");
 											}
 										}
-										ws.send("#001-pick-up");
+										var json_msg = JSON.stringify({
+											Kode: "#001-pick-up",
+											Pesan: "Success!"
+										});
+										ws.send(json_msg);
 									} else {
 										alert("Session has timed out :(");
 										window.location = "/";
