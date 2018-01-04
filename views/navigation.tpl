@@ -67,7 +67,6 @@
 		var homeSearchBar = document.getElementById("app-home-searchbar");
 		var jqueryHomeSearchBar = $("input#app-home-searchbar");
 		var userIsLoggedIn = $("div#app-user-islogged-in").text();
-		console.log(userIsLoggedIn);
 		if (statusPageElement) {
 			var statusPage = statusPageElement.innerHTML;
 			if (statusPage) {

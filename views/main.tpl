@@ -57,5 +57,6 @@
 [[ end ]]
 
 [[ define "side_notification_bar" ]]
-<div id="app-side-notif"></div>
+<div id="app-side-notif">
+</div>
 [[ end ]]

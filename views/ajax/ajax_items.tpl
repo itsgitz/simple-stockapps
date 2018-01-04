@@ -1034,7 +1034,7 @@ function removeTable() {
 	}
 	div.edit-modal-content {
 		background-color: #FEFEFE;
-		margin: 10% auto;
+		margin: 3% auto;
 		padding: 20px;
 		border: solid 1px #888;
 		width: 70%;

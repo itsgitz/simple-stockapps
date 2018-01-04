@@ -26,7 +26,6 @@ func main() {
 	router.HandleFunc("/logout", main_ctrl.AppLogout) // routing for "/logout" handler
 
 	// Websocket router/controllers
-	go main_ctrl.RunningWebSocketController()
 	router.HandleFunc("/ws", main_ctrl.AppWebSocket) // routing for web socket handler
 
 	// ajax handler routers
@@ -48,8 +47,8 @@ func main() {
 	// Pickup item url
 	router.HandleFunc("/json_pickup_item", main_ctrl.AppPickupItem)
 
-	// Handling message concurrency
-	//go main_ctrl.HandleMessage()
+	// Handling websocket message concurrency
+	go main_ctrl.RunningWebSocketController()
 
 	// defining http middleware using negroni method
 	middleware := negroni.Classic()
@@ -58,7 +57,7 @@ func main() {
 
 	// initialization http server
 	HttpServer := &http.Server{
-		Addr:			":8080", // http port that used by web server
+		Addr:			":80", // http port that used by web server
 		Handler:		middleware, // using handler as http middleware
 		ReadTimeout:	time.Second * 10,
 		WriteTimeout:	time.Second * 10,
@@ -66,7 +65,7 @@ func main() {
 
 
 	// log will tell web server has already opening on port :8080
-	log.Println("[*] Web server is running on port :8080")
+	log.Println("[*] Web server is running on port :80")
 	HttpError := HttpServer.ListenAndServe()
 
 	// catch the error log if any error outhere

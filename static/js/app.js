@@ -1,32 +1,21 @@
 // jQuery.3.2.1
-var ws = new WebSocket('ws://192.168.43.51:8080/ws');
-ws.onopen = function() {
-	console.log("WebSocket connection opened!");
-}
-ws.onclose = function() {
-	console.log("WebSocket connection closed!");
-	console.log("Ready: " + ws.readyState);
-}
-ws.onerror = function(error) {
-	alert('WebSocket' + error);
-}
-ws.onmessage = function(e) {
-	var tableBox = $("div#app-table-box");
-	console.log("Pesan: "+ e.data);
-	if (e.data) {
-		switch(e.data) {
-			case "#001-pick-up":
-				tableBox.load(" #app-table-box", function() {
-					appTableHandler();
-					tableBox.hide();
-					tableBox.fadeIn(300);
-				});
-			break;
-		}
+	var ws = new WebSocket('ws://192.168.43.56/ws');
+	if (window.WebSocket) {
+		console.log("Your web browser is support websocket");
+	} else {
+		console.log("Your web browser doesn't support websocket");
 	}
-}
-
-$(document).ready(function() {
+	ws.onopen = function() {
+		console.log("WebSocket connection opened!");
+	}
+	ws.onclose = function() {
+		console.log("WebSocket connection closed!");
+		console.log("Ready: " + ws.readyState);
+	}
+	ws.onerror = function(error) {
+		alert('WebSocket' + error);
+	}
+$(function() {
 	////////// Main Page ///////////////////
 	// login popup box function
 	appLoginHandler();
@@ -42,6 +31,21 @@ $(document).ready(function() {
 		jqueryGetTableBox.css("top", "200px");
 	}
 
+	ws.onmessage = function(e) {
+		var tableBox = $("div#app-table-box");
+		console.log("Pesan: "+ e.data);
+		if (e.data) {
+			switch(e.data) {
+				case "#001-pick-up":
+					tableBox.load(" #app-table-box", function() {
+						appTableHandler();
+						tableBox.hide();
+						tableBox.fadeIn(300);
+					});
+				break;
+			}
+		}
+	}
 });
 
 // Login popup box function
@@ -247,19 +251,24 @@ function appTableHandler() {
 								},
 								async: true,
 								success: function(res) {
-									jqueryModalPickupAlert.fadeOut(300);
-									$("div.app-pickup-content").html("<p style='padding: 10px; font-weight: bold; color: #3498db;'>"+res.message+" Please wait ...</p>");
-									$("div#app-pickup-btn-box").css("display", "none");
-									setTimeout(function() {
-										jqueryGetModalBox.fadeOut(300);
-									}, 3000)
-									// if user clicks anywhere outside of the modal
-									window.onclick = function(e) {
-										if (e.target == pickupModalBox) {
-											$("div#app-pickup-modal").css("display", "block");
+									if (!res.Message_Timeout) {
+										jqueryModalPickupAlert.fadeOut(300);
+										$("div.app-pickup-content").html("<p style='padding: 10px; font-weight: bold; color: #3498db;'>"+res.Message+" Please wait ...</p>");
+										$("div#app-pickup-btn-box").css("display", "none");
+										setTimeout(function() {
+											jqueryGetModalBox.fadeOut(300);
+										}, 3000)
+										// if user clicks anywhere outside of the modal
+										window.onclick = function(e) {
+											if (e.target == pickupModalBox) {
+												$("div#app-pickup-modal").css("display", "block");
+											}
 										}
+										ws.send("#001-pick-up");
+									} else {
+										alert("Session has timed out :(");
+										window.location = "/";
 									}
-									ws.send("#001-pick-up");
 								}
 							});
 						} else if (parseInt(itemHowMuch) > parseInt(getQuantity)) {
