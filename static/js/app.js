@@ -150,6 +150,7 @@ function appTableHandler() {
 			// if "Available" has blue background color
 			// if "Limited" has orange background color
 			$("div#app-table-box .tb-status").css("color", "#FFFFFF");
+			$("div#app-table-box .tb-status").css("font-weight", "bolder");
 			$("div#app-table-box .tb-status:contains(Available)").css("background-color", "#2980b9");
 			$("div#app-table-box .tb-status:contains(Limited)").css("background-color", "#d35400");
 			$("div#app-table-box .tb-status:contains(Not Available)").css("background-color", "#c0392b");

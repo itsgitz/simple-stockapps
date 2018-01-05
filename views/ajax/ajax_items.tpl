@@ -455,12 +455,13 @@ function editTable() {
 		if (itemThisTimePeriod == "None") {
 			itemThisTimePeriod = "0";
 		}
-		editContent += "  <td><input class='edit-table edit-time-period' type='number' placeholder='Time Period' value='"+parseInt(itemThisTimePeriod)+"'>";
+		editContent += "  <td><input class='edit-table edit-time-period' type='number' placeholder='Time Period'>";
 		editContent += "    <select class='edit-period edit-type-period'>";
 		editContent += "       <option value='Day(s)'>Day(s)</option>";
 		editContent += "       <option value='Week(s)'>Week(s)</option>";
 		editContent += "       <option value='Month(s)'>Month(s)</option>";
 		editContent += "    </select>";
+		editContent += "   &nbsp;<label style='color: #27ae60; font-weight: bold;'><i>*Currently "+itemThisTimePeriod+"</i></label>";
 		editContent += "  </td>";
 		editContent += "</tr>";
 		editContent += "<tr>";
@@ -480,6 +481,7 @@ function editTable() {
 		editContent += "       <option value='DC TBS 2nd Floor'>DC TBS 2nd Floor</option>";
 		editContent += "       <option value='DC TBS 3rd Floor'>DC TBS 3rd Floor</option>";
 		editContent += "    </select>";
+		editContent += "   &nbsp;<label style='color: #27ae60; font-weight: bold;'><i>*Currently "+itemThisLocation+"</i></label>";
 		editContent += "  </td>";
 		editContent += "</tr>";
 		editContent += "<tr>";
