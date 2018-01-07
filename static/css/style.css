@@ -34,7 +34,7 @@ div.app-modal {
 }
 div.app-modal-content {
 	background-color: #FEFEFE;
-	margin: 10% auto;
+	margin: 5% auto;
 	padding: 30px;
 	border: 1px solid #888;
 	width: 70%;
@@ -93,9 +93,27 @@ input.app-login-btn:hover {
 div#app-table-box {
 	overflow-x: auto;
 	position: absolute;
-	top: 160px;
+	top: 220px;
 	left: 0;
 	width: 75%;
+}
+div#app-table-nav {
+	padding: 5px;
+	padding-top: 10px;
+	padding-left: : 30px;
+	width: 75%;
+	border-radius: 3px;
+}
+button.sub-nav {
+	border: none;
+	border-bottom: solid 2px #3498db;
+	color: #3498db;
+	background-color: #FFFFFF;
+	padding: 10px;
+	outline: none;
+}
+button.sub-nav:hover {
+	cursor: pointer;
 }
 div#app-side-notif {
 	height: 100%;

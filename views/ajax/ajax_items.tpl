@@ -461,7 +461,7 @@ function editTable() {
 		editContent += "       <option value='Week(s)'>Week(s)</option>";
 		editContent += "       <option value='Month(s)'>Month(s)</option>";
 		editContent += "    </select>";
-		editContent += "   &nbsp;<label style='color: #27ae60; font-weight: bold;'><i>*Currently "+itemThisTimePeriod+"</i></label>";
+		editContent += "   &nbsp;<label style='color: #27ae60; font-weight: bold;'><i>*Current: "+itemThisTimePeriod+"</i></label>";
 		editContent += "  </td>";
 		editContent += "</tr>";
 		editContent += "<tr>";
@@ -481,7 +481,7 @@ function editTable() {
 		editContent += "       <option value='DC TBS 2nd Floor'>DC TBS 2nd Floor</option>";
 		editContent += "       <option value='DC TBS 3rd Floor'>DC TBS 3rd Floor</option>";
 		editContent += "    </select>";
-		editContent += "   &nbsp;<label style='color: #27ae60; font-weight: bold;'><i>*Currently "+itemThisLocation+"</i></label>";
+		editContent += "   &nbsp;<label style='color: #27ae60; font-weight: bold;'><i>*Current: "+itemThisLocation+"</i></label>";
 		editContent += "  </td>";
 		editContent += "</tr>";
 		editContent += "<tr>";
@@ -888,7 +888,8 @@ function removeTable() {
 		display: none;
 		padding-top: 0px;
 		position: absolute;
-		left: 225px;
+		top: 250px;
+		left: 10px;
 		right: 10px;
 		overflow: hidden;
 	}
@@ -1153,6 +1154,7 @@ function removeTable() {
 		}
 		div#app-remove-content {
 			position: absolute;
+			top: 150px;
 			left: 10px;
 			right: 10px;
 		}

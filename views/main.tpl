@@ -7,7 +7,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="/css/style.css">
 		<link rel="icon" href="/img/lintasarta_icon.png" type="image/gif">
-		<script src="/js/jquery-3.2.1.js"></script>
+		<script src="/js/jquery-3.2.1.min.js"></script>
 		<script src="/js/app.js"></script>
 	</head>
 	<body>
@@ -39,19 +39,14 @@
 </div>
 [[ end ]]
 
-[[ define "sub_main_navigation_of_table" ]]
-<div id="app-sub-nav">
-	<ul>
-		<li><a href="?#show=full">Full Data</a></li>
-		<li><a href="?#show=real_time">Realtime Monitor</a></li>
-	</ul>
-</div>
-[[ end ]]
-
 [[ define "table_monitor" ]]
 <div id="app-user-islogged-in" style="display: none;">[[ .HtmlUserIsLoggedIn ]]</div>
+<div id="app-table-nav">
+	<button class="sub-nav our-data">Our Items</button>&nbsp;&nbsp;
+	<button class="sub-nav other-data">Other Items</button>
+</div>
 <div id="app-table-box"></div>
-<br><br>
+
 <div id="app-pickup-alert"></div>
 <div id="app-modal-pickup-container"></div>
 [[ end ]]
