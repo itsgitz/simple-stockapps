@@ -163,6 +163,17 @@ func ModelsSelectAllItems() ([]Items_Columns, error) {
 	return items_value, err
 }
 
+func ModelsSelectOtherItems() ([]Items_Columns, error) {
+	items_value := []Items_Columns{}
+	search := "'%lintasarta%'"
+	query := fmt.Sprintf("SELECT * FROM items WHERE item_owner NOT LIKE %s ORDER BY date_of_entry ASC", search)
+	err = db.Select(&items_value, query)
+	if err != nil {
+		log.Println("[!] ERROR: ModelsSelectOtherItems:", err)
+	}
+	return items_value, err
+}
+
 func ModelsSelectFromUserLogin(username string) []User_Login {
 	user_login_value := []User_Login{}
 	err = db.Select(&user_login_value, 
