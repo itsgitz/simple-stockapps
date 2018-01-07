@@ -174,6 +174,41 @@ func (this *MainController) AppJSONGetAllItems(w http.ResponseWriter, r *http.Re
 	fmt.Fprintf(w, string(outgoingJSON))
 }
 
+func (this *MainController) AppJSONGetOtherItems(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	values, err := models.ModelsSelectOtherItems()
+	if err != nil {
+		errMsg := "[!] ERROR: in ModelsSelectOtherItems(), Database Server: " + err.Error() + " Please contact the Administrator: anggit.ginanjar@lintasarta.co.id a.k.a AQX Tamvan :)"
+		http.Error(w, errMsg, http.StatusInternalServerError)
+	}
+
+	x := make([]Items, len(values))
+
+	for i:=0; i<len(values); i++ {
+		x[i].Item_id = values[i].Item_id
+		x[i].Item_name = values[i].Item_name
+		x[i].Item_model = values[i].Item_model
+		x[i].Item_quantity = values[i].Item_quantity
+		x[i].Item_limitation = values[i].Item_limitation
+		x[i].Item_unit = values[i].Item_unit
+		x[i].Date_of_entry = values[i].Date_of_entry
+		x[i].Item_time_period = values[i].Item_time_period
+		x[i].Item_expired = values[i].Item_expired
+		x[i].Item_owner = values[i].Item_owner
+		x[i].Owner_id = values[i].Owner_id
+		x[i].Item_location = values[i].Item_location
+		x[i].Item_status = values[i].Item_status
+		x[i].Added_by = values[i].Added_by
+	}
+
+	outgoingJSON, err := json.Marshal(x)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	fmt.Fprintf(w, string(outgoingJSON))
+}
+
 // Searching item in database then create JSON datatype from item_results
 func (this *MainController) AppJSONSearchData(w http.ResponseWriter, r *http.Request) {
 	// get session
