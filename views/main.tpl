@@ -42,8 +42,9 @@
 [[ define "table_monitor" ]]
 <div id="app-user-islogged-in" style="display: none;">[[ .HtmlUserIsLoggedIn ]]</div>
 <div id="app-table-nav">
-	<button class="sub-nav our-data">Our Items</button>&nbsp;&nbsp;
-	<button class="sub-nav other-data">Other Items</button>
+	<button class="sub-nav our-data">Our Items</button>&nbsp;
+	<button class="sub-nav other-data">Other Items</button>&nbsp;
+	<button class="sub-nav empty-data">Empty Items</button>
 </div>
 <div id="app-table-box"></div>
 

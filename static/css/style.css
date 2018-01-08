@@ -37,7 +37,7 @@ div.app-modal-content {
 	margin: 5% auto;
 	padding: 30px;
 	border: 1px solid #888;
-	width: 70%;
+	width: 700px;
 	border-radius: 10px;
 	text-align: center;
 }
@@ -103,6 +103,7 @@ div#app-table-nav {
 	padding-left: : 30px;
 	width: 75%;
 	border-radius: 3px;
+	display: inline;
 }
 button.sub-nav {
 	border: none;

@@ -23,7 +23,7 @@ ws.onerror = function(error) {
 }
 ws.onmessage = function(e) {
 	var tableBox = $("div#app-table-box");
-	//var parseJSON = JSON.parse(e.data);
+	console.log(window.location.hash);
 	console.log("Pesan: "+ e.data);
 	if (e.data) {
 		switch(e.data) {
@@ -45,12 +45,16 @@ $(function() {
 	// table handler function
 	// if when user load the browser and it has window hash location (#other_items), then
 	// load other items in div#app-table-box
-	var hashOtherItemsLocation = window.location.hash;
-	console.log(hashOtherItemsLocation);
-	if (hashOtherItemsLocation) {
+	var hashThisLocation = window.location.hash;
+	if (hashThisLocation) {
 		appAjaxLoad("/json_get_other_items");
 	} else {
 		appTableHandler();
+	}
+	switch(hashThisLocation) {
+		case "#other_items": appAjaxLoad("/json_get_other_items"); break;
+		case "#empty_items": appAjaxLoad("/json_get_empty_items"); break;
+		default: appTableHandler();
 	}
 
 	var navigationBar = document.getElementById("app-navbar");
@@ -62,17 +66,6 @@ $(function() {
 		jqueryGetTableBox.css("top", "260px");
 	}
 	appTableNavigation();
-
-	// also I create onpopstate so that hash could be push in history browser
-	window.onpopstate = function(event) {
-		var hashStateEvent = JSON.stringify(event.state);
-		var hashJSONParse = JSON.parse(hashStateEvent);
-		if (hashJSONParse.page == "main") {
-			appAjaxLoad("/json_get_items");
-		} else {
-			appAjaxLoad("/json_get_other_items");
-		}
-	}
 });
 
 // Login popup box function
@@ -352,6 +345,7 @@ function appPickupFunction() {
 function appTableNavigation() {
 	var ourItemsButton = $("button.our-data");
 	var otherItemsButton = $("button.other-data");
+	var emptyItemsButton = $("button.empty-data");
 
 	// when our items button is clicked
 	ourItemsButton.click(function() {
@@ -365,6 +359,12 @@ function appTableNavigation() {
 		var stateObj = {page: "other_items"};
 		history.pushState(stateObj, "other_items", "#other_items");
 		appAjaxLoad("/json_get_other_items");
+	});
+	// when empty items button is clicked
+	emptyItemsButton.click(function() {
+		var stateObj = {page: "empty_items"};
+		history.pushState(stateObj, "empty_items", "#empty_items");
+		appAjaxLoad("/json_get_empty_items");
 	});
 }
 
