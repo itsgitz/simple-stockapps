@@ -143,8 +143,8 @@ func ModelsSelectFromOurItems() ([]Items_Columns, error) {
 	items_value := []Items_Columns{}
 
 	search := "'%lintasarta%'"
-	query := fmt.Sprintf("SELECT * FROM items WHERE item_owner LIKE %s ORDER BY date_of_entry ASC", search)
-	err = db.Select(&items_value, query)
+	query := fmt.Sprintf("SELECT * FROM items WHERE item_owner LIKE %s AND NOT item_quantity=? ORDER BY date_of_entry ASC", search)
+	err = db.Select(&items_value, query, 0)
 	if err != nil {
 		log.Println("[!] ERROR: ModelsSelectFromItems:", err)
 	}
@@ -163,6 +163,7 @@ func ModelsSelectAllItems() ([]Items_Columns, error) {
 	return items_value, err
 }
 
+// other items means except lintasarta's items
 func ModelsSelectOtherItems() ([]Items_Columns, error) {
 	items_value := []Items_Columns{}
 	search := "'%lintasarta%'"
@@ -170,6 +171,16 @@ func ModelsSelectOtherItems() ([]Items_Columns, error) {
 	err = db.Select(&items_value, query)
 	if err != nil {
 		log.Println("[!] ERROR: ModelsSelectOtherItems:", err)
+	}
+	return items_value, err
+}
+
+// get empty items or item that has quantity 0
+func ModelsSelectEmptyItems() ([]Items_Columns, error) {
+	items_value := []Items_Columns{}
+	err = db.Select(&items_value, "SELECT * FROM items WHERE item_quantity=?", 0)
+	if  err != nil {
+		log.Println("[!] ERROR: ModelsSelectEmptyItems:", err)
 	}
 	return items_value, err
 }
