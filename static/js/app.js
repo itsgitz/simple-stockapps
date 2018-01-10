@@ -1,5 +1,5 @@
 // jQuery.3.2.1
-var ws = new WebSocket('ws://10.24.44.52:8080/ws');
+var ws = new WebSocket('ws://10.24.44.215:8080/ws');
 if (window.WebSocket) {
 	console.log("Your web browser is support websocket");
 } else {
@@ -46,11 +46,6 @@ $(function() {
 	// if when user load the browser and it has window hash location (#other_items), then
 	// load other items in div#app-table-box
 	var hashThisLocation = window.location.hash;
-	if (hashThisLocation) {
-		appAjaxLoad("/json_get_other_items");
-	} else {
-		appTableHandler();
-	}
 	switch(hashThisLocation) {
 		case "#other_items": appAjaxLoad("/json_get_other_items"); break;
 		case "#empty_items": appAjaxLoad("/json_get_empty_items"); break;
@@ -376,6 +371,9 @@ function appAjaxLoad(myUrl) {
 		success: function(res) {
 			appShowItemsTable(res);
 			appPickupFunction();
+		},
+		beforeSend: function(res) {
+			$("div#app-table-box").html("<h2 style='color: #7f8c8d; padding: 50px;'>Loading please wait ...</h2>");
 		}
 	});
 }

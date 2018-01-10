@@ -30,7 +30,7 @@
 [[ define "logo" ]]
 <div id="app-logo">
 	<img src="/img/logo_lintasarta.png" style="width: 150px; height: auto;"><br><br>
-	<label style="font-size: 80%; font-weight: 600; color: #2980b9;">Data Center Stock of Goods Management System</label>
+	<label style="font-size: 80%; font-weight: 600; color: #2980b9;">Data Center Simple StockApps</label>
 	[[ if .HtmlUserIsLoggedIn ]]
 	[[ template "user_profile". ]]
 	[[ end ]]

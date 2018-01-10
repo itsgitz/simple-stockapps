@@ -13,7 +13,6 @@ div#app-container {
 	left: 0;
 	right: 0;
 	margin: auto;
-	padding: 0px;
 	height: 100%;
 }
 /* End of Container Style */
@@ -107,7 +106,7 @@ div#app-table-nav {
 }
 button.sub-nav {
 	border: none;
-	border-bottom: solid 2px #3498db;
+	border-bottom: solid 3px #3498db;
 	color: #3498db;
 	background-color: #FFFFFF;
 	padding: 10px;
@@ -258,6 +257,7 @@ button.modal-button:hover {
 	cursor: pointer;
 }
 
+/* Media query for responsive web */
 @media only screen and (max-width: 550px) {
 	input.app-howmuch {
 		width: 100%;

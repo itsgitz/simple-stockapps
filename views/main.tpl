@@ -12,6 +12,7 @@
 	</head>
 	<body>
 		<div id="app-container">
+			<div id="app-loading-bar"></div>
 			<div id="app-status-page" style="display: none;">Aku Rumah</div>
 			[[ template "navigation". ]]
 			[[ template "login_popup". ]]

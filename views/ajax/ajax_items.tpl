@@ -20,9 +20,9 @@
 [[ define "script" ]]
 <script>
 $(document).ready(function() {
-	var sideNavBar = $("div#app-side-nav ul li a");
-	var addButton = $("a.item-add");
-	var removeButton = $("a.item-remove");
+	var addButton = $("button.item-add");
+	var removeButton = $("button.item-remove");
+	var menuButton = $("button.menu-button");
 	var addBox = $("div#app-add-content");
 	var removeBox = $("div#app-remove-content");
 	var hashUrl = window.location.hash;
@@ -39,21 +39,16 @@ $(document).ready(function() {
 		case "remove":
 			removeBox.css("display", "block");
 			addBox.css("display", "none");
-			$("title").text("Removing Item - Simple StockApps");
+			$("title").text("Edit or Removing Item - Simple StockApps");
 		break;
 	}
-
-	// prevent default from clicked links		
-	sideNavBar.click(function(e) {
-		e.preventDefault();
-	});
 
 	// hide welcome-box when loaded
 	if (getOptionFromHash) {
 		$("div#app-welcome-box").css("display", "none");
 	}
 
-	$("div#app-side-nav ul li a").click(function() {
+	menuButton.click(function() {
 		$("div#app-welcome-box").css("display", "none");
 	});
 
@@ -712,51 +707,39 @@ function removeTable() {
 	.clear {
 		clear:both;
 	}
-	/* Vertical navigation style */
-	div#app-side-nav {
-		position: fixed;
-		z-index: 1;
-		left: 0;
-		display: table-cell;
-		padding-top: 25px;
-		position: absolute;
-		left: 10px;
-		height: 100%;
-		border-radius: 5px;
-		overflow-x: hidden;
+	/* Sub navigation style */
+	div#app-sidenav {
+		padding: 5px;
+		padding-top: 10px;
+		padding-left: : 30px;
+		width: 75%;
+		border-radius: 3px;
+		display: inline;
 	}
-	div#app-side-nav ul {
-		list-style-type: none;
-		margin: 0;
-		padding: 0;
-		width: 200px;
+	button.menu-button {
+		border: none;
+		border-bottom: solid 3px #3498db;
+		color: #3498db;
+		background-color: #FFFFFF;
+		padding: 10px;
+		outline: none;
 	}
-	div#app-side-nav ul a {
-		text-decoration: none;
-		display: block;
-		color: #2c3e50;
-		padding: 11px;
-		font-weight: 500;
-		font-size: 90%;
-	}
-	div#app-side-nav ul a:hover {
-		background-color: #D8D8D8;
+	button.menu-button:hover {
+		cursor: pointer;
 	}
 	/* end of vertical navigation style */
 
 	/* form wrapper style */
 	div#app-form-wrapper {
 		display: table;
-		margin-left: 210px;
-		padding: 0px 10px;
 	}
 	div#app-add-content {
 		display: none;
-		padding-top: 20px;
 		padding-left: 10px;
 		padding-bottom: 25px;
 		position: absolute;
-		left: 225px;
+		top: 200px;
+		left: 20px;
 		right: 10px;
 		overflow-x: auto;
 	}
@@ -878,7 +861,7 @@ function removeTable() {
 	/* Welcome box style */
 	div#app-welcome-box {
 		padding-top: 20px;
-		padding-left: 50px;
+		padding-left: 10px;
 		color: #34495e;
 	}
 	/* end of welcome box */
@@ -888,7 +871,7 @@ function removeTable() {
 		display: none;
 		padding-top: 0px;
 		position: absolute;
-		top: 250px;
+		top: 200px;
 		left: 10px;
 		right: 10px;
 		overflow: hidden;
@@ -1138,14 +1121,12 @@ function removeTable() {
 	/* end of edit modal content */
 
 	@media only screen and (max-width: 550px) {
-		div#app-side-nav {
-			display: none;
-		}
 		div#app-form-wrapper {
 			margin: 0%;
 		}
 		div#app-add-content {
 			position: absolute;
+			top: 250px;
 			left: 10px;
 			right: 10px;
 		}
@@ -1154,7 +1135,7 @@ function removeTable() {
 		}
 		div#app-remove-content {
 			position: absolute;
-			top: 150px;
+			top: 250px;
 			left: 10px;
 			right: 10px;
 		}
@@ -1292,19 +1273,9 @@ function removeTable() {
 
 
 [[ define "side_navigation" ]]
-<br><br>
+<br><br><br>
 <div id="app-side-nav">
-	<ul>
-		<li>
-			<a class="item-add" href="javascript:void(0)">
-				Add <div class="arrow-right"></div>
-			</a>
-		</li>
-		<li>
-			<a class="item-remove" href="javascript:void(0)">
-				Edit or Remove <div class="arrow-right"></div>
-			</a>
-		</li>
-	</ul>
+	<button class="item-add menu-button" href="javascript:void(0)">Add</button>&nbsp;
+	<button class="item-remove menu-button" href="javascript:void(0)">Edit or Remove</button>
 </div>
 [[ end ]]
