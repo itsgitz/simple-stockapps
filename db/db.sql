@@ -59,12 +59,14 @@ INSERT INTO `items` (
 	'0000-00-00', 'PT Aplikanusa Lintasarta', '0091202898120', 'DC TBS 1st Floor', 'Available', 'Anggit Muhamad Ginanjar'
 );
 
-CREATE TABLE IF NOT EXISTS `history` {
+CREATE TABLE IF NOT EXISTS `history` (
 	`history_id` VARCHAR(16) NOT NULL PRIMARY KEY,
 	`history_date` DATETIME NOT NULL,
 	`history_code` VARCHAR(8) NOT NULL,
-	`history_name` VARCHAR(8) NOT NULL,
 	`history_by` VARCHAR(32) NOT NULL,
 	`history_content` TEXT NOT NULL,
 	`history_notes` TEXT NOT NULL
-}
+)
+ENGINE=InnoDB
+ROW_FORMAT=COMPRESSED
+KEY_BLOCK_SIZE=8;
