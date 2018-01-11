@@ -1077,7 +1077,7 @@ function removeTable() {
 	}
 	table.table-form-add {
 		font-size: 80%;
-		width: 550px;
+		width: 750px;
 	}
 	table.table-form-add tr:nth-child(even) {
 		background-color: #FFFFFF;
