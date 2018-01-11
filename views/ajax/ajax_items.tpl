@@ -1011,7 +1011,7 @@ function removeTable() {
 	}
 	div.remove-modal-content {
 		background-color: #FEFEFE;
-		margin: 3% auto;
+		margin: 150px auto;
 		padding: 20px;
 		border: solid 1px #888;
 		width: 70%;
@@ -1020,7 +1020,7 @@ function removeTable() {
 	}
 	div.edit-modal-content {
 		background-color: #FEFEFE;
-		margin: 3% auto;
+		margin: 50px auto;
 		padding: 20px;
 		border: solid 1px #888;
 		width: 70%;

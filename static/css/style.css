@@ -33,7 +33,7 @@ div.app-modal {
 }
 div.app-modal-content {
 	background-color: #FEFEFE;
-	margin: 5% auto;
+	margin: 50px auto;
 	padding: 30px;
 	border: 1px solid #888;
 	width: 700px;
@@ -205,7 +205,7 @@ div#app-pickup-alert {
 
 div.app-pickup-content {
 	background-color: #FEFEFE;
-	margin: 10% auto;
+	margin: 80px auto;
 	padding: 20px;
 	border: solid 1px #888;
 	width: 80%;
