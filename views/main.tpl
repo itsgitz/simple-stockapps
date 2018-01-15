@@ -35,7 +35,8 @@
 			<label><input class="app-login-btn" type="submit" value="Sign in"></label>
 		</form>
 		<br>
-		<button class="app-close-btn">Close</button>
+		<button class="app-close-btn">Close</button><br><br>
+		<p><b>&copy;AQX</b> <a href="https://github.com/anggitmg" target="_blank" style="color: grey;">GitHub</a></p>
 	</div>
 </div>
 [[ end ]]

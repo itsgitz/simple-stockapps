@@ -175,7 +175,7 @@
 		padding-top: 5px;
 		padding-bottom: 5px;
 		font-size: 12px;
-		border: none;
+		border: solid 1px #ddd;
 		margin-bottom: 12px;
 		border-radius: 5px;
 		outline: none;
