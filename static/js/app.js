@@ -1,5 +1,5 @@
 // jQuery.3.2.1
-var ws = new WebSocket('ws://10.24.44.161:8080/ws');
+var ws = new WebSocket('ws://192.168.43.56:8080/ws');
 if (window.WebSocket) {
 	console.log("Your web browser is support websocket");
 } else {
@@ -142,6 +142,7 @@ function appTableHandler() {
 }
 
 function appShowItemsTable(res) {
+	var dataLength = res.length;
 	var isLoggedIn = $("div#app-user-islogged-in").text();
 	var tableMonitoring = "<table id='app-table' class='app-table' border='0' cellpadding='12' cellspacing='0'>";
 	// window hash
@@ -153,8 +154,11 @@ function appShowItemsTable(res) {
 	tableMonitoring += "  <th>Limitation</th>";
 	tableMonitoring += "  <th>Item Unit</th>";
 	// window has "other_items" hash url, then show item owner column
-	if (windowHash) {
+	if (windowHash == "#other_items" || windowHash == "#empty_items") {
 		tableMonitoring += "  <th>Owner</th>";
+		tableMonitoring += "  <th>In</th>";
+		tableMonitoring += "  <th>Time Period</th>";
+		tableMonitoring += "  <th>Expired</th>";
 	}
 	tableMonitoring += "  <th>Status</th>";
 	
@@ -162,22 +166,32 @@ function appShowItemsTable(res) {
 		tableMonitoring += "  <th>Action</th>";
 	}
 
-	for (var i=0; i<res.length; i++) {
-		tableMonitoring += "  <tr>";
-		tableMonitoring += "    <td>"+ (i+1) +"</td>";
-		tableMonitoring += "    <td>"+ res[i].item_name +"</td>";
-		tableMonitoring += "    <td>"+ res[i].item_model +"</td>";
-		tableMonitoring += "    <td>"+ res[i].item_quantity +"</td>";
-		tableMonitoring += "    <td>"+ res[i].item_limitation +"</td>";
-		tableMonitoring += "    <td>"+ res[i].item_unit +"</td>";
-		if (windowHash) {
-			tableMonitoring += "     <td>"+res[i].item_owner+"</td>";
+	// if data length (json) is exists or more than zero (0)
+	if (dataLength > 0) {
+		for (var i=0; i<dataLength; i++) {
+			tableMonitoring += "  <tr>";
+			tableMonitoring += "    <td>"+ (i+1) +"</td>";
+			tableMonitoring += "    <td>"+ res[i].item_name +"</td>";
+			tableMonitoring += "    <td>"+ res[i].item_model +"</td>";
+			tableMonitoring += "    <td>"+ res[i].item_quantity +"</td>";
+			tableMonitoring += "    <td>"+ res[i].item_limitation +"</td>";
+			tableMonitoring += "    <td>"+ res[i].item_unit +"</td>";
+			if (windowHash == "#other_items" || windowHash == "#empty_items") {
+				tableMonitoring += "     <td>"+res[i].item_owner+"</td>";
+				tableMonitoring += "     <td>"+res[i].date_of_entry+"</td>";
+				tableMonitoring += "     <td>"+res[i].item_time_period+"</td>";
+				tableMonitoring += "     <td>"+res[i].item_expired+"</td>";
+			}
+			tableMonitoring += "    <td class='tb-status'>"+ res[i].item_status +"</td>";
+			if (isLoggedIn == "true") {
+				tableMonitoring += "    <td><a id='app-pick-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"'>Pick Up</a></td>";
+			}
+			tableMonitoring += "  </tr>";
 		}
-		tableMonitoring += "    <td class='tb-status'>"+ res[i].item_status +"</td>";
-		if (isLoggedIn == "true") {
-			tableMonitoring += "    <td><a id='app-pick-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"'>Pick Up</a></td>";
-		}
-		tableMonitoring += "  </tr>";
+	} else {
+		tableMonitoring += "<tr>";
+		tableMonitoring +=   "<td colspan='11'><h2>No Results have been found :(</h2></td>";
+		tableMonitoring += "</tr>";
 	}
 	tableMonitoring += "</table>";
 
