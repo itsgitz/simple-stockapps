@@ -34,7 +34,7 @@ div.app-modal {
 div.app-modal-content {
 	background-color: #FEFEFE;
 	margin: 50px auto;
-	padding: 30px;
+	padding: 20px;
 	border: 1px solid #888;
 	width: 700px;
 	border-radius: 10px;
@@ -129,17 +129,6 @@ div#app-side-notif {
 	border-radius: 3px;
 	color: #2c3e50;
 }
-@media only screen and (max-width: 750px) {
-	div#app-side-notif {
-		display: none;
-	}
-	div#app-table-box {
-		width: 100%;
-	}
-	div#app-table-box table {
-		width: 100%;
-	}
-}
 div#app-table-box table {
 	text-align: center;
 	font-size: 80%;
@@ -205,7 +194,7 @@ div#app-pickup-alert {
 
 div.app-pickup-content {
 	background-color: #FEFEFE;
-	margin: 80px auto;
+	margin: 50px auto;
 	padding: 20px;
 	border: solid 1px #888;
 	width: 80%;
@@ -263,6 +252,29 @@ button.modal-button:hover {
 		width: 100%;
 	}
 	textarea.text-notes {
+		width: 100%;
+	}
+	div.app-modal-content {
+		width: 100%;
+	}
+	input.input-text {
+		width: 100%;
+	}
+	input.app-login-btn {
+		width: 100%;
+	}
+	button.app-close-btn {
+		width: 100%;
+	}
+}
+@media only screen and (max-width: 750px) {
+	div#app-side-notif {
+		display: none;
+	}
+	div#app-table-box {
+		width: 100%;
+	}
+	div#app-table-box table {
 		width: 100%;
 	}
 }
