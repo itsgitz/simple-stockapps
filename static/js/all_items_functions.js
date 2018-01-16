@@ -214,7 +214,7 @@ function getJSONSearchItems(searchValue, categoryValue) {
 				$("div#remove-result").hide();
 				$("div#remove-result").fadeIn(300);
 			} else {
-				$("div#remove-result").html("<div class='not-found'><h2>Not Found :(</h2></div>");
+				$("div#remove-result").html("<div class='not-found'><h2>Not results have been found :(</h2></div>");
 				$("div#remove-result").hide();
 				$("div#remove-result").fadeIn(300);
 			}
