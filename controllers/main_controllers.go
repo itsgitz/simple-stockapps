@@ -46,9 +46,16 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 		HtmlTitle             		string
 		HtmlUserIsLoggedIn			bool
 		HtmlUserFullName			string
+		HtmlCSSVersion              string
+		HtmlJavaScriptVersion       string
 	}{}
 
 	html_data.HtmlTitle = "Simple StockApps"
+
+	// css and javascript versioning
+	html_data.HtmlCSSVersion = generator.GenerateID()
+	html_data.HtmlJavaScriptVersion = generator.GenerateID()
+	log.Println("Versioning: CSS", html_data.HtmlCSSVersion, "JavaScript", html_data.HtmlJavaScriptVersion)
 
 	// if username session is not null or user has already logged in into system
 	if len(username_session) != 0 {
@@ -510,6 +517,7 @@ func (this *MainController) AppPickupItem(w http.ResponseWriter, r *http.Request
 			item_id := r.Form["item_id"][0]
 			item_quantity_picked := r.Form["item_quantity_picked"][0]
 			item_limitation := r.Form["item_limitation"][0]
+			itsRequest := r.Form["request"][0]
 			// convert it to integer
 			item_quantity_picked_int, _ := strconv.Atoi(item_quantity_picked)
 			item_limitation_int, _ := strconv.Atoi(item_limitation)
@@ -531,6 +539,7 @@ func (this *MainController) AppPickupItem(w http.ResponseWriter, r *http.Request
 				item_status = "Not Available"
 			}
 
+			// pickup / update table
 			errPickup := models.ModelsPickupItem(item_id, item_quantity_picked, item_status)
 			if errPickup != nil {
 				http.Error(w, errPickup.Error(), http.StatusInternalServerError)
