@@ -5,7 +5,7 @@
 [[ template "loading_bar". ]]
 <div id="app-ajax-items">
 	<h3>Items Dashboard</h3>
-	<span style="text-align: justify;"><i style="font-size: 90%;">You could add or remove (Administrator privilege) items, Please choose one of navigation options below.</i></span>
+	<span style="text-align: justify;"><i style="font-size: 90%;">You could add, edit or remove items in here, Please choose one of navigation options below.</i></span>
 
 	[[ template "side_navigation". ]]
 	<div id="app-form-wrapper">
@@ -335,7 +335,7 @@ $(function() {
 	}
 	.not-found {
 		color: #2c3e50;
-		padding-top: 20px;
+		padding-top: 0px;
 		padding-left: 25px;
 		padding: 35px;
 	}
