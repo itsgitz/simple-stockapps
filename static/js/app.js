@@ -1,5 +1,11 @@
 // jQuery.3.2.1
 var ws = new WebSocket('ws://192.168.43.56:8080/ws');
+// all websocket request
+const pickupRequest = "#001-pick-up";
+const editRequest = "#002-edit-item";
+const addRequest = "#003-add-item";
+const removeRequest = "#004-remove-item";
+
 if (window.WebSocket) {
 	console.log("Your web browser is support websocket");
 } else {
@@ -190,7 +196,7 @@ function appShowItemsTable(res) {
 		}
 	} else {
 		tableMonitoring += "<tr>";
-		tableMonitoring +=   "<td colspan='11'><h2>No Results have been found :(</h2></td>";
+		tableMonitoring +=   "<td colspan='12'><h2>No Results have been found :(</h2></td>";
 		tableMonitoring += "</tr>";
 	}
 	tableMonitoring += "</table>";
@@ -302,6 +308,7 @@ function appPickupFunction() {
 							item_id: getItemId,
 							item_limitation: getLimitation,
 							item_quantity_picked: quantityToMin,
+							request: pickupRequest
 						},
 						async: true,
 						success: function(res) {
@@ -318,7 +325,8 @@ function appPickupFunction() {
 										$("div#app-pickup-modal").css("display", "block");
 									}
 								}
-								ws.send("#001-pick-up");
+								// send websocket message
+								ws.send(pickupRequest);
 							} else {
 								alert("Session has timed out :(");
 								window.location = "/";
