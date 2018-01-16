@@ -5,10 +5,10 @@
 		<title>[[.HtmlTitle]]</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="stylesheet" href="/css/style.css">
+		<link rel="stylesheet" href="/css/style.css?[[.HtmlCSSVersion]]">
 		<link rel="icon" href="/img/lintasarta_icon.png" type="image/gif">
-		<script src="/js/jquery-3.2.1.min.js"></script>
-		<script src="/js/app.js"></script>
+		<script src="/js/jquery-3.2.1.min.js?[[.HtmlJavaScriptVersion]]"></script>
+		<script src="/js/app.js?[[.HtmlJavaScriptVersion]]"></script>
 	</head>
 	<body>
 		<div id="app-container">
