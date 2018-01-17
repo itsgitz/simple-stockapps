@@ -1,3 +1,10 @@
+// websocket request
+const editRequest = "#002-edit-item";
+const addRequest = "#003-add-item";
+const removeRequest = "#004-remove-item";
+const updateRequest = "#005-update-item"
+
+
 // add items handler
 function appFormAddItemsHandler() {
 	var addItemForm = $("form.app-form-add");

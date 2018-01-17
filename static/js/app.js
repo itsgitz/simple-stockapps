@@ -1,10 +1,7 @@
 // jQuery.3.2.1
-var ws = new WebSocket('ws://192.168.43.56:8080/ws');
+var ws = new WebSocket('ws://10.24.44.161:8080/ws');
 // all websocket request
 const pickupRequest = "#001-pick-up";
-const editRequest = "#002-edit-item";
-const addRequest = "#003-add-item";
-const removeRequest = "#004-remove-item";
 
 if (window.WebSocket) {
 	console.log("Your web browser is support websocket");
@@ -190,7 +187,7 @@ function appShowItemsTable(res) {
 			}
 			tableMonitoring += "    <td class='tb-status'>"+ res[i].item_status +"</td>";
 			if (isLoggedIn == "true") {
-				tableMonitoring += "    <td><a id='app-pick-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"'>Pick Up</a></td>";
+				tableMonitoring += "    <td><a id='app-pick-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"' data-item-unit='"+res[i].item_unit+"'>Pick Up</a></td>";
 			}
 			tableMonitoring += "  </tr>";
 		}
@@ -222,6 +219,7 @@ function appPickupFunction() {
 		var getItemId = $(this).attr("data-item-id");
 		var getName = $(this).attr("data-item-name");
 		var getQuantity = $(this).attr("data-item-quantity");
+		var getUnit = $(this).attr("data-item-unit");
 		var getLimitation = $(this).attr("data-item-limitation");
 		var getOwner = $(this).attr("data-item-owner");
 				
@@ -246,6 +244,10 @@ function appPickupFunction() {
 		pickupModalText += "            <tr>";
 		pickupModalText += "               <td>Quantity</td>";
 		pickupModalText += "               <td>"+getQuantity+"</td>";
+		pickupModalText += "            </tr>";
+		pickupModalText += "            <tr>";
+		pickupModalText += "               <td>Unit</td>";
+		pickupModalText += "               <td>"+getUnit+"</td>";
 		pickupModalText += "            </tr>";
 		pickupModalText += "            <tr>";
 		pickupModalText += "               <td>Limitation</td>";
@@ -289,11 +291,14 @@ function appPickupFunction() {
 		}
 
 		pickupYes.click(function () {
+			// number of picked up by user
 			var itemHowMuch = $("input.app-howmuch").val();
 
 			var alertPickupMessage;
 			var modalPickupAlert = document.getElementById("app-pickup-alert");
 			var jqueryModalPickupAlert = $("div#app-pickup-alert");
+
+			// user notes
 			var textNotes = $("textarea.text-notes").val();
 
 			var quantityToMin = parseInt(getQuantity - itemHowMuch);
@@ -308,7 +313,11 @@ function appPickupFunction() {
 							item_id: getItemId,
 							item_limitation: getLimitation,
 							item_quantity_picked: quantityToMin,
-							request: pickupRequest
+							item_howmuch: itemHowMuch,
+							request: pickupRequest,
+							notes: textNotes,
+							item_unit: getUnit,
+							item_name: getName
 						},
 						async: true,
 						success: function(res) {
@@ -402,4 +411,8 @@ function appAjaxLoad(myUrl) {
 			$("div#app-table-box").html("<h2 style='color: #7f8c8d; padding: 50px;'>Loading please wait ...</h2>");
 		}
 	});
+}
+
+function appSideNotification() {
+	
 }
