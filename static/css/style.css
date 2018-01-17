@@ -246,6 +246,32 @@ button.modal-button:hover {
 	cursor: pointer;
 }
 
+/* home searchbar */
+input#app-home-searchbar {
+	position: absolute;
+	top: 200px;
+	right: 25%;
+	background-image: url(/img/searchicon.png);
+	background-size: 12px;
+	background-position: 7px 7px;
+	background-repeat: no-repeat;
+	padding-left: 40px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	font-size: 12px;
+	border: solid 1px #ddd;
+	margin-bottom: 12px;
+	border-radius: 5px;
+	outline: none;
+	width: 24%;
+}
+@media only screen and (max-width: 750px) {
+	input#app-home-searchbar {
+		visibility: hidden;
+	}
+}
+	/* end of home searchbar */
+
 /* Media query for responsive web */
 @media only screen and (max-width: 550px) {
 	input.app-howmuch {
