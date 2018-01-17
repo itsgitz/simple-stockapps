@@ -34,7 +34,6 @@
 	[[ if .HtmlUserIsLoggedIn ]]
 	[[ template "user_profile". ]]
 	[[ end ]]
-	[[ template "home_searchbar". ]]
 </div>
 [[ end ]]
 
@@ -50,9 +49,6 @@
 </div>
 [[ end ]]
 
-[[ define "home_searchbar" ]]
-<input id="app-home-searchbar" class="app-home-searchbar" type="text" placeholder="Search items ...">
-[[ end ]]
 
 [[ define "script" ]]
 <script>
@@ -63,7 +59,7 @@
 		});
 
 		// if "Aku rumah", then show the search bar
-		var statusPageElement = document.getElementById("app-status-page"); // "Aku Rumah"
+		/*var statusPageElement = document.getElementById("app-status-page"); // "Aku Rumah"
 		var homeSearchBar = document.getElementById("app-home-searchbar");
 		var jqueryHomeSearchBar = $("input#app-home-searchbar");
 		var userIsLoggedIn = $("div#app-user-islogged-in").text();
@@ -77,7 +73,7 @@
 			if (userIsLoggedIn == "false") {
 				$("input#app-home-searchbar").css("top", "100px");
 			}
-		}
+		}*/
 	});
 </script>
 [[ end ]]
@@ -159,33 +155,6 @@
 		box-shadow: 1px 2px 2px #888888;
 	}
 	/* end of logo style */
-
-	/* home searchbar */
-	input#app-home-searchbar {
-		position: absolute;
-		right: 5px;
-		top: 150px;
-		display: none;
-		background-image: url(/img/searchicon.png);
-		background-size: 12px;
-		background-position: 7px 7px;
-		background-repeat: no-repeat;
-		padding-left: 40px;
-		padding-top: 5px;
-		padding-bottom: 5px;
-		font-size: 12px;
-		border: solid 1px #ddd;
-		margin-bottom: 12px;
-		border-radius: 5px;
-		outline: none;
-		width: 24%;
-	}
-	@media only screen and (max-width: 750px) {
-		input#app-home-searchbar {
-			visibility: hidden;
-		}
-	}
-	/* end of home searchbar */
 
 	/* Sign in Button style */
 	button.app-sign-btn {
