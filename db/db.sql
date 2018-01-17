@@ -62,7 +62,7 @@ INSERT INTO `items` (
 CREATE TABLE IF NOT EXISTS `history` (
 	`history_id` VARCHAR(16) NOT NULL PRIMARY KEY,
 	`history_date` DATETIME NOT NULL,
-	`history_code` VARCHAR(8) NOT NULL,
+	`history_code` VARCHAR(16) NOT NULL,
 	`history_by` VARCHAR(32) NOT NULL,
 	`history_content` TEXT NOT NULL,
 	`history_notes` TEXT NOT NULL
