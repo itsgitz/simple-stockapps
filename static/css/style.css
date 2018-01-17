@@ -249,7 +249,7 @@ button.modal-button:hover {
 /* home searchbar */
 input#app-home-searchbar {
 	position: absolute;
-	top: 200px;
+	top: 160px;
 	right: 25%;
 	background-image: url(/img/searchicon.png);
 	background-size: 12px;

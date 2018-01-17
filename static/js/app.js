@@ -68,6 +68,7 @@ $(function() {
 		jqueryGetTableBox.css("top", "260px");
 	}
 	appTableNavigation();
+	appHomeSerachBar();
 });
 
 // Login popup box function
@@ -414,5 +415,13 @@ function appAjaxLoad(myUrl) {
 }
 
 function appSideNotification() {
-	
+
+}
+
+function appHomeSerachBar() {
+	var isLoggedIn = $("div#app-user-islogged-in").text();
+	var homeSearchBar = $("input#app-home-searchbar");
+	if (isLoggedIn == "true") {
+		homeSearchBar.css("top", "200px");
+	}
 }

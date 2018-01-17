@@ -57,23 +57,6 @@
 			e.preventDefault();
 			$("div.app-dropdown-content").slideToggle(200);
 		});
-
-		// if "Aku rumah", then show the search bar
-		/*var statusPageElement = document.getElementById("app-status-page"); // "Aku Rumah"
-		var homeSearchBar = document.getElementById("app-home-searchbar");
-		var jqueryHomeSearchBar = $("input#app-home-searchbar");
-		var userIsLoggedIn = $("div#app-user-islogged-in").text();
-		if (statusPageElement) {
-			var statusPage = statusPageElement.innerHTML;
-			if (statusPage) {
-				homeSearchBar.style.display = "block";
-			} else {
-				homeSearchBar.style.display = "none";
-			}
-			if (userIsLoggedIn == "false") {
-				$("input#app-home-searchbar").css("top", "100px");
-			}
-		}*/
 	});
 </script>
 [[ end ]]
