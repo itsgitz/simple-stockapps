@@ -143,8 +143,8 @@ func ModelsSelectFromOurItems() ([]Items_Columns, error) {
 	items_value := []Items_Columns{}
 
 	search := "'%lintasarta%'"
-	query := fmt.Sprintf("SELECT * FROM items WHERE item_owner LIKE %s AND NOT item_quantity=? ORDER BY date_of_entry ASC", search)
-	err = db.Select(&items_value, query, 0)
+	query := fmt.Sprintf("SELECT * FROM items WHERE item_owner LIKE %s ORDER BY date_of_entry ASC", search)
+	err = db.Select(&items_value, query)
 	if err != nil {
 		log.Println("[!] ERROR: ModelsSelectFromItems:", err)
 	}
