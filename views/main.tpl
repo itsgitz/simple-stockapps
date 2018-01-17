@@ -45,8 +45,8 @@
 <div id="app-user-islogged-in" style="display: none;">[[ .HtmlUserIsLoggedIn ]]</div>
 <div id="app-table-nav">
 	<button class="sub-nav our-data">Our Items</button>&nbsp;
-	<button class="sub-nav other-data">Other Items</button>&nbsp;
-	<button class="sub-nav empty-data">Empty Items</button>
+	<button class="sub-nav other-data">Other Items</button> &nbsp;
+	[[ template "home_searchbar". ]]
 </div>
 <div id="app-table-box"></div>
 
@@ -57,4 +57,8 @@
 [[ define "side_notification_bar" ]]
 <div id="app-side-notif">
 </div>
+[[ end ]]
+
+[[ define "home_searchbar" ]]
+<input id="app-home-searchbar" class="app-home-searchbar" type="text" placeholder="Search items ...">
 [[ end ]]
