@@ -10,6 +10,13 @@ type History struct{
 	History_notes    string
 }
 
+// func history update for notification
+func ModelsGetHistory() ([]History, error) {
+	get_history := []History{}
+	err = db.Select(&get_history, "SELECT * FROM history")
+	return get_history, err
+}
+
 func ModelsUpdateHistory(id, date, code, by, content, notes string) error {
 	sql_query := `INSERT INTO history (history_id, history_date, history_code, history_by, history_content, history_notes) VALUES
 	(?, ?, ?, ?, ?, ?)
