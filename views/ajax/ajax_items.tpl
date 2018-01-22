@@ -18,7 +18,6 @@
 [[ end ]]
 
 [[ define "script" ]]
-<script src="/js/all_items_functions.js"></script>
 <script>
 $(function() {
 	var addButton = $("button.item-add");
@@ -75,7 +74,6 @@ $(function() {
 	appFormAddItemsHandler();
 	appFormRemoveOrEditItemsHandler();
 });
-
 </script>
 [[ end ]]
 

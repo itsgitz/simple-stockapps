@@ -8,6 +8,7 @@
 		<link rel="stylesheet" href="/css/navbar_style.css">
 		<link rel="icon" href="/img/lintasarta_icon.png" type="image/gif">
 		<script src="/js/jquery-3.2.1.min.js"></script>
+		<script src="/js/all_items_functions.js"></script>
 		<script src="/js/app_ajax_navbar.js"></script>
 	</head>
 	<body>
