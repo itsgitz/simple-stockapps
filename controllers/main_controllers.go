@@ -146,8 +146,12 @@ func (this *MainController) AppJSONOurItemsData(w http.ResponseWriter, r *http.R
 
 // showing all items
 func (this *MainController) AppJSONGetAllItems(w http.ResponseWriter, r *http.Request) {
+	// session start
+	sess := session.Start(w, r)
+	privilege := sess.GetString("user_privilege")
+
 	w.Header().Set("Content-Type", "application/json")
-	values, err := models.ModelsSelectAllItems()
+	values, err := models.ModelsSelectAllItems(privilege)
 
 	if err != nil {
 		errMsg := "[!] ERROR: in ModelsSelectAllItems(), Database Server: " + err.Error() + " Please contact the Administrator: anggit.ginanjar@lintasarta.co.id a.k.a AQX Tamvan :)"
@@ -812,6 +816,7 @@ func (this *MainController) AppLogin(w http.ResponseWriter, r *http.Request) {
 		//log.Println(data_user[0].User_name) // print user_name (isn't login name but fullname)
 		// fullname user
 		fullname := data_user[0].User_name
+		privilege := data_user[0].User_privilege
 
 		// create JSON data for web services
 		json_login_auth.AuthLoginMessage = true
@@ -820,6 +825,7 @@ func (this *MainController) AppLogin(w http.ResponseWriter, r *http.Request) {
 
 		sess.Set("user_name", username)
 		sess.Set("user_fullname", fullname)
+		sess.Set("user_privilege", privilege)
 	} else {
 		// create json data for web service
 		json_login_auth.AuthLoginMessage = false

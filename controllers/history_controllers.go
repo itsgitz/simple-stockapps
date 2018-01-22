@@ -59,12 +59,12 @@ func UpdateHistory(history_code, history_by, history_notes, item_unit, item_quan
 
 // history table in database
 type History struct{
-	History_id       string
-	History_date     string
-	History_code     string
-	History_by       string
-	History_content  string
-	History_notes    string
+	History_id       string	`json:"history_id"`
+	History_date     string `json:"history_date"`
+	History_code     string `json:"history_code"`
+	History_by       string `json:"history_by"`
+	History_content  string `json:"history_content"`
+	History_notes    string `json:"history_notes"`
 }
 
 // get history 
