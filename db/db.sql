@@ -59,6 +59,7 @@ INSERT INTO `items` (
 	'0000-00-00', 'PT Aplikanusa Lintasarta', '0091202898120', 'DC TBS 1st Floor', 'Available', 'Anggit Muhamad Ginanjar'
 );
 
+-- History table for history/log and notification backend storage
 CREATE TABLE IF NOT EXISTS `history` (
 	`history_id` VARCHAR(16) NOT NULL PRIMARY KEY,
 	`history_date` DATETIME NOT NULL,
