@@ -1,5 +1,5 @@
 // jQuery.3.2.1
-var ws = new WebSocket('ws://10.24.44.161:8080/ws');
+var ws = new WebSocket('ws://192.168.42.63:8080/ws');
 // all websocket request
 const pickupRequest = "#001-pick-up";
 
@@ -30,6 +30,7 @@ ws.onerror = function(error) {
 }
 ws.onmessage = function(e) {
 	var tableBox = $("div#app-table-box");
+	var sideNotificationBar = $("div#app-side-notif");
 	console.log(window.location.hash);
 	console.log("Pesan: "+ e.data);
 	if (e.data) {
@@ -39,6 +40,11 @@ ws.onmessage = function(e) {
 					appTableHandler();
 					tableBox.hide();
 					tableBox.fadeIn(300);
+				});
+				sideNotificationBar.load(" #app-side-notif", function() {
+					appAjaxNotif();
+					sideNotificationBar.hide();
+					sideNotificationBar.fadeIn(300);
 				});
 			break;
 		}
@@ -59,16 +65,9 @@ $(function() {
 		default: appTableHandler();
 	}
 
-	var navigationBar = document.getElementById("app-navbar");
-	var jqueryGetSideNotificationBar = $("div#app-side-notif");
-	var jqueryGetTableBox = $("div#app-table-box");
-	
-	if (navigationBar) {
-		jqueryGetSideNotificationBar.css("top", "200px");
-		jqueryGetTableBox.css("top", "260px");
-	}
 	appTableNavigation();
 	appHomeSerachBar();
+	appSideNotification();
 });
 
 // Login popup box function
@@ -414,8 +413,39 @@ function appAjaxLoad(myUrl) {
 	});
 }
 
+// showing side notification
 function appSideNotification() {
+	var navigationBar = document.getElementById("app-navbar");
+	var jqueryGetSideNotificationBar = $("div#app-side-notif");
+	var jqueryGetTableBox = $("div#app-table-box");
+	
+	if (navigationBar) {
+		jqueryGetSideNotificationBar.css("top", "200px");
+		jqueryGetTableBox.css("top", "260px");
+	}
+	appAjaxNotif();
+}
+// get notification using ajax
+function appAjaxNotif() {
+	$.ajax({
+		url: "/json_get_side_notification",
+		async: true,
+		success: function(res) {
+			var i;
+			var dataLength = res.length;
+			var notificationText = "";
 
+			if (dataLength != 0) {
+				for (i=0; i<dataLength; i++) {
+					notificationText += "<p>"+res[i].history_content+"</p>";
+				}
+			} else {
+				notificationText = "<h3	style='color: #27ae60'>Currently there's no activity in here</h3>";
+			}
+
+			document.getElementById("app-side-notif").innerHTML = notificationText;
+		}
+	});
 }
 
 function appHomeSerachBar() {
