@@ -13,7 +13,7 @@ type History struct{
 // func history update for notification
 func ModelsGetHistory() ([]History, error) {
 	get_history := []History{}
-	err = db.Select(&get_history, "SELECT * FROM history")
+	err = db.Select(&get_history, "SELECT * FROM history ORDER BY history_date DESC")
 	return get_history, err
 }
 

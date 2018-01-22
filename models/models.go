@@ -131,7 +131,7 @@ func ModelsSearchForItems(search, cat string) []Items_Columns {
 	// example
 	// SELECT * FROM items WHERE cat LIKE %search%; 
 	search = "%"+search+"%"
-	query := fmt.Sprintf("SELECT * FROM items WHERE %s LIKE ? ORDER BY date_of_entry ASC", cat)
+	query := fmt.Sprintf("SELECT * FROM items WHERE %s LIKE ? ORDER BY date_of_entry DESC", cat)
 	err = db.Select(&items_value, query, search)
 
 	return items_value
@@ -143,7 +143,7 @@ func ModelsSelectFromOurItems() ([]Items_Columns, error) {
 	items_value := []Items_Columns{}
 
 	search := "'%lintasarta%'"
-	query := fmt.Sprintf("SELECT * FROM items WHERE item_owner LIKE %s ORDER BY date_of_entry ASC", search)
+	query := fmt.Sprintf("SELECT * FROM items WHERE item_owner LIKE %s ORDER BY date_of_entry DESC", search)
 	err = db.Select(&items_value, query)
 	if err != nil {
 		log.Println("[!] ERROR: ModelsSelectFromItems:", err)
@@ -153,9 +153,17 @@ func ModelsSelectFromOurItems() ([]Items_Columns, error) {
 }
 
 // Get all items data
-func ModelsSelectAllItems() ([]Items_Columns, error) {
+func ModelsSelectAllItems(privilege string) ([]Items_Columns, error) {
 	items_value := []Items_Columns{}
-	err = db.Select(&items_value, "SELECT * FROM items ORDER BY date_of_entry ASC")
+
+	if privilege == "Administrator" {
+		err = db.Select(&items_value, "SELECT * FROM items ORDER BY date_of_entry DESC")
+	} else {
+		keyword := "'%lintasarta%'"
+		query := fmt.Sprintf("SELECT * FROM items WHERE item_owner NOT LIKE %s ORDER BY date_of_entry DESC", keyword)
+		err = db.Select(&items_value, query)
+	}
+
 	if err != nil {
 		log.Println("[!] ERROR: ModelsSelectAllItems:", err)
 	}
@@ -167,7 +175,7 @@ func ModelsSelectAllItems() ([]Items_Columns, error) {
 func ModelsSelectOtherItems() ([]Items_Columns, error) {
 	items_value := []Items_Columns{}
 	search := "'%lintasarta%'"
-	query := fmt.Sprintf("SELECT * FROM items WHERE item_owner NOT LIKE %s ORDER BY date_of_entry ASC", search)
+	query := fmt.Sprintf("SELECT * FROM items WHERE item_owner NOT LIKE %s ORDER BY date_of_entry DESC", search)
 	err = db.Select(&items_value, query)
 	if err != nil {
 		log.Println("[!] ERROR: ModelsSelectOtherItems:", err)
