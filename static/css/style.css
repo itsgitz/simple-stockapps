@@ -265,6 +265,17 @@ input#app-home-searchbar {
 	outline: none;
 	width: 24%;
 }
+
+/* Notification Style */
+p.notif-text {
+	font-size: 90%;
+	color: #2574A9;
+	padding: 10px;
+	border-radius: 3px;
+	background-color: #EEEEEE;
+}
+/* end of notification style */
+
 @media only screen and (max-width: 750px) {
 	input#app-home-searchbar {
 		visibility: hidden;

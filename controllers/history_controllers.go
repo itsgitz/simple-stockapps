@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"simple_stockapps/generator"
 	"simple_stockapps/models"
 )
@@ -20,6 +21,15 @@ func UpdateHistory(history_code, history_by, history_notes, item_unit, item_quan
 
 	// create history content accroding to history code
 	var history_content string
+	var item_unit_str string // i put this variable just want to make sure that if quantity more than 1, it will concantinating "s" char
+
+	// convert to integer
+	item_quantity_int, _ := strconv.Atoi(item_quantity)
+	if item_quantity_int > 1 {
+		item_unit_str = item_unit + "s"
+	} else {
+		item_unit_str = item_unit
+	}
 
 	// from JavaScript
 	/*
@@ -34,7 +44,7 @@ func UpdateHistory(history_code, history_by, history_notes, item_unit, item_quan
 	case "#001-pick-up":
 		// example:
 		// Anggit Muhamad Ginanjar has picked up 2 cable roll of Cat-6 UTP Cable
-		history_content = history_by + " has picked up " + item_quantity + " " + item_unit + " of " + item_name + " ID: " + item_id
+		history_content = history_by + " has picked up " + item_quantity + " " + item_unit_str + " of " + item_name + " ID: " + item_id
 		break
 	case "#002-edit-item":
 		history_content = history_by + " has edited item, item name: " + item_name + " ID: " + item_id

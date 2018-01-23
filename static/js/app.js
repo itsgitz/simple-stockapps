@@ -1,5 +1,5 @@
 // jQuery.3.2.1
-var ws = new WebSocket('ws://192.168.42.63:8080/ws');
+var ws = new WebSocket('ws://10.24.44.55:8080/ws');
 // all websocket request
 const pickupRequest = "#001-pick-up";
 
@@ -437,10 +437,10 @@ function appAjaxNotif() {
 
 			if (dataLength != 0) {
 				for (i=0; i<dataLength; i++) {
-					notificationText += "<p>"+res[i].history_content+"</p>";
+					notificationText += "<p class='notif-text'>"+res[i].history_content+"</p>";
 				}
 			} else {
-				notificationText = "<h3	style='color: #27ae60'>Currently there's no activity in here</h3>";
+				notificationText = "<h3	style='color: #27ae60; padding: 30px;'>Currently there's no activity in here</h3>";
 			}
 
 			document.getElementById("app-side-notif").innerHTML = notificationText;
