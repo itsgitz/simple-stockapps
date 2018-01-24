@@ -43,19 +43,17 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 
 	// html template data
 	html_data := struct{
-		HtmlTitle             		string
-		HtmlUserIsLoggedIn			bool
-		HtmlUserFullName			string
-		HtmlCSSVersion              string
-		HtmlJavaScriptVersion       string
+		HtmlTitle             	string
+		HtmlUserIsLoggedIn		bool
+		HtmlUserFullName		string
+		HtmlScriptVersion       string
 	}{}
 
 	html_data.HtmlTitle = "Simple StockApps"
 
 	// css and javascript versioning
-	html_data.HtmlCSSVersion = generator.GenerateID()
-	html_data.HtmlJavaScriptVersion = generator.GenerateID()
-	log.Println("Versioning: CSS", html_data.HtmlCSSVersion, "JavaScript", html_data.HtmlJavaScriptVersion)
+	html_data.HtmlScriptVersion = generator.GenerateID()
+	log.Println("Script: ", html_data.HtmlScriptVersion)
 
 	// if username session is not null or user has already logged in into system
 	if len(username_session) != 0 {
@@ -330,6 +328,7 @@ func (this *MainController) AppNavbarMainPage(w http.ResponseWriter, r *http.Req
 	html_data := struct{
 		HtmlUserFullName	string
 		HtmlUserIsLoggedIn	bool
+		HtmlScriptVersion   string
 	}{}
 
 	// get session
@@ -344,6 +343,8 @@ func (this *MainController) AppNavbarMainPage(w http.ResponseWriter, r *http.Req
 		html_data.HtmlUserIsLoggedIn = false
 		http.Redirect(w, r, "/", 302)
 	}
+
+	html_data.HtmlScriptVersion = generator.GenerateID()
 
 	// template
 	tpl_filename := "views/ajax/ajax_navbar.tpl"
