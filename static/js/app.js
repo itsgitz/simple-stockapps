@@ -155,7 +155,7 @@ function appShowItemsTable(res) {
 	tableMonitoring += "  <th>Model/Brand</th>";
 	tableMonitoring += "  <th>Quantity</th>";
 	tableMonitoring += "  <th>Limitation</th>";
-	tableMonitoring += "  <th>Item Unit</th>";
+	tableMonitoring += "  <th>Item Unit/Type</th>";
 	// window has "other_items" hash url, then show item owner column
 	if (windowHash == "#other_items" || windowHash == "#empty_items") {
 		tableMonitoring += "  <th>Owner</th>";
