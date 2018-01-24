@@ -5,10 +5,10 @@
 		<title>[[.HtmlTitle]]</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="stylesheet" href="/css/style.css?[[.HtmlCSSVersion]]">
+		<link rel="stylesheet" href="/css/style.css?[[.HtmlScriptVersion]]">
 		<link rel="icon" href="/img/lintasarta_icon.png" type="image/gif">
-		<script src="/js/jquery-3.3.1.min.js?[[.HtmlJavaScriptVersion]]"></script>
-		<script src="/js/app.js?[[.HtmlJavaScriptVersion]]"></script>
+		<script src="/js/jquery-3.3.1.min.js?[[.HtmlScriptVersion]]"></script>
+		<script src="/js/app.js?[[.HtmlScriptVersion]]"></script>
 	</head>
 	<body>
 		<div id="app-container">
@@ -44,8 +44,8 @@
 [[ define "table_monitor" ]]
 <div id="app-user-islogged-in" style="display: none;">[[ .HtmlUserIsLoggedIn ]]</div>
 <div id="app-table-nav">
-	<button class="sub-nav our-data">Our Items</button>&nbsp;
-	<button class="sub-nav other-data">Other Items</button> &nbsp;
+	<button class="sub-nav our-data">Our Goods</button>&nbsp;
+	<button class="sub-nav other-data">Customer Goods</button> &nbsp;
 	[[ template "home_searchbar". ]]
 </div>
 <div id="app-table-box"></div>
