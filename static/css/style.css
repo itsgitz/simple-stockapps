@@ -15,6 +15,9 @@ body {
 ::-webkit-scrollbar-thumb {
 	background-color: #59ABE3;
 }
+::-webkit-scrollbar:horizontal {
+	height: 3px;
+}
 
 /* Main/Root Container Style */
 div#app-container {
