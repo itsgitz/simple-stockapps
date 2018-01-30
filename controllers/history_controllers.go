@@ -21,7 +21,7 @@ func UpdateHistory(history_code, history_by, history_notes, item_unit, item_quan
 
 	// create history content accroding to history code
 	var history_content string
-	var item_unit_str string // i put this variable just want to make sure that if quantity more than 1, it will concantinating "s" char
+	var item_unit_str string // i create this variable just want to make sure that if quantity more than 1, it will concantinating "s" char
 
 	// convert to integer
 	item_quantity_int, _ := strconv.Atoi(item_quantity)
