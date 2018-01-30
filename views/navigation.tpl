@@ -16,9 +16,11 @@
 		<li>
 			<a class="ajax-navbar ajax-reports" href="/navbar?#navigate_link=/reports">History</a>
 		</li>
+		[[ if .HtmlUserIsAdmin ]]
 		<li>
 			<a class="ajax-navbar ajax-users" href="/navbar?#navigate_link=/users">Users</a>
 		</li>
+		[[ end ]]
 	</ul>
 </div>
 [[ else ]]
