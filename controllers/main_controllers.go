@@ -38,6 +38,7 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 	// get the sessions
 	username_session := sess.GetString("user_name")	// get username session
 	user_fullname_session := sess.GetString("user_fullname") // get username full session
+	privilege := sess.GetString("user_privilege") // get user privilege
 	//log.Println("Session:", username_session)
 	//log.Println("Session:", user_fullname_session)
 
@@ -45,6 +46,7 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 	html_data := struct{
 		HtmlTitle             	string
 		HtmlUserIsLoggedIn		bool
+		HtmlUserIsAdmin     bool // check for privilege
 		HtmlUserFullName		string
 		HtmlScriptVersion       string
 	}{}
@@ -59,6 +61,11 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 	if len(username_session) != 0 {
 		html_data.HtmlUserIsLoggedIn = true
 		html_data.HtmlUserFullName = user_fullname_session
+		if privilege == "Administrator" {
+			html_data.HtmlUserIsAdmin = true
+		} else {
+			html_data.HtmlUserIsAdmin = false
+		}
 	} else {
 		html_data.HtmlUserIsLoggedIn = false
 	}
@@ -328,17 +335,24 @@ func (this *MainController) AppNavbarMainPage(w http.ResponseWriter, r *http.Req
 	html_data := struct{
 		HtmlUserFullName	string
 		HtmlUserIsLoggedIn	bool
+		HtmlUserIsAdmin     bool // check for privilege
 		HtmlScriptVersion   string
 	}{}
 
 	// get session
 	username_session := sess.GetString("user_name")	// get username session
 	user_fullname_session := sess.GetString("user_fullname") // get username full session
+	privilege := sess.GetString("user_privilege") // get user privilege (Administrator/Operator)
 
 	// if username session is not null or user has already logged in into system
 	if len(username_session) != 0 {
 		html_data.HtmlUserIsLoggedIn = true
 		html_data.HtmlUserFullName = user_fullname_session
+		if privilege == "Administrator" {
+			html_data.HtmlUserIsAdmin = true
+		} else {
+			html_data.HtmlUserIsAdmin = false
+		}
 	} else {
 		html_data.HtmlUserIsLoggedIn = false
 		http.Redirect(w, r, "/", 302)
