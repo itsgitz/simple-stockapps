@@ -6,6 +6,17 @@ body {
 	margin: 0;
 }
 
+/* Add custom scrollbar */
+::-webkit-scrollbar {
+	width: 3px;
+}
+::-webkit-scrollbar-thumb {
+	background-color: #59ABE3;
+}
+::-webkit-scrollbar:horizontal {
+	height: 3px;
+}
+
 /* Main container */
 div#app-container {
 	position: absolute;
