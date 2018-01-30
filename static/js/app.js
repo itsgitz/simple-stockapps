@@ -1,8 +1,9 @@
 // jQuery.3.2.1
-var ws = new WebSocket('ws://10.24.44.55:8080/ws');
+var ws = new WebSocket('ws://192.168.42.244:8080/ws');
 // all websocket request
 const pickupRequest = "#001-pick-up";
 
+// if browser support or not support
 if (window.WebSocket) {
 	console.log("Your web browser is support websocket");
 } else {
@@ -16,7 +17,7 @@ ws.onopen = function() {
 ws.onclose = function() {
 	console.log("WebSocket connection closed!");
 	console.log("Ready: " + ws.readyState);
-	alert("WebSocket server connection is close... I'll try to reconnecting in 3s ... Or if I'm always try to reconnecting to websocket server, please clean the cookies and cache in your browser :) -AQX-");
+	alert("WebSocket server connection is close... I'll try to reconnecting in 3s ... Or if I always try to reconnecting to websocket server, please clean the cookies and cache in your browser :) -AQX-");
 	setTimeout(function() {
 		window.location = "/";
 	}, 3000);
@@ -28,6 +29,8 @@ ws.onclose = function() {
 ws.onerror = function(error) {
 	console.log(error);
 }
+
+// when websocket message arrive
 ws.onmessage = function(e) {
 	var tableBox = $("div#app-table-box");
 	var sideNotificationBar = $("div#app-side-notif");
@@ -45,6 +48,9 @@ ws.onmessage = function(e) {
 					appAjaxNotif();
 					sideNotificationBar.hide();
 					sideNotificationBar.fadeIn(300);
+					if ($(window).width() < 750) {
+						$("div#app-side-notif").css("display", "none");
+					}
 				});
 			break;
 		}
@@ -440,7 +446,7 @@ function appAjaxNotif() {
 					notificationText += "<p class='notif-text'>"+res[i].history_content+"</p>";
 				}
 			} else {
-				notificationText = "<h3	style='color: #27ae60; padding: 30px;'>Currently there's no activity in here</h3>";
+				notificationText = "<h3	style='color: #27ae60; padding: 30px;'>Currently there is no recent activity in here</h3>";
 			}
 
 			document.getElementById("app-side-notif").innerHTML = notificationText;
