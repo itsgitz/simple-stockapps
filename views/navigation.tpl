@@ -20,6 +20,10 @@
 		<li>
 			<a class="ajax-navbar ajax-users" href="/navbar?#navigate_link=/users">Users</a>
 		</li>
+		[[ else ]]
+		<li>
+			<a class="ajax-navbar ajax-settings" href="/navbar?#navigate_link=/settings">Settings</a>
+		</li>
 		[[ end ]]
 	</ul>
 </div>
