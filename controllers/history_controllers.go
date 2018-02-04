@@ -26,7 +26,7 @@ func UpdateHistory(history_code, history_by, history_notes, item_unit, item_quan
 	// convert to integer
 	item_quantity_int, _ := strconv.Atoi(item_quantity)
 	if item_quantity_int > 1 {
-		item_unit_str = item_unit + "s"
+		item_unit_str = item_unit + "(s)"
 	} else {
 		item_unit_str = item_unit
 	}
