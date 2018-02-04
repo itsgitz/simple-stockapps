@@ -11,7 +11,7 @@
 			<a href="/">Home</a>
 		</li>
 		<li>
-			<a class="ajax-navbar ajax-items" href="/navbar?#navigate_link=/items">Items</a>
+			<a class="ajax-navbar ajax-items" href="/navbar?#navigate_link=/items">Goods</a>
 		</li>
 		<li>
 			<a class="ajax-navbar ajax-reports" href="/navbar?#navigate_link=/reports">History</a>
@@ -20,11 +20,10 @@
 		<li>
 			<a class="ajax-navbar ajax-users" href="/navbar?#navigate_link=/users">Users</a>
 		</li>
-		[[ else ]]
+		[[ end ]]
 		<li>
 			<a class="ajax-navbar ajax-settings" href="/navbar?#navigate_link=/settings">Settings</a>
 		</li>
-		[[ end ]]
 	</ul>
 </div>
 [[ else ]]
@@ -49,7 +48,6 @@
 		&nbsp;[[.HtmlUserFullName]]&nbsp;
 	</a>
 	<div id='this-dropdown' class="app-dropdown-content">
-		<a href="/settings">Settings</a>
 		<a href="/logout">Logout</a>
 	</div>
 </div>

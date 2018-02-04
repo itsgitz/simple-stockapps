@@ -33,7 +33,7 @@ function appAjaxController() {
 		switch(getUrlFromHash) {
 			// change title
 			case "/items":
-				$("title").text("Items Dashboard - Simple StockApps");
+				$("title").text("Goods Dashboard - Simple StockApps");
 				break;
 			case "/reports":
 				$("title").text("History Dashboard - Simple StockApps");

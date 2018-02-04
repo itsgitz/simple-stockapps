@@ -45,7 +45,7 @@
 <div id="app-user-islogged-in" style="display: none;">[[ .HtmlUserIsLoggedIn ]]</div>
 <div id="app-table-nav">
 	<button class="sub-nav our-data">Our Goods</button>&nbsp;
-	<button class="sub-nav other-data">Customer Goods</button> &nbsp;
+	<button class="sub-nav other-data">Customer's</button> &nbsp;
 	[[ template "home_searchbar". ]]
 </div>
 <div id="app-table-box"></div>

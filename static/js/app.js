@@ -1,5 +1,5 @@
 // jQuery.3.2.1
-var ws = new WebSocket('ws://192.168.42.244:8080/ws');
+var ws = new WebSocket('ws://10.24.44.120:8080/ws');
 // all websocket request
 const pickupRequest = "#001-pick-up";
 
@@ -22,9 +22,9 @@ ws.onclose = function() {
 		window.location = "/";
 	}, 3000);
 	setTimeout(function() {
-		alert("Establish WebSocket server connection in 1s ... -AQX-")
+		alertg("Establish WebSocket server connection in 1s ... -AQX-")
 		window.location = "/";
-	});
+	}, 1000);
 }
 ws.onerror = function(error) {
 	console.log(error);
