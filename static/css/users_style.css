@@ -1,0 +1,20 @@
+/* Users Ajax Wrapper */
+div#users-wrapper {
+	padding-top: 15px;
+}
+table.form-add-users-table tr:nth-child(even) {
+	background-color: #FFFFFF;
+}
+/* end of Users Ajax Wrapper */
+
+/* Add Box style */
+div#users-add-box {
+	display: none;
+}
+/* End of Add Box style */
+
+/* User List Box style */
+div#users-list-box {
+	display: none;
+}
+/* End of User List Box style */
