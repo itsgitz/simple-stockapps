@@ -8,7 +8,6 @@
 
 	[[ template "side_navigation". ]]
 	<div id="app-form-wrapper">
-		[[ template "welcome_box". ]]
 		[[ template "add_box". ]]
 		[[ template "remove_box". ]]
 	</div>
@@ -27,6 +26,10 @@ $(function() {
 	var hashUrl = window.location.hash;
 	var getOptionFromHash = hashUrl.substring(22);
 
+	console.log(getOptionFromHash);
+
+	removeBox.css("display", "block");
+
 	// onload if current url has a hash url
 	switch(getOptionFromHash) {
 		case "add":
@@ -35,21 +38,7 @@ $(function() {
 			$("title").text("Adding Goods - Simple StockApps");
 			$("input[placeholder='Item Name']").focus();
 		break;
-		case "remove":
-			removeBox.css("display", "block");
-			addBox.css("display", "none");
-			$("title").text("Edit or Removing Goods - Simple StockApps");
-		break;
 	}
-
-	// hide welcome-box when loaded
-	if (getOptionFromHash) {
-		$("div#app-welcome-box").css("display", "none");
-	}
-
-	menuButton.click(function() {
-		$("div#app-welcome-box").css("display", "none");
-	});
 
 	// when addbutton click
 	addButton.click(function() {
@@ -62,8 +51,8 @@ $(function() {
 	});
 	// when removebutton click
 	removeButton.click(function() {
-		var stateObj = { page: "items#remove" };
-		history.pushState(stateObj, "page", "/navbar?#navigate_link=/items#remove");
+		var stateObj = { page: "items" };
+		history.pushState(stateObj, "page", "/navbar?#navigate_link=/items");
 		removeBox.css("display", "block");
 		addBox.css("display", "none");
 		$("title").text("Removing Goods - Simple StockApps");
@@ -74,13 +63,6 @@ $(function() {
 	appFormRemoveOrEditItemsHandler();
 });
 </script>
-[[ end ]]
-
-<!-- Just Welcome :D -->
-[[ define "welcome_box" ]]
-<div id="app-welcome-box">
-	<h2>Please select the menu :)</h2>
-</div>
 [[ end ]]
 
 [[ define "loading_bar" ]]

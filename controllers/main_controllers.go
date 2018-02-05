@@ -758,9 +758,15 @@ func (this *MainController) AppReports(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// users handling request
 func (this *MainController) AppUsers(w http.ResponseWriter, r *http.Request) {
 	// start session
 	sess := session.Start(w, r)
+
+	html_data := struct{
+		HtmlGenerateDefaultPassword   string
+		HtmlCurrentDate               string
+	}{}
 
 	// get session
 	username_session := sess.GetString("user_name")	// get username session
@@ -779,12 +785,21 @@ func (this *MainController) AppUsers(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, string(outgoingJSON))
 		} else {
 			ajax_items_filename := "views/ajax/ajax_users.tpl"
+
+			// generate password string when administrator want to add users
+			// it will give a random password
+			html_data.HtmlGenerateDefaultPassword = "P4ssword" + generator.GenerateID()
+
+			// generate current date and time
+			waktu := time.Now()
+			html_data.HtmlCurrentDate = fmt.Sprintf(waktu.Format("2006-01-02 15:04:05"))
+
 			tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
 			if err != nil {
 				log.Println("[!] ERROR:", err)
 			}
 
-			err = tpl.ExecuteTemplate(w, "users_layout", nil)
+			err = tpl.ExecuteTemplate(w, "users_layout", html_data)
 			if err != nil {
 				log.Println("[!] ERROR:", err)
 			}
