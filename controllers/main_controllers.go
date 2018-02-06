@@ -840,7 +840,7 @@ func (this *MainController) AppAddUser(w http.ResponseWriter, r *http.Request) {
 		// func ModelsAddUser(user_id, user_name, user_full_name, user_privilege, user_password, user_email, user_key, date_created string) error
 		//err := models.ModelsAddUser(user_id, user_name, user_full_name, user_role, user_password, user_email, user_key, date_created)
 
-		err := models.ModelsAddUser(user_id, user_name, user_full_name, user_role, user_password, user_email, user_key)
+		err := models.ModelsAddUser(user_id, user_name, user_full_name, user_role, user_password, user_email)
 
 		if err != nil {
 			errMsg := "[!] ERROR: Contact Administrator (AQX)"
