@@ -83,11 +83,45 @@
 			var dateCreated = $("label.users-date").text();
 
 			// alert box
-			var addUserAlertBox = $("")
+			var addUserAlertBox = $("div.users-add-alert");
+			var alertCloseButton = "<span>&times;</span>";
+			var alertMessage = alertCloseButton;
 
 			// error handling
 			if (!userName) {
-
+				alertMessage += "<p>Username is empty!</p>";
+				addUserAlertBox.html(alertMessage);
+			} else if (!fullName) {
+				alertMessage += "<p>User's full name is empty!</p>";
+				addUserAlertBox.html(alertMessage);
+			} else if (!userEmail) {
+				alertMessage += "<p>User's e-mail address is empty!</p>";
+				addUserAlertBox.html(alertMessage);
+			} else if (!userRole) {
+				alertMessage += "<p>User role/privilege is empty!</p>";
+				addUserAlertBox.html(alertMessage);
+			} else {
+				$.ajax({
+					url: "/add_user",
+					async: true,
+					data: {
+						user_name: userName,
+						user_full_name: fullName,
+						user_password: userPassword,
+						user_email: userEmail,
+						user_role: userRole,
+						date_created: dateCreated
+					},
+					success: function(response) {
+						if (response.Message) {
+							alert("Session login has timed out :(");
+							window.location ="/";
+						} else {
+							alert("Successful inserting data!");
+							window.location = "/";	
+						}
+					}
+				});
 			}
 		});
 	}
@@ -96,7 +130,7 @@
 
 [[ define "add_box" ]]
 <div id="users-add-box">
-	<div class="user-add-alert"></div>
+	<div class="users-add-alert"></div>
 	<form class="add-user-form">
 		<table class="form-add-users-table" cellpadding="8px" cellspacing="0">
 			<tr>

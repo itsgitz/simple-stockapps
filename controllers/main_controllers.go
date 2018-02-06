@@ -807,6 +807,48 @@ func (this *MainController) AppUsers(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// add user function (only administrator)
+func (this *MainController) AppAddUser(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	username_session := sess.GetString("user_name")	// get username session
+
+	if len(username_session) == 0 {
+		w.Header().Set("Content-Type", "application/json")
+		redirectMessage := struct{
+			Message  bool  `json:"Message"`
+		}{}
+
+		redirectMessage.Message = true
+		outgoingJSON, err := json.Marshal(redirectMessage)
+		if err != nil {
+			log.Println("[!] ERROR:", err)
+		}
+		fmt.Fprintf(w, string(outgoingJSON))
+	} else {
+		r.ParseForm()
+		user_name := r.Form["user_name"][0]
+		user_full_name := r.Form["user_full_name"][0]
+		user_password := r.Form["user_password"][0]
+		user_email := r.Form["user_email"][0]
+		user_role := r.Form["user_role"][0]
+		//date_created := r.Form["date_created"][0]
+
+		// create user id and user key
+		user_id :=  generator.GenerateID()
+		user_key := generator.GenerateOwnerID()
+
+		// func ModelsAddUser(user_id, user_name, user_full_name, user_privilege, user_password, user_email, user_key, date_created string) error
+		//err := models.ModelsAddUser(user_id, user_name, user_full_name, user_role, user_password, user_email, user_key, date_created)
+
+		err := models.ModelsAddUser(user_id, user_name, user_full_name, user_role, user_password, user_email, user_key)
+
+		if err != nil {
+			errMsg := "[!] ERROR: Contact Administrator (AQX)"
+			http.Error(w, errMsg, http.StatusInternalServerError)
+		}
+	}
+}
+
 // login process handler
 // custom login authentication
 // checking if username and password is exists (matching)

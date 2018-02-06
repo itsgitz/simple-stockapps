@@ -47,6 +47,9 @@ func main() {
 	// Pickup item url
 	router.HandleFunc("/json_pickup_item", main_ctrl.AppPickupItem)
 
+	// add user url
+	router.HandleFunc("/add_user", main_ctrl.AppAddUser)
+
 	// defining http middleware using negroni method
 	middleware := negroni.Classic()
 	middleware.Use(negroni.NewStatic(http.Dir("static"))) // initialization static file

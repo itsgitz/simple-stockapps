@@ -10,7 +10,9 @@ type User_Login struct{
 	User_login_name 	string
 	User_name 			string	// fullname of user
 	User_privilege		string
+	Password            string
 	User_email			string
+	Key                 string
 	Date_created		string
 }
 
@@ -51,4 +53,18 @@ func ModelsSelectFromUserLogin(username string) []User_Login {
 	}
 
 	return user_login_value
+}
+
+// add user
+//func ModelsAddUser(user_id, user_name, user_full_name, user_privilege, user_password, user_email, user_key, date_created string) error {
+func ModelsAddUser(user_id, user_name, user_full_name, user_privilege, user_password, user_email, user_key string) error {
+	//sql_query := `INSERT INTO user_login (user_id, user_login_name, user_name, user_privilege, password, user_email, key, date_created) VALUES
+	//(?, ?, ?, ?, ?, ?, ?, ?)
+	//`
+	//x, err := db.Queryx(sql_query, user_id, user_name, user_full_name, user_privilege, user_password, user_email, user_key, date_created)
+	sql_query := `INSERT INTO user_login (user_id, user_login_name, user_name, user_privilege, password, user_email, key) VALUES (?, ?, ?, ?, ?, ?, ?)`
+	x, err := db.Queryx(sql_query, user_id, user_name, user_full_name, user_privilege, user_password, user_email, user_key)
+	defer x.Close()
+
+	return err
 }
