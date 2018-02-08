@@ -1,5 +1,5 @@
 --  SQL script: DC Stock Apps
---  Created by: Anggit Muhamad Ginanjar @ PT APLIKANUSA LINTASARTA
+--  Created by: Anggit Muhamad Ginanjar @ Koperasi Karyawan PT APLIKANUSA LINTASARTA
 --  Copyright @AQX
 
 -- Create user login table
@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS `user_login` (
 	`user_privilege` VARCHAR(16) NOT NULL,		-- Several privilege belong to the user login (Such as Administrator or Operator) 
 	`password` VARCHAR(64) NOT NULL,			-- Password, will encrypted with encryption program
 	`user_email` VARCHAR(64) NOT NULL,			-- E-mail
-	`key` VARCHAR(64) NOT NULL,					-- Key as key while users forgot their password
-	`date_created` DATETIME NOT NULL			-- Date and time when it user was created
+	`date_created` DATETIME NOT NULL,			-- Date and time when it user was created
+	`status` VARCHAR(32) NOT NULL
 )
 ENGINE=InnoDB
 ROW_FORMAT=COMPRESSED
@@ -24,7 +24,7 @@ INSERT INTO `user_login` (
 	`password`, `user_email`, `key`, `date_created`
 ) VALUES (
 	'001', 'mimin', 'Default User', 'Administrator', '123456abC',
-	'mimin.mimin@lintasarta.co.id', '0992012412Bxas', '2017-11-11'
+	'mimin.mimin@lintasarta.co.id', '2017-11-11', 'registered'
 );
 
 -- Item's table that contains list of item
