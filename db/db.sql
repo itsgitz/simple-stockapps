@@ -24,7 +24,7 @@ INSERT INTO `user_login` (
 	`password`, `user_email`, `date_created`, `status`
 ) VALUES (
 	'001', 'mimin', 'Default User', 'Administrator', '123456abC',
-	'mimin.mimin@lintasarta.co.id', '2017-11-11', 'registered'
+	'mimin.mimin@lintasarta.co.id', '2017-11-11', 'Registered'
 );
 
 -- Item's table that contains list of item
