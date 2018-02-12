@@ -56,9 +56,9 @@ func ModelsSelectFromUserLogin(username string) []User_Login {
 }
 
 // add user
-func ModelsAddUser(user_id, user_name, user_full_name, user_privilege, user_password, user_email, date_created string) error {
-	sql_query := `INSERT INTO user_login (user_id, user_login_name, user_name, user_privilege, password, user_email, key, date_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-	x, err := db.Queryx(sql_query, user_id, user_name, user_full_name, user_privilege, user_password, user_email, "20001029120102", date_created)
+func ModelsAddUser(user_id, user_name, user_full_name, user_privilege, user_password, user_email, date_created, status string) error {
+	sql_query := `INSERT INTO user_login (user_id, user_login_name, user_name, user_privilege, password, user_email, date_created, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+	x, err := db.Queryx(sql_query, user_id, user_name, user_full_name, user_privilege, user_password, user_email, date_created, status)
 	defer x.Close()
 
 	return err
