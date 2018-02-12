@@ -21,7 +21,7 @@ KEY_BLOCK_SIZE=8;
 -- Default values for user_login table
 INSERT INTO `user_login` (
 	`user_id`, `user_login_name`, `user_name`, `user_privilege`,
-	`password`, `user_email`, `key`, `date_created`, `status`
+	`password`, `user_email`, `date_created`, `status`
 ) VALUES (
 	'001', 'mimin', 'Default User', 'Administrator', '123456abC',
 	'mimin.mimin@lintasarta.co.id', '2017-11-11', 'registered'
