@@ -63,3 +63,8 @@ func ModelsAddUser(user_id, user_name, user_full_name, user_privilege, user_pass
 
 	return err
 }
+
+// show all new user
+func ModelsShowNewUsers() {
+	
+}
