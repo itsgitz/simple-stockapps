@@ -49,16 +49,6 @@ ENGINE=InnoDB
 ROW_FORMAT=COMPRESSED
 KEY_BLOCK_SIZE=8;
 
--- Default values for items table
-INSERT INTO `items` (
-	`item_id`, `item_name`, `item_model`, `item_limitation`, `item_quantity`,
-	`item_unit`, `date_of_entry`, `item_time_period`, `item_expired`, `item_owner`, `owner_id`, `item_location`,
-	`item_status`, `added_by`
-) VALUES (
-	'001', 'Cat-7 UTP Cable', 'AMP Connect', 5, 10, 'Cable Roll', '2017-11-11', 'None',
-	'0000-00-00', 'PT Aplikanusa Lintasarta', '0091202898120', 'DC TBS 1st Floor', 'Available', 'Anggit Muhamad Ginanjar'
-);
-
 -- History table for history/log and notification backend storage
 CREATE TABLE IF NOT EXISTS `history` (
 	`history_id` VARCHAR(16) NOT NULL PRIMARY KEY,
