@@ -12,8 +12,8 @@ type User_Login struct{
 	User_privilege		string
 	Password            string
 	User_email			string
-	Key                 string
 	Date_created		string
+	Status              string
 }
 
 // ModelsReadLogin function used for checking user login name in database table
@@ -65,6 +65,14 @@ func ModelsAddUser(user_id, user_name, user_full_name, user_privilege, user_pass
 }
 
 // show all new user
-func ModelsShowNewUsers() {
-	
+func ModelsShowNewUsers() []User_Login {
+	users_value := []User_Login{}
+	query := `SELECT * FROM user_login WHERE status=?`
+	err := db.Select(&users_value, query, "New")
+
+	if err != nil {
+		log.Println("[!] ERROR: ModelsShowNewUsers:", err)
+	}
+
+	return users_value
 }

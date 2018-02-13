@@ -922,3 +922,56 @@ func (this *MainController) AppLogout(w http.ResponseWriter, r *http.Request) {
 	session.Destroy(w, r)
 	http.Redirect(w, r, "/", 302)
 }
+
+// user_login table in database
+type User_Login struct{
+	User_id				string
+	User_login_name 	string
+	User_name 			string	// fullname of user
+	User_privilege		string
+	Password            string
+	User_email			string
+	Date_created		string
+	Status              string
+}
+
+// Get / Show all new users
+func (this *MainController) AppJSONGetNewUsers(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	username_session := sess.GetString("user_name")
+
+	if len(username_session) == 0 {
+		w.Header().Set("Content-Type", "application/json")
+		redirectMessage := struct{
+			Message  bool  `json:"Message"`
+		}{}
+
+		redirectMessage.Message = true
+		json_val, err := json.Marshal(redirectMessage)
+		if err != nil {
+			log.Println("[!] ERROR", err)
+		}
+
+		fmt.Fprintf(w, string(json_val))
+	} else {
+		new_users_result := models.ModelsShowNewUsers()
+		x := make([]User_Login, len(new_users_result))
+
+		for i:=0; i<len(new_users_result); i++ {
+			x[i].User_id = new_users_result[i].User_id
+			x[i].User_login_name = new_users_result[i].User_login_name
+			x[i].User_name = new_users_result[i].User_name
+			x[i].User_privilege = new_users_result[i].User_privilege
+			x[i].Password = new_users_result[i].Password
+			x[i].User_email = new_users_result[i].User_email
+			x[i].Date_created = new_users_result[i].Date_created
+			x[i].Status = new_users_result[i].Status
+		}
+
+		json_val, err := json.Marshal(x)
+		if err != nil {
+			log.Println("[!] ERROR:", err)
+		}
+		fmt.Fprintf(w, string(json_val))
+	}
+}

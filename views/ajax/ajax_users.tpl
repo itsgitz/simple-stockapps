@@ -5,11 +5,13 @@
 	<h3>User Dashboard</h3>
 	<div id="app-side-nav">
 		<button class="add-user menu-button" href="javascript:void(0)">Add</button>&nbsp;
-		<button class="user-list menu-button" href="javascript:void(0)">Users List</button>
+		<button class="registered-users menu-button" href="javascript:void(0)">Registered Users</button>&nbsp;
+		<button class="new-users menu-button" href="javascript:void(0)">New Users</button>
 	</div>
 	<div id="users-wrapper">
 		[[ template "add_box". ]]
-		[[ template "user_list_box". ]]
+		[[ template "registered_user_list_box". ]]
+		[[ template "new_user_list_box". ]]
 	</div>
 </div>
 [[ end ]]
@@ -18,10 +20,13 @@
 <script>
 	// box
 	var addBox = $("div#users-add-box");
-	var userListBox = $("div#users-list-box");
+	var registeredUserListBox = $("div#registered-users-box");
+	var newUsersListBox = $("div#new-users-box");
 	// sub-navigation button
 	var addUserButton = $("button.add-user");
-	var userListButton = $("button.user-list");
+	var registeredUserListButton = $("button.registered-users");
+	var newUsersListButton = $("button.new-users");
+
 	var hashUrl = window.location.hash;
 
 	// get partly string from hash url
@@ -30,14 +35,20 @@
 	
 	$(function() {
 		// display block when onload event occurs
-		userListBox.css("display", "block");
+		registeredUserListBox.css("display", "block");
 
 		// determine hash option when onload
 		switch(getOptionFromHash) {
 			case "add":
 				addBox.css("display", "block");
-				userListBox.css("display", "none");
+				registeredUserListBox.css("display", "none");
+				newUsersListBox.css("display", "none");
 				$("title").text("Add Users - Simple StockApps");
+			break;
+			case "new":
+				newUsersListBox.css("display", "block");
+				addBox.css("display", "none");
+				registeredUserListBox.css("display", "none");
 			break;
 		}
 
@@ -46,6 +57,10 @@
 
 		// add user handler
 		appAddUser();
+
+		// registered user list
+		appShowNewUsers();
+		//appShowRegisteredUsers();
 	});
 
 	// navigation click handler
@@ -54,17 +69,26 @@
 		addUserButton.click(function() {
 			var stateObj = {page: "users#add"};
 			history.pushState(stateObj, "page", "/navbar?#navigate_link=/users#add");
-			userListBox.css("display", "none");
+			registeredUserListBox.css("display", "none");
+			newUsersListBox.css("display", "none");
 			addBox.css("display", "block");
 			$("title").text("Add Users - Simple StockApps");
 		});
 		// user list button clicked
-		userListButton.click(function() {
+		registeredUserListButton.click(function() {
 			var stateObj = {page: "users"};
 			history.pushState(stateObj, "page", "/navbar?#navigate_link=/users");
-			userListBox.css("display", "block");
+			registeredUserListBox.css("display", "block");
 			addBox.css("display", "none");
+			newUsersListBox.css("display", "none");
 			$("title").text("Users Dashboard - Simple StockApps");
+		});
+		newUsersListButton.click(function() {
+			var stateObj = {page: "users#new"};
+			history.pushState(stateObj, "page", "/navbar?#navigate_link=/users#new");
+			newUsersListBox.css("display", "block");
+			registeredUserListBox.css("display", "none");
+			addBox.css("display", "none");
 		});
 	}
 
@@ -125,6 +149,26 @@
 			}
 		});
 	}
+
+	function appShowNewUsers() {
+		$.ajax({
+			url: "/new_users",
+			async: true,
+			success: function(response) {
+				var resultTable;
+
+				resultTable =  "<table>";
+				resultTable += "   <th>No.</th>";
+				resultTable += "   <th>User ID</th>";
+				resultTable += "</table>";
+
+				document.getElementById("new-users-box").innerHTML = resultTable;
+			}
+		});
+	}
+	//function appShowRegisteredUsers() {
+
+	//}
 </script>
 [[ end ]]
 
@@ -171,8 +215,13 @@
 </div>
 [[ end ]]
 
-[[ define "user_list_box" ]]
-<div id="users-list-box">
-	<h3>Users List Box</h3>
+[[ define "registered_user_list_box" ]]
+<div id="registered-users-box">
+	<h3>Registered Users List Box</h3>
+</div>
+[[ end ]]
+
+[[ define "new_user_list_box" ]]
+<div id="new-users-box">
 </div>
 [[ end ]]

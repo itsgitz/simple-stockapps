@@ -14,7 +14,10 @@ div#users-add-box {
 /* End of Add Box style */
 
 /* User List Box style */
-div#users-list-box {
+div#registered-users-box {
+	display: none;
+}
+div#new-users-box {
 	display: none;
 }
 /* End of User List Box style */
