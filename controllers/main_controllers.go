@@ -501,6 +501,7 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 				if errModels != nil {
 					log.Println(errModels)
 				}
+				//log.Println(item_id, item_name, item_model, item_limitation, item_quantity, item_unit, date_of_entry, str_time_prd, item_expired, item_owner, owner_id, item_location, item_status, user_fullname_session)
 			break
 			}
 		} else {

@@ -36,7 +36,7 @@ var err error
 // initialization connection to database using init() function
 // will run first when the program start to running
 func init() {
-	db, err = sqlx.Connect("mysql", "dc:IniP4ssword@tcp(127.0.0.1:3306)/stockapps")
+	db, err = sqlx.Connect("mysql", "dc:)1)1P4sswordHello@tcp(127.0.0.1:3306)/stockapps")
 	if err != nil {
 		log.Println("[!] ERROR:", err)
 	}
