@@ -925,14 +925,14 @@ func (this *MainController) AppLogout(w http.ResponseWriter, r *http.Request) {
 
 // user_login table in database
 type User_Login struct{
-	User_id				string
-	User_login_name 	string
-	User_name 			string	// fullname of user
-	User_privilege		string
-	Password            string
-	User_email			string
-	Date_created		string
-	Status              string
+	User_id				string  `json:"user_id"`
+	User_login_name 	string  `json:"user_login_name"`
+	User_name 			string	`json:"user_name"` // fullname of user
+	User_privilege		string  `json:"user_privilege"`
+	Password            string  `json:"password"`
+	User_email			string  `json:"user_email"`
+	Date_created		string  `json:"date_created"`
+	Status              string  `json:"status"`
 }
 
 // Get / Show all new users

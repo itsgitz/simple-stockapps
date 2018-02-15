@@ -156,10 +156,25 @@
 			async: true,
 			success: function(response) {
 				var resultTable;
+				var lengthResponse = response.length;
+				var i;
 
-				resultTable =  "<table>";
+				console.log(response);
+
+				resultTable =  "<table border='1' cellpadding='10' cellspacing='0'>";
 				resultTable += "   <th>No.</th>";
 				resultTable += "   <th>User ID</th>";
+				resultTable += "   <th>Username</th>";
+				resultTable += "   <th>Fullname</th>";
+				resultTable += "   <th>Role/Privilege</th>";
+				resultTable += "   <th>Password</th>";
+				resultTable += "   <th>E-mail Address</th>";
+				resultTable += "   <th>Date Created</th>";
+				resultTable += "   <th>Status</th>";
+				for (i=0; i<lengthResponse; i++) {
+					resultTable += "<tr>";
+					resultTable += "</tr>";
+				}
 				resultTable += "</table>";
 
 				document.getElementById("new-users-box").innerHTML = resultTable;
