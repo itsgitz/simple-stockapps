@@ -50,6 +50,7 @@ func main() {
 	// add user url
 	router.HandleFunc("/add_user", main_ctrl.AppAddUser)
 	router.HandleFunc("/json_new_users", main_ctrl.AppJSONGetNewUsers)
+	router.HandleFunc("/json_reg_users", main_ctrl.AppJSONGetRegUsers)
 
 	// defining http middleware using negroni method
 	middleware := negroni.Classic()
