@@ -977,3 +977,44 @@ func (this *MainController) AppJSONGetNewUsers(w http.ResponseWriter, r *http.Re
 		fmt.Fprintf(w, string(json_val))
 	}
 }
+
+// get all registered users
+func (this *MainController) AppJSONGetRegUsers(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	username_session := sess.GetString("user_name")
+
+	if len(username_session) == 0 {
+		w.Header().Set("Content-Type", "application/json")
+		redirectMessage := struct{
+			Message  bool `json:"Message"`
+		}{}
+
+		redirectMessage.Message = true
+		json_val, err := json.Marshal(redirectMessage)
+		if err != nil {
+			log.Println("[!] ERROR:", err)
+		}
+		fmt.Fprintf(w, string(json_val))
+	} else {
+		w.Header().Set("Content-Type", "application/json")
+		registered_users := models.ModelsShowRegUsers()
+
+		x := make([]User_Login, len(registered_users))
+
+		for i:=0; i<len(registered_users); i++ {
+			x[i].User_id = registered_users[i].User_id
+			x[i].User_login_name = registered_users[i].User_login_name
+			x[i].User_name = registered_users[i].User_name
+			x[i].User_privilege = registered_users[i].User_privilege
+			x[i].User_email = registered_users[i].User_email
+			x[i].Date_created = registered_users[i].Date_created
+			x[i].Status = registered_users[i].Status
+		}
+
+		json_val, err := json.Marshal(x)
+		if err != nil {
+			log.Println("[!] ERROR:", err)
+		}
+		fmt.Fprintf(w, string(json_val))
+	}
+}
