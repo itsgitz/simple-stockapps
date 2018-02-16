@@ -76,3 +76,16 @@ func ModelsShowNewUsers() []User_Login {
 
 	return users_value
 }
+
+// show all registered user
+func ModelsShowRegUsers() []User_Login {
+	users_value := []User_Login{}
+	query := `SELECT * FROM user_login WHERE status=?`
+	err := db.Select(&users_value, query, "Registered")
+
+	if err != nil {
+		log.Println("[!] ERROR: ModelsShowRegUsers:", err)
+	}
+
+	return users_value
+}
