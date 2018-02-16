@@ -18,7 +18,7 @@
 		</li>
 		[[ if .HtmlUserIsAdmin ]]
 		<li>
-			<a class="ajax-navbar ajax-search-reports" href="/navbar?#navigate_link=/searc_reports"><img src='img/reports.svg' width="20px">&nbsp;Reports</a>
+			<a class="ajax-navbar ajax-search-reports" href="/navbar?#navigate_link=/search_reports"><img src='img/reports.svg' width="20px">&nbsp;Reports</a>
 		</li>
 		<li>
 			<a class="ajax-navbar ajax-users" href="/navbar?#navigate_link=/users"><img src="img/group.svg" width="20px">&nbsp;Users</a>

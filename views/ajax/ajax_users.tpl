@@ -110,22 +110,30 @@
 
 			// alert box
 			var addUserAlertBox = $("div.users-add-alert");
-			var alertCloseButton = "<span>&times;</span>";
+			var alertCloseButton = "<span class='users-close-alert'>&times;</span>";
 			var alertMessage = alertCloseButton;
 
 			// error handling
 			if (!userName) {
 				alertMessage += "<p>Username is empty!</p>";
 				addUserAlertBox.html(alertMessage);
+				addUserAlertBox.hide();
+				addUserAlertBox.fadeIn(300);
 			} else if (!fullName) {
 				alertMessage += "<p>User's full name is empty!</p>";
 				addUserAlertBox.html(alertMessage);
+				addUserAlertBox.hide();
+				addUserAlertBox.fadeIn(300);
 			} else if (!userEmail) {
 				alertMessage += "<p>User's e-mail address is empty!</p>";
 				addUserAlertBox.html(alertMessage);
+				addUserAlertBox.hide();
+				addUserAlertBox.fadeIn(300);
 			} else if (!userRole) {
 				alertMessage += "<p>User role/privilege is empty!</p>";
 				addUserAlertBox.html(alertMessage);
+				addUserAlertBox.hide();
+				addUserAlertBox.fadeIn(300);
 			} else {
 				$.ajax({
 					url: "/add_user",
@@ -149,6 +157,12 @@
 					}
 				});
 			}
+					// close button
+			var closeButton = $("span.users-close-alert");
+			var alertBox = $("div.users-add-alert");
+			closeButton.click(function() {
+				alertBox.fadeOut(300);
+			});
 		});
 	}
 
@@ -171,6 +185,7 @@
 				resultTable += "   <th>E-mail Address</th>";
 				resultTable += "   <th>Date Created</th>";
 				resultTable += "   <th>Status</th>";
+				resultTable += "   <th>Action</th>";
 				for (i=0; i<lengthResponse; i++) {
 					resultTable += "<tr>";
 					resultTable += "   <td>"+(i+1)+"</td>";
@@ -182,6 +197,7 @@
 					resultTable += "   <td>"+res[i].user_email+"</td>";
 					resultTable += "   <td>"+res[i].date_created+"</td>";
 					resultTable += "   <td>"+res[i].status+"</td>";
+					resultTable += "   <td><button>Remove</button></td>";
 					resultTable += "</tr>";
 				}
 				resultTable += "</table>";
@@ -240,7 +256,7 @@
 <div id="users-add-box">
 	<div class="users-add-alert"></div>
 	<form class="add-user-form">
-		<table class="form-add-users-table" cellpadding="8px" cellspacing="0">
+		<table class="form-add-users-table" cellpadding="10px" cellspacing="0">
 			<tr>
 				<td>Username</td>
 				<td><input class="users-username users-text" type="text" placeholder="login name"></td>
@@ -272,7 +288,7 @@
 				<td><label class="users-date label-text">[[.HtmlCurrentDate]]</label></td>
 			</tr>
 			<tr>
-				<td colspan="2"><input class="add-submit" type="submit" value="Submit Data"></td>
+				<td colspan="2"><br><input class="add-submit" type="submit" value="Submit Data"></td>
 			</tr>
 		</table>
 	</form>

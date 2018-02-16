@@ -1,3 +1,7 @@
+div#app-ajax-wrapper {
+	padding: 20px;
+}
+
 /* Users Ajax Wrapper */
 div#users-wrapper {
 	padding-top: 35px;
@@ -25,7 +29,7 @@ input.users-text {
 	width: 100%;
 }
 label.label-text {
-	padding: 10px;
+	padding-left: 10px;
 	color: #636e72;
 }
 select.users-role {
@@ -60,3 +64,26 @@ table.users-table {
 	font-size: 80%;
 }
 /* End of User List Box style */
+
+/* Alert/Popup */
+div.users-add-alert {
+	position: fixed;
+	top: 0px;
+	left: 30%;
+	right: 30%;
+	background-color: #00b894;
+	color: #FFFFFF;
+	padding: 10px;
+	display: none;
+	border-radius: 3px;
+	text-align: center;
+}
+.users-close-alert {
+	font-size: 28px; float: right;
+	padding: 15px;
+}
+.users-close-alert:hover {
+	cursor: pointer;
+}
+
+/* end of alert */
