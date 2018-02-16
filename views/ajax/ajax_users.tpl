@@ -2,7 +2,7 @@
 
 [[ template "script". ]]
 <div id="app-ajax-users">
-	<h3 style="padding-left: 5px;">User Dashboard</h3>
+	<h4 style="padding-left: 5px; color: #d63031;">User Dashboard</h4>
 	<div id="app-side-nav">
 		<button class="add-user menu-button" href="javascript:void(0)">Add</button>&nbsp;
 		<button class="registered-users menu-button" href="javascript:void(0)">Registered Users</button>&nbsp;

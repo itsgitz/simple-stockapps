@@ -1,6 +1,8 @@
 /* Users Ajax Wrapper */
 div#users-wrapper {
-	padding-top: 15px;
+	padding-top: 35px;
+	padding-left: 15px;
+	overflow-x: auto;
 }
 table.form-add-users-table tr:nth-child(even) {
 	background-color: #FFFFFF;

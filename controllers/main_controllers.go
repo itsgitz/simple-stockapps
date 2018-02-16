@@ -42,6 +42,9 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 	//log.Println("Session:", username_session)
 	//log.Println("Session:", user_fullname_session)
 
+	waktu := time.Now()
+	jam := fmt.Sprintf(waktu.Format("15:04:05"))
+
 	// html template data
 	html_data := struct{
 		HtmlTitle             	string
@@ -49,9 +52,11 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 		HtmlUserIsAdmin     bool // check for privilege
 		HtmlUserFullName		string
 		HtmlScriptVersion       string
+		HtmlTime                string
 	}{}
 
 	html_data.HtmlTitle = "Simple StockApps"
+	html_data.HtmlTime = jam
 
 	// css and javascript versioning
 	html_data.HtmlScriptVersion = generator.GenerateID()
