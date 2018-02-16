@@ -2,7 +2,7 @@
 
 [[ template "script". ]]
 <div id="app-ajax-users">
-	<h3>User Dashboard</h3>
+	<h3 style="padding-left: 5px;">User Dashboard</h3>
 	<div id="app-side-nav">
 		<button class="add-user menu-button" href="javascript:void(0)">Add</button>&nbsp;
 		<button class="registered-users menu-button" href="javascript:void(0)">Registered Users</button>&nbsp;
@@ -61,7 +61,7 @@
 
 		// registered user list
 		appShowNewUsers();
-		//appShowRegisteredUsers();
+		appShowRegisteredUsers();
 	});
 
 	// navigation click handler
@@ -161,7 +161,7 @@
 				var lengthResponse = res.length;
 				var i;
 
-				resultTable =  "<table class='new-users-table' border='0' cellpadding='10' cellspacing='0'>";
+				resultTable =  "<table class='new-users-table users-table' border='0' cellpadding='10' cellspacing='0'>";
 				resultTable += "   <th>No.</th>";
 				resultTable += "   <th>User ID</th>";
 				resultTable += "   <th>Username</th>";
@@ -187,12 +187,52 @@
 				resultTable += "</table>";
 
 				document.getElementById("new-users-box").innerHTML = resultTable;
+			},
+			beforeSend: function() {
+				document.getElementById("registered-users-box").innerHTML = "<h2 style='color: #636e72;'>Loading please wait ...</h2>";
 			}
 		});
 	}
-	//function appShowRegisteredUsers() {
 
-	//}
+	// show registered users
+	function appShowRegisteredUsers() {
+		$.ajax({
+			url: "/json_reg_users",
+			async: true,
+			success: function(res) {
+				var resultTable;
+				var lengthResponse = res.length;
+				var i;
+				resultTable =  "<table class='registered-users-table users-table' border='0' cellpadding='10' cellspacing='0'>";
+				resultTable += "   <th>No.</th>";
+				resultTable += "   <th>User ID</th>";
+				resultTable += "   <th>Username</th>";
+				resultTable += "   <th>Fullname</th>";
+				resultTable += "   <th>Role/Privilege</th>";
+				resultTable += "   <th>E-mail Address</th>";
+				resultTable += "   <th>Date Created</th>";
+				resultTable += "   <th>Status</th>";
+				for (i=0; i<lengthResponse; i++) {
+					resultTable += "<tr>";
+					resultTable += "   <td>"+(i+1)+"</td>";
+					resultTable += "   <td>"+res[i].user_id+"</td>";
+					resultTable += "   <td>"+res[i].user_login_name+"</td>";
+					resultTable += "   <td>"+res[i].user_name+"</td>";
+					resultTable += "   <td>"+res[i].user_privilege+"</td>";
+					resultTable += "   <td>"+res[i].user_email+"</td>";
+					resultTable += "   <td>"+res[i].date_created+"</td>";
+					resultTable += "   <td>"+res[i].status+"</td>";
+					resultTable += "</tr>";
+				}
+				resultTable += "</table>";
+
+				document.getElementById("registered-users-box").innerHTML = resultTable;
+			},
+			beforeSend: function() {
+				document.getElementById("registered-users-box").innerHTML = "<h2 style='color: #636e72;'>Loading please wait ...</h2>";
+			}
+		});
+	}
 </script>
 [[ end ]]
 
@@ -203,19 +243,19 @@
 		<table class="form-add-users-table" cellpadding="8px" cellspacing="0">
 			<tr>
 				<td>Username</td>
-				<td><input class="users-username" type="text" placeholder="login name"></td>
+				<td><input class="users-username users-text" type="text" placeholder="login name"></td>
 			</tr>
 			<tr>
 				<td>Name</td>
-				<td><input class="users-fullname" type="text" placeholder="full name"></td>
+				<td><input class="users-fullname users-text" type="text" placeholder="full name"></td>
 			</tr>
 			<tr>
 				<td>Password (Generate)</td>
-				<td><label class="users-password">[[.HtmlGenerateDefaultPassword]]</label></td>
+				<td><label class="users-password label-text">[[.HtmlGenerateDefaultPassword]]</label></td>
 			</tr>
 			<tr>
 				<td>E-mail</td>
-				<td><input class="users-mail" type="email" placeholder="e-mail address"></td>
+				<td><input class="users-mail users-text" type="email" placeholder="e-mail address"></td>
 			</tr>
 			<tr>
 				<td>Role</td>
@@ -229,7 +269,7 @@
 			</tr>
 			<tr>
 				<td>Date Created</td>
-				<td><label class="users-date">[[.HtmlCurrentDate]]</label></td>
+				<td><label class="users-date label-text">[[.HtmlCurrentDate]]</label></td>
 			</tr>
 			<tr>
 				<td colspan="2"><input class="add-submit" type="submit" value="Submit Data"></td>
@@ -240,12 +280,9 @@
 [[ end ]]
 
 [[ define "registered_user_list_box" ]]
-<div id="registered-users-box">
-	<h3>Registered Users List Box</h3>
-</div>
+<div id="registered-users-box"></div>
 [[ end ]]
 
 [[ define "new_user_list_box" ]]
-<div id="new-users-box">
-</div>
+<div id="new-users-box"></div>
 [[ end ]]

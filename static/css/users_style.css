@@ -5,11 +5,44 @@ div#users-wrapper {
 table.form-add-users-table tr:nth-child(even) {
 	background-color: #FFFFFF;
 }
+table.form-add-users-table {
+	font-size: 85%;
+	color: #0984e3;
+	width: 700px;
+}
 /* end of Users Ajax Wrapper */
 
 /* Add Box style */
 div#users-add-box {
 	display: none;
+}
+input.users-text {
+	border: none;
+	border-bottom: solid 1px #636e72;
+	padding: 10px;
+	width: 100%;
+}
+label.label-text {
+	padding: 10px;
+	color: #636e72;
+}
+select.users-role {
+	width: 100%;
+	border: none;
+	padding: 10px;
+	background-color: #FFFFFF;
+	border-bottom: solid 1px #636e72;
+}
+input.add-submit {
+	border: none;
+	width: 100%;
+	padding: 5px;
+	background-color: #636e72;
+	color: #FFFFFF;
+	border-radius: 3px;
+}
+input.add-submit:hover {
+	cursor: pointer;
 }
 /* End of Add Box style */
 
@@ -20,7 +53,7 @@ div#registered-users-box {
 div#new-users-box {
 	display: none;
 }
-table.new-users-table {
+table.users-table {
 	border: solid 1px #ddd;
 	font-size: 80%;
 }

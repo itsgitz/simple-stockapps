@@ -88,11 +88,14 @@
 	div#app-navbar ul li a {
 		display: block;
 		padding: 10px;
+		padding-left: 15px;
+		padding-right: 15px;
 		background-color: #e74c3c;
 		color: #FFFFFF;
 		text-decoration: none;
 		font-weight: 600;
 		border-bottom: solid 3px #e74c3c;
+		font-size: 80%;
 	}
 	div#app-navbar ul li a:hover {
 		border-bottom: solid 3px #ecf0f1;

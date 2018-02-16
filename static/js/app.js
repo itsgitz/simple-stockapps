@@ -17,12 +17,12 @@ ws.onopen = function() {
 ws.onclose = function() {
 	console.log("WebSocket connection closed!");
 	console.log("Ready: " + ws.readyState);
-	alert("WebSocket server connection is close... I'll try to reconnecting in 3s ... Or if I always try to reconnecting to websocket server, please clean the cookies and cache in your browser :) -AQX-");
+	console.log("WebSocket server connection is close... I'll try to reconnecting in 3s ... Or if I always try to reconnecting to websocket server, please clean the cookies and cache in your browser :) -AQX-");
 	setTimeout(function() {
 		window.location = "/";
 	}, 3000);
 	setTimeout(function() {
-		alert("Establish WebSocket server connection in 1s ... -AQX-")
+		console.log("Establish WebSocket server connection in 1s ... -AQX-")
 		window.location = "/";
 	}, 1000);
 }

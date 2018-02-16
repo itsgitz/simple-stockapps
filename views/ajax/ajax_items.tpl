@@ -119,9 +119,9 @@ $(function() {
 				<td>
 					<select class="select-location">
 						<option value="" selected="">-- Location --</option>
-						<option value="DC TBS 1st Floor">DC TBS 1st Floor</option>
-						<option value="DC TBS 2nd Floor">DC TBS 2nd Floor</option>
-						<option value="DC TBS 3rd Floor"> DC TBS 3rd Floor</option>
+						<option value="Staging Lt. 1">Staging Lt. 1</option>
+						<option value="Staging Lt. 2">Staging Lt. 2</option>
+						<option value="Gudang Bawah Tangga">Gudang Bawah Tangga</option>
 					</select>
 				</td>
 			</tr>
