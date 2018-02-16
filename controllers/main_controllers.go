@@ -955,6 +955,7 @@ func (this *MainController) AppJSONGetNewUsers(w http.ResponseWriter, r *http.Re
 
 		fmt.Fprintf(w, string(json_val))
 	} else {
+		w.Header().Set("Content-Type", "application/json")
 		new_users_result := models.ModelsShowNewUsers()
 		x := make([]User_Login, len(new_users_result))
 

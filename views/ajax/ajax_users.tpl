@@ -49,6 +49,7 @@
 				newUsersListBox.css("display", "block");
 				addBox.css("display", "none");
 				registeredUserListBox.css("display", "none");
+				$("title").text("New Users - Simple StockApps");
 			break;
 		}
 
@@ -89,6 +90,7 @@
 			newUsersListBox.css("display", "block");
 			registeredUserListBox.css("display", "none");
 			addBox.css("display", "none");
+			$("title").text("New Users - Simple StockApps");
 		});
 	}
 
@@ -152,16 +154,14 @@
 
 	function appShowNewUsers() {
 		$.ajax({
-			url: "/new_users",
+			url: "/json_new_users",
 			async: true,
-			success: function(response) {
+			success: function(res) {
 				var resultTable;
-				var lengthResponse = response.length;
+				var lengthResponse = res.length;
 				var i;
 
-				console.log(response);
-
-				resultTable =  "<table border='1' cellpadding='10' cellspacing='0'>";
+				resultTable =  "<table class='new-users-table' border='0' cellpadding='10' cellspacing='0'>";
 				resultTable += "   <th>No.</th>";
 				resultTable += "   <th>User ID</th>";
 				resultTable += "   <th>Username</th>";
@@ -173,6 +173,15 @@
 				resultTable += "   <th>Status</th>";
 				for (i=0; i<lengthResponse; i++) {
 					resultTable += "<tr>";
+					resultTable += "   <td>"+(i+1)+"</td>";
+					resultTable += "   <td>"+res[i].user_id+"</td>";
+					resultTable += "   <td>"+res[i].user_login_name+"</td>";
+					resultTable += "   <td>"+res[i].user_name+"</td>";
+					resultTable += "   <td>"+res[i].user_privilege+"</td>";
+					resultTable += "   <td>"+res[i].password+"</td>";
+					resultTable += "   <td>"+res[i].user_email+"</td>";
+					resultTable += "   <td>"+res[i].date_created+"</td>";
+					resultTable += "   <td>"+res[i].status+"</td>";
 					resultTable += "</tr>";
 				}
 				resultTable += "</table>";

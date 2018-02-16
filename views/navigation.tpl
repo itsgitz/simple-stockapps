@@ -8,24 +8,24 @@
 <div id="app-navbar">
 	<ul>
 		<li>
-			<a href="/">Home</a>
+			<a href="/"><img src="img/home.svg" width="20px"></a>
 		</li>
 		<li>
-			<a class="ajax-navbar ajax-items" href="/navbar?#navigate_link=/items">Goods</a>
+			<a class="ajax-navbar ajax-items" href="/navbar?#navigate_link=/items"><img src='img/items.svg' width="20px">&nbsp;Goods</a>
 		</li>
 		<li>
-			<a class="ajax-navbar ajax-reports" href="/navbar?#navigate_link=/reports">History</a>
+			<a class="ajax-navbar ajax-reports" href="/navbar?#navigate_link=/reports"><img src='img/history.svg' width="20px">&nbsp;History</a>
 		</li>
 		[[ if .HtmlUserIsAdmin ]]
 		<li>
-			<a class="ajax-navbar ajax-search-reports" href="/navbar?#navigate_link=/searc_reports">Reports</a>
+			<a class="ajax-navbar ajax-search-reports" href="/navbar?#navigate_link=/searc_reports"><img src='img/reports.svg' width="20px">&nbsp;Reports</a>
 		</li>
 		<li>
-			<a class="ajax-navbar ajax-users" href="/navbar?#navigate_link=/users">Users</a>
+			<a class="ajax-navbar ajax-users" href="/navbar?#navigate_link=/users"><img src="img/group.svg" width="20px">&nbsp;Users</a>
 		</li>
 		[[ end ]]
 		<li>
-			<a class="ajax-navbar ajax-settings" href="/navbar?#navigate_link=/settings">Settings</a>
+			<a class="ajax-navbar ajax-settings" href="/navbar?#navigate_link=/settings"><img src="img/settings.svg" width="20px">&nbsp;Settings</a>
 		</li>
 	</ul>
 </div>

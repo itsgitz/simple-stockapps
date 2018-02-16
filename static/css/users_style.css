@@ -20,4 +20,8 @@ div#registered-users-box {
 div#new-users-box {
 	display: none;
 }
+table.new-users-table {
+	border: solid 1px #ddd;
+	font-size: 80%;
+}
 /* End of User List Box style */
