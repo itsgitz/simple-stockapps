@@ -843,9 +843,6 @@ func (this *MainController) AppAddUser(w http.ResponseWriter, r *http.Request) {
 		user_id :=  generator.GenerateID()
 		status := "New"
 
-		// func ModelsAddUser(user_id, user_name, user_full_name, user_privilege, user_password, user_email, user_key, date_created string) error
-		//err := models.ModelsAddUser(user_id, user_name, user_full_name, user_role, user_password, user_email, user_key, date_created)
-
 		err := models.ModelsAddUser(user_id, user_name, user_full_name, user_role, user_password, user_email, date_created, status)
 
 		if err != nil {
@@ -1021,5 +1018,47 @@ func (this *MainController) AppJSONGetRegUsers(w http.ResponseWriter, r *http.Re
 			log.Println("[!] ERROR:", err)
 		}
 		fmt.Fprintf(w, string(json_val))
+	}
+}
+
+// delte user controller
+func (this *MainController) AppRemoveUser(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	username_session := sess.GetString("user_name")
+
+	remove_success := struct{
+		Timeout   bool  `json:"Timeout"`
+		Success   bool  `json:"Success"`
+	}{}
+
+	if len(username_session) == 0 {
+		w.Header().Set("Content-Type", "application/json")
+
+		remove_success.Timeout = true
+		remove_success.Success = false
+		json_val, err := json.Marshal(remove_success)
+		if err != nil {
+			log.Println("[!] ERROR:", err)
+		}
+		fmt.Fprint(w, string(json_val))
+	} else {
+		w.Header().Set("Content-Type", "application/json")
+		r.ParseForm()
+
+		user_id := r.Form["user_id"][0]
+		//log.Println("ID", user_id)
+		err := models.ModelsDeleteUser(user_id)
+		if err != nil {
+			log.Println("[!] ERROR:", err)
+			remove_success.Success = true
+			remove_success.Timeout = false
+		}
+
+		json_val, err := json.Marshal(remove_success)
+		if err != nil {
+			log.Println("[!] ERROR:", err)
+		}
+
+		fmt.Fprint(w, string(json_val))
 	}
 }
