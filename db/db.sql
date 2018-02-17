@@ -5,9 +5,9 @@
 -- Create user login table
 -- Table that contains information about login
 CREATE TABLE IF NOT EXISTS `user_login` (
-	`user_id` VARCHAR(8) NOT NULL PRIMARY KEY,	-- User ID
+	`user_id` VARCHAR(16) NOT NULL PRIMARY KEY,	-- User ID
 	`user_login_name` VARCHAR(8) NOT NULL,		-- User Name, Initial that contain 3 characters on it and in-casesensitive... It will be used when user want to login, ex: aqx
-	`user_name` VARCHAR(32) NOT NULL,			-- User Common Name, contain the name of the user that will viewed on website
+	`user_name` VARCHAR(64) NOT NULL,			-- User Common Name, contain the name of the user that will viewed on website
 	`user_privilege` VARCHAR(16) NOT NULL,		-- Several privilege belong to the user login (Such as Administrator or Operator) 
 	`password` VARCHAR(64) NOT NULL,			-- Password, will encrypted with encryption program
 	`user_email` VARCHAR(64) NOT NULL,			-- E-mail
