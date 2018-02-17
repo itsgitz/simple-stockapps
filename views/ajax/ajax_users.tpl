@@ -12,6 +12,7 @@
 		[[ template "add_box". ]]
 		[[ template "registered_user_list_box". ]]
 		[[ template "new_user_list_box". ]]
+		[[ template "remove_reg_user_modal". ]]
 	</div>
 </div>
 [[ end ]]
@@ -157,7 +158,8 @@
 					}
 				});
 			}
-					// close button
+
+			// close button
 			var closeButton = $("span.users-close-alert");
 			var alertBox = $("div.users-add-alert");
 			closeButton.click(function() {
@@ -166,6 +168,7 @@
 		});
 	}
 
+	// show all new users
 	function appShowNewUsers() {
 		$.ajax({
 			url: "/json_new_users",
@@ -197,12 +200,86 @@
 					resultTable += "   <td>"+res[i].user_email+"</td>";
 					resultTable += "   <td>"+res[i].date_created+"</td>";
 					resultTable += "   <td>"+res[i].status+"</td>";
-					resultTable += "   <td><button>Remove</button></td>";
+					resultTable += "   <td><button class='remove-users' data-user-id='"+res[i].user_id+"' data-user-name='"+res[i].user_login_name+"' data-user-fullname='"+res[i].user_name+"'>Remove</button></td>";
 					resultTable += "</tr>";
 				}
 				resultTable += "</table>";
 
 				document.getElementById("new-users-box").innerHTML = resultTable;
+
+				var removeButton = $("button.remove-users");
+				removeButton.click(function() {
+					// get user id
+					var thisUserId = $(this).attr("data-user-id");
+					var thisUserName = $(this).attr("data-user-name");
+					var thisUserFullName = $(this).attr("data-user-fullname");
+					var modalTable;
+					
+					// open popup section ...
+					var modal = document.getElementById("remove-modal-reg-user");
+					var jqueryGetModal = $("div#remove-modal-reg-user");
+					var jqueryGetModalContent = $("div.remove-modal-reg-content");
+
+					// show popup
+					jqueryGetModal.fadeIn(300);
+					window.onclick = function(e) {
+						if (e.target == modal) {
+							jqueryGetModal.fadeOut(100);
+						}
+					}
+
+					// fill the modal table
+					modalTable = "<table class='table-modal-content'>";
+					modalTable += "  <th>ID</th>";
+					modalTable += "  <th>Login Name</th>";
+					modalTable += "  <th>Fullname</th>";
+					modalTable += "  <tr>";
+					modalTable += "     <td>"+thisUserId+"</td>";
+					modalTable += "     <td>"+thisUserName+"</td>";
+					modalTable += "     <td>"+thisUserFullName+"</td>";
+					modalTable += "  </tr>";
+					modalTable += "</table>";
+					modalTable += "<br>";
+					modalTable += "<button class='remove-true' data-user-id='"+thisUserId+"'>Yes</button>&nbsp;";
+					modalTable += "<button class='close-modal'>No</button>";
+					document.getElementById("modal-table").innerHTML = modalTable;
+
+					var closeModalButton = $("button.close-modal");
+					// close modal button
+					closeModalButton.click(function() {
+						jqueryGetModal.fadeOut(100);
+					});
+
+					var removeTrue = $("button.remove-true");
+
+					removeTrue.click(function() {
+						var catchUserId = $(this).attr("data-user-id");
+						$.ajax({
+							url: "/remove_user",
+							async: true,
+							data: {
+								user_id: catchUserId
+							},
+							success: function(res) {
+								if (res.Timeout) {
+									alert("Session timed out :(");
+									window.location = "/";
+								} else {
+									jqueryGetModalContent.html("<p>Successful removing user!</p>");
+									setTimeout(function() {
+										jqueryGetModal.fadeOut(300);
+									}, 2000);
+									window.onclick = function(e) {
+										if (e.target == modal) {
+											jqueryGetModal.css("display", "block");	
+										}
+									}
+									appShowNewUsers();
+								}
+							}
+						});
+					});
+				});
 			},
 			beforeSend: function() {
 				document.getElementById("registered-users-box").innerHTML = "<h2 style='color: #636e72;'>Loading please wait ...</h2>";
@@ -256,14 +333,14 @@
 <div id="users-add-box">
 	<div class="users-add-alert"></div>
 	<form class="add-user-form">
-		<table class="form-add-users-table" cellpadding="10px" cellspacing="0">
+		<table class="form-add-users-table" cellpadding="8px" cellspacing="0">
 			<tr>
 				<td>Username</td>
-				<td><input class="users-username users-text" type="text" placeholder="login name"></td>
+				<td><input class="users-username users-text" type="text" placeholder="login name" maxlength="3"></td>
 			</tr>
 			<tr>
 				<td>Name</td>
-				<td><input class="users-fullname users-text" type="text" placeholder="full name"></td>
+				<td><input class="users-fullname users-text" type="text" placeholder="full name" maxlength="64"></td>
 			</tr>
 			<tr>
 				<td>Password (Generate)</td>
@@ -271,7 +348,7 @@
 			</tr>
 			<tr>
 				<td>E-mail</td>
-				<td><input class="users-mail users-text" type="email" placeholder="e-mail address"></td>
+				<td><input class="users-mail users-text" type="email" placeholder="e-mail address" maxlength="64"></td>
 			</tr>
 			<tr>
 				<td>Role</td>
@@ -301,4 +378,15 @@
 
 [[ define "new_user_list_box" ]]
 <div id="new-users-box"></div>
+[[ end ]]
+
+[[ define "remove_reg_user_modal" ]]
+<!-- Modal Wrapper -->
+<div id="remove-modal-reg-user" class="remove-modal">
+	<!-- Modal Content -->
+	<div class="remove-modal-reg-content">
+		<p>Are you sure want to remove?</p><br>
+		<div id="modal-table"></div><br>
+	</div>
+</div>
 [[ end ]]
