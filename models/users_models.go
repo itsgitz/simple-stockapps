@@ -89,3 +89,12 @@ func ModelsShowRegUsers() []User_Login {
 
 	return users_value
 }
+
+// delte user
+func ModelsDeleteUser(id string) error {
+	sql_query := "DELETE FROM user_login WHERE user_id=?"
+	x, err := db.Queryx(sql_query, id)
+	defer x.Close()
+
+	return err
+}
