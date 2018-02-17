@@ -169,6 +169,7 @@ function appShowItemsTable(res) {
 		tableMonitoring += "  <th>Time Period</th>";
 		tableMonitoring += "  <th>Expired</th>";
 	}
+	tableMonitoring += "  <th>Location</th>";
 	tableMonitoring += "  <th>Status</th>";
 	
 	if (isLoggedIn == "true") {
@@ -191,6 +192,7 @@ function appShowItemsTable(res) {
 				tableMonitoring += "     <td>"+res[i].item_time_period+"</td>";
 				tableMonitoring += "     <td>"+res[i].item_expired+"</td>";
 			}
+			tableMonitoring += "    <td>"+res[i].item_location+"</td>";
 			tableMonitoring += "    <td class='tb-status'>"+ res[i].item_status +"</td>";
 			if (isLoggedIn == "true") {
 				tableMonitoring += "    <td><a id='app-pick-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"' data-item-unit='"+res[i].item_unit+"'>Pick Up</a></td>";
