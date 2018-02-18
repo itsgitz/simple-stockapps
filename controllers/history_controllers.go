@@ -11,13 +11,13 @@ import (
 	"simple_stockapps/models"
 )
 
-func UpdateHistory(history_code, history_by, history_notes, item_unit, item_quantity, item_name, item_id string) {
+func UpdateHistory(history_code, history_by, history_notes, item_unit, item_quantity, item_name, item_id, item_location string) {
 	waktu := time.Now()
 	// generate history id
 	history_id := generator.GenerateID()
 
 	// create history date, now!
-	history_date := waktu.Format("2006-01-02 15:04")
+	history_date := waktu.Format("2006-01-02 15:04:05")
 
 	// create history content accroding to history code
 	var history_content string
@@ -44,7 +44,7 @@ func UpdateHistory(history_code, history_by, history_notes, item_unit, item_quan
 	case "#001-pick-up":
 		// example:
 		// Anggit Muhamad Ginanjar has picked up 2 cable roll of Cat-6 UTP Cable
-		history_content = history_by + " has picked up " + item_quantity + " " + item_unit_str + " of " + item_name + " ID: " + item_id
+		history_content = history_by + " has picked up " + item_quantity + " " + item_unit_str + " of " + item_name + ", Location: " + item_location + ", " + history_date
 		break
 	case "#002-edit-item":
 		history_content = history_by + " has edited item, item name: " + item_name + " ID: " + item_id
