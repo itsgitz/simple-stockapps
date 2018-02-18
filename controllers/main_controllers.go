@@ -1063,3 +1063,67 @@ func (this *MainController) AppRemoveUser(w http.ResponseWriter, r *http.Request
 		fmt.Fprint(w, string(json_val))
 	}
 }
+
+// settings controller
+func (this *MainController) AppSettings(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	username_session := sess.GetString("user_name")
+	user_fullname_session := sess.GetString("user_fullname")
+
+	if r.Method == "GET" {
+		if len(username_session) <= 0 && len(user_fullname_session) <= 0 {
+			w.Header().Set("Content-Type", "application/json")
+			redirectMessage := struct{
+				Message 	bool 	`json:"Message"`
+			}{}
+
+			redirectMessage.Message = true
+			outgoingJSON, err := json.Marshal(redirectMessage)
+			if err != nil { log.Println("[!] ERROR:", err) }
+			fmt.Fprint(w, string(outgoingJSON))
+		} else {
+			ajax_items_filename := "views/ajax/ajax_settings.tpl"
+			tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
+			if err != nil {
+				log.Println("[!] ERROR:", err)
+			}
+
+			err = tpl.ExecuteTemplate(w, "settings_layout", nil)
+			if err != nil {
+				log.Println("[!] ERROR:", err)
+			}
+		}
+	}
+}
+
+// search_reports controller
+func (this *MainController) AppSearchReports(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	username_session := sess.GetString("user_name")
+	user_fullname_session := sess.GetString("user_fullname")
+
+	if r.Method == "GET" {
+		if len(username_session) <= 0 && len(user_fullname_session) <= 0 {
+			w.Header().Set("Content-Type", "application/json")
+			redirectMessage := struct{
+				Message 	bool 	`json:"Message"`
+			}{}
+
+			redirectMessage.Message = true
+			outgoingJSON, err := json.Marshal(redirectMessage)
+			if err != nil { log.Println("[!] ERROR:", err) }
+			fmt.Fprint(w, string(outgoingJSON))
+		} else {
+			ajax_items_filename := "views/ajax/ajax_search_reports.tpl"
+			tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
+			if err != nil {
+				log.Println("[!] ERROR:", err)
+			}
+
+			err = tpl.ExecuteTemplate(w, "search_reports_layout", nil)
+			if err != nil {
+				log.Println("[!] ERROR:", err)
+			}
+		}
+	}
+}
