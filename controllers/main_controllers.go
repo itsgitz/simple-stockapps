@@ -547,6 +547,7 @@ func (this *MainController) AppPickupItem(w http.ResponseWriter, r *http.Request
 			item_unit := r.Form["item_unit"][0] // item unit
 			itsRequest := r.Form["request"][0] // websocket code
 			itsNotes := r.Form["notes"][0] // websocket notes
+			item_location := r.Form["item_location"][0] // location
 
 			// convert it to integer
 			item_quantity_picked_int, _ := strconv.Atoi(item_quantity_picked)
@@ -574,7 +575,7 @@ func (this *MainController) AppPickupItem(w http.ResponseWriter, r *http.Request
 			// note: history_code = itsRequest variable
 			//       history_by = user_fullname_session
 			//       history_notes = itsNotes
-			UpdateHistory(itsRequest, user_fullname_session, itsNotes, item_unit, item_howmuch, item_name, item_id)
+			UpdateHistory(itsRequest, user_fullname_session, itsNotes, item_unit, item_howmuch, item_name, item_id, item_location)
 			errPickup := models.ModelsPickupItem(item_id, item_quantity_picked, item_status)
 			if errPickup != nil {
 				http.Error(w, errPickup.Error(), http.StatusInternalServerError)
