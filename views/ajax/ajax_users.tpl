@@ -12,7 +12,7 @@
 		[[ template "add_box". ]]
 		[[ template "registered_user_list_box". ]]
 		[[ template "new_user_list_box". ]]
-		[[ template "remove_reg_user_modal". ]]
+		[[ template "remove_user_modal". ]]
 	</div>
 </div>
 [[ end ]]
@@ -221,9 +221,9 @@
 					var modalTable;
 					
 					// open popup section ...
-					var modal = document.getElementById("remove-modal-reg-user");
-					var jqueryGetModal = $("div#remove-modal-reg-user");
-					var jqueryGetModalContent = $("div.remove-modal-reg-content");
+					var modal = document.getElementById("remove-modal-user");
+					var jqueryGetModal = $("div#remove-modal-user");
+					var jqueryGetModalContent = $("div.remove-modal-content");
 					var jqueryGetModalTable = $("div#modal-table");
 					var jqueryGetAskToRemove = $("p#ask-to-remove");
 
@@ -329,12 +329,96 @@
 					resultTable += "   <td>"+res[i].user_email+"</td>";
 					resultTable += "   <td>"+res[i].date_created+"</td>";
 					resultTable += "   <td>"+res[i].status+"</td>";
-					resultTable += "   <td><button class='remove-reg-user remove-users'>Remove</button></td>";
+					// gif data-* attribute for store current data
+					resultTable += "   <td><button class='remove-reg-user remove-users' data-user-id='"+res[i].user_id+"' data-user-name='"+res[i].user_login_name+"' data-user-fullname='"+res[i].user_name+"'>Remove</button></td>";
 					resultTable += "</tr>";
 				}
 				resultTable += "</table>";
 
 				document.getElementById("registered-users-box").innerHTML = resultTable;
+
+				// define remove button options
+				var removeRegUserButton = $("button.remove-reg-user");
+
+				// removeRegUserButton on click
+				removeRegUserButton.click(function() {
+					// get the data-* value
+					var regUserId = $(this).attr("data-user-id");
+					var regUserName = $(this).attr("data-user-name");
+					var regFullName = $(this).attr("data-user-fullname");
+
+					var modal = document.getElementById("remove-modal-user");
+					var jqueryGetModal = $("div#remove-modal-user");
+					var jqueryGetModalContent = $("div.remove-modal-content");
+					var jqueryGetModalTable = $("div#modal-table");
+					var jqueryGetAskToRemove = $("p#ask-to-remove");
+
+					// show popup
+					jqueryGetModal.fadeIn(300);
+					window.onclick = function(e) {
+						if (e.target == modal) {
+							jqueryGetModal.fadeOut(100);
+						}
+					}
+
+					// fill the modal table
+					modalTable = "<table class='table-modal-content' cellspacing='0' cellpadding='10px'>";
+					modalTable += "  <th>ID</th>";
+					modalTable += "  <th>Login Name</th>";
+					modalTable += "  <th>Fullname</th>";
+					modalTable += "  <tr>";
+					modalTable += "     <td>"+regUserId+"</td>";
+					modalTable += "     <td>"+regUserName+"</td>";
+					modalTable += "     <td>"+regFullName+"</td>";
+					modalTable += "  </tr>";
+					modalTable += "</table>";
+					modalTable += "<br>";
+					modalTable += "<div class='buton-box' style='text-align: center;'>"
+					modalTable += "    <button class='remove-true' data-user-id='"+regUserId+"'>Yes</button>&nbsp;";
+					modalTable += "    <button class='close-modal'>No</button>";
+					modalTable += "</div>";
+					document.getElementById("modal-table").innerHTML = modalTable;
+
+					var closeModalButton = $("button.close-modal");
+					// close modal button
+					closeModalButton.click(function() {
+						jqueryGetModal.fadeOut(100);
+					});
+
+					var removeTrue = $("button.remove-true");
+
+					removeTrue.click(function() {
+						var catchUserId = $(this).attr("data-user-id");
+						$.ajax({
+							url: "/remove_user",
+							async: true,
+							data: {
+								user_id: catchUserId
+							},
+							success: function(res) {
+								if (!res.Timeout) {
+									jqueryGetAskToRemove.css("display", "none");
+									jqueryGetModalTable.html("<p>Successful removing user!</p>");
+									setTimeout(function() {
+										jqueryGetModal.fadeOut(300);
+									}, 2000);
+									window.onclick = function(e) {
+										if (e.target == modal) {
+											jqueryGetModal.css("display", "block");	
+										}
+									}
+									// load again using recursive
+									appShowRegisteredUsers();
+									registeredUserListBox.hide();
+									registeredUserListBox.fadeIn(300);
+								} else {
+									alert("Session timed out :(");
+									window.location = "/";
+								}
+							}
+						});
+					});
+				});
 			},
 			beforeSend: function() {
 				document.getElementById("registered-users-box").innerHTML = "<h2 style='color: #636e72;'>Loading please wait ...</h2>";
@@ -395,11 +479,11 @@
 <div id="new-users-box"></div>
 [[ end ]]
 
-[[ define "remove_reg_user_modal" ]]
+[[ define "remove_user_modal" ]]
 <!-- Modal Wrapper -->
-<div id="remove-modal-reg-user" class="remove-modal">
+<div id="remove-modal-user" class="remove-modal">
 	<!-- Modal Content -->
-	<div class="remove-modal-reg-content">
+	<div class="remove-modal-content">
 		<p id="ask-to-remove">Are you sure want to remove?</p><br>
 		<div id="modal-table"></div><br>
 	</div>

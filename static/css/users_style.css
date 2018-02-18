@@ -148,7 +148,7 @@ div.users-add-alert {
 	background-color: rgba(0,0,0,0.4);
 }
 /* Content */
-.remove-modal-reg-content {
+div.remove-modal-content {
 	background-color: #fefefe;
 	margin: 10% auto;
 	padding: 20px;

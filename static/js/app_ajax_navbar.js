@@ -23,6 +23,8 @@ function appAjaxController() {
 				case "items": $("title").text("Items Dashboard - Simple StockApps"); break;
 				case "reports": $("title").text("History - Simple StockApps"); break;
 				case "users": $("title").text("Users Dashboard - Simple StockApps"); break;
+				case "settings": $("title").text("Settings Dashboard - Simple StockApps"); break;
+				case "search_reports": $("title").text("Reports Dashboard - Simple StockApps"); break;
 			}
 		}
 	}
@@ -41,6 +43,12 @@ function appAjaxController() {
 			case "/users":
 				$("title").text("Users Dashboard - Simple StockApps");
 				break;
+			case "/settings":
+				$("title").text("Settings Dashboard - Simple StockApps");
+				break;
+			case "/search_reports":
+				$("title").text("Reports Dashboard - Simple StockApps");
+				break;
 		}
 		var getStateFromUrl = getUrlFromHash.substring(1);
 		var stateObj = { page: getStateFromUrl };
@@ -56,6 +64,7 @@ function appAjaxController() {
 		e.preventDefault();
 	});	
 
+	// items page click
 	$("a.ajax-items").click(function() {
 		// create history pushstate
 		var stateObj = { page: "items" };
@@ -68,6 +77,7 @@ function appAjaxController() {
 		appAjaxRequestPage("/items");
 	});
 
+	// history page click
 	$("a.ajax-reports").click(function() {
 		var stateObj = { page: "reports" };
 		history.pushState(stateObj, "reports", "/navbar?#navigate_link=/reports");
@@ -77,6 +87,7 @@ function appAjaxController() {
 		appAjaxRequestPage("/reports");
 	});
 
+	// users page click
 	$("a.ajax-users").click(function() {
 		var stateObj = { page: "users" };
 		history.pushState(stateObj, "users", "/navbar?#navigate_link=/users");
@@ -85,6 +96,22 @@ function appAjaxController() {
 		// load again with ajax
 		appAjaxRequestPage("/users");
 	});
+
+	// settings page click
+	$("a.ajax-settings").click(function() {
+		var stateObj = { page: "settings" };
+		history.pushState(stateObj, "settings", "/navbar?#navigate_link=/settings");
+		$("title").text("Settings Dashboard - Simple StockApps");
+		appAjaxRequestPage("/settings");
+	});
+
+	// reports page click
+	$("a.ajax-search-reports").click(function() {
+		var stateObj = { page: "search_reports" };
+		history.pushState(stateObj, "search_reports", "/navbar#navigate_link=/search_reports");
+		$("title").text("Reports Dashboard - Simple StockApps");
+		appAjaxRequestPage("/search_reports");
+	})
 }
 
 function appAjaxRequestPage(url) {
