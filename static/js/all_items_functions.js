@@ -128,8 +128,7 @@ function appFormAddItemsHandler() {
 						alert("Session login has timed out :(");
 						window.location ="/";
 					} else {
-						alert("Successful inserting data!");
-						window.location = "/";	
+						alert("Successful inserting data!");			
 					}
 				}
 			});

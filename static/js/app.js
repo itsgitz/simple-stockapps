@@ -195,7 +195,7 @@ function appShowItemsTable(res) {
 			tableMonitoring += "    <td>"+res[i].item_location+"</td>";
 			tableMonitoring += "    <td class='tb-status'>"+ res[i].item_status +"</td>";
 			if (isLoggedIn == "true") {
-				tableMonitoring += "    <td><a id='app-pick-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"' data-item-unit='"+res[i].item_unit+"'>Pick Up</a></td>";
+				tableMonitoring += "    <td><a id='app-pick-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"' data-item-unit='"+res[i].item_unit+"' data-location='"+res[i].item_location+"'>Pick Up</a></td>";
 			}
 			tableMonitoring += "  </tr>";
 		}
@@ -230,6 +230,7 @@ function appPickupFunction() {
 		var getUnit = $(this).attr("data-item-unit");
 		var getLimitation = $(this).attr("data-item-limitation");
 		var getOwner = $(this).attr("data-item-owner");
+		var getLocation = $(this).attr("data-location");
 				
 		var pickupModalText;
 		pickupModalText = "<div id='app-pickup-modal'>";
@@ -325,7 +326,8 @@ function appPickupFunction() {
 							request: pickupRequest,
 							notes: textNotes,
 							item_unit: getUnit,
-							item_name: getName
+							item_name: getName,
+							item_location: getLocation
 						},
 						async: true,
 						success: function(res) {

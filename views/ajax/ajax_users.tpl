@@ -75,6 +75,7 @@
 			newUsersListBox.css("display", "none");
 			addBox.css("display", "block");
 			$("title").text("Add Users - Simple StockApps");
+
 		});
 		// user list button clicked
 		registeredUserListButton.click(function() {
@@ -84,6 +85,7 @@
 			addBox.css("display", "none");
 			newUsersListBox.css("display", "none");
 			$("title").text("Users Dashboard - Simple StockApps");
+			appShowRegisteredUsers();
 		});
 		newUsersListButton.click(function() {
 			var stateObj = {page: "users#new"};
@@ -92,6 +94,7 @@
 			registeredUserListBox.css("display", "none");
 			addBox.css("display", "none");
 			$("title").text("New Users - Simple StockApps");
+			appShowNewUsers();
 		});
 	}
 
@@ -153,7 +156,7 @@
 							window.location ="/";
 						} else {
 							alert("Successful inserting data!");
-							window.location = "/";	
+							addUserForm[0].reset();
 						}
 					}
 				});
@@ -208,6 +211,8 @@
 				document.getElementById("new-users-box").innerHTML = resultTable;
 
 				var removeButton = $("button.remove-users");
+
+
 				removeButton.click(function() {
 					// get user id
 					var thisUserId = $(this).attr("data-user-id");
@@ -219,6 +224,8 @@
 					var modal = document.getElementById("remove-modal-reg-user");
 					var jqueryGetModal = $("div#remove-modal-reg-user");
 					var jqueryGetModalContent = $("div.remove-modal-reg-content");
+					var jqueryGetModalTable = $("div#modal-table");
+					var jqueryGetAskToRemove = $("p#ask-to-remove");
 
 					// show popup
 					jqueryGetModal.fadeIn(300);
@@ -229,7 +236,7 @@
 					}
 
 					// fill the modal table
-					modalTable = "<table class='table-modal-content'>";
+					modalTable = "<table class='table-modal-content' cellspacing='0' cellpadding='10px'>";
 					modalTable += "  <th>ID</th>";
 					modalTable += "  <th>Login Name</th>";
 					modalTable += "  <th>Fullname</th>";
@@ -240,8 +247,10 @@
 					modalTable += "  </tr>";
 					modalTable += "</table>";
 					modalTable += "<br>";
-					modalTable += "<button class='remove-true' data-user-id='"+thisUserId+"'>Yes</button>&nbsp;";
-					modalTable += "<button class='close-modal'>No</button>";
+					modalTable += "<div class='buton-box' style='text-align: center;'>"
+					modalTable += "    <button class='remove-true' data-user-id='"+thisUserId+"'>Yes</button>&nbsp;";
+					modalTable += "    <button class='close-modal'>No</button>";
+					modalTable += "</div>";
 					document.getElementById("modal-table").innerHTML = modalTable;
 
 					var closeModalButton = $("button.close-modal");
@@ -261,11 +270,9 @@
 								user_id: catchUserId
 							},
 							success: function(res) {
-								if (res.Timeout) {
-									alert("Session timed out :(");
-									window.location = "/";
-								} else {
-									jqueryGetModalContent.html("<p>Successful removing user!</p>");
+								if (!res.Timeout) {
+									jqueryGetAskToRemove.css("display", "none");
+									jqueryGetModalTable.html("<p>Successful removing user!</p>");
 									setTimeout(function() {
 										jqueryGetModal.fadeOut(300);
 									}, 2000);
@@ -274,7 +281,13 @@
 											jqueryGetModal.css("display", "block");	
 										}
 									}
+									// load again using recursive
 									appShowNewUsers();
+									newUsersListBox.hide();
+									newUsersListBox.fadeIn(300);
+								} else {
+									alert("Session timed out :(");
+									window.location = "/";
 								}
 							}
 						});
@@ -305,6 +318,7 @@
 				resultTable += "   <th>E-mail Address</th>";
 				resultTable += "   <th>Date Created</th>";
 				resultTable += "   <th>Status</th>";
+				resultTable += "   <th>Action</th>";
 				for (i=0; i<lengthResponse; i++) {
 					resultTable += "<tr>";
 					resultTable += "   <td>"+(i+1)+"</td>";
@@ -315,6 +329,7 @@
 					resultTable += "   <td>"+res[i].user_email+"</td>";
 					resultTable += "   <td>"+res[i].date_created+"</td>";
 					resultTable += "   <td>"+res[i].status+"</td>";
+					resultTable += "   <td><button class='remove-reg-user remove-users'>Remove</button></td>";
 					resultTable += "</tr>";
 				}
 				resultTable += "</table>";
@@ -385,7 +400,7 @@
 <div id="remove-modal-reg-user" class="remove-modal">
 	<!-- Modal Content -->
 	<div class="remove-modal-reg-content">
-		<p>Are you sure want to remove?</p><br>
+		<p id="ask-to-remove">Are you sure want to remove?</p><br>
 		<div id="modal-table"></div><br>
 	</div>
 </div>

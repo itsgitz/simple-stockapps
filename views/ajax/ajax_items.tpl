@@ -56,6 +56,7 @@ $(function() {
 		removeBox.css("display", "block");
 		addBox.css("display", "none");
 		$("title").text("Removing Goods - Simple StockApps");
+		appFormRemoveOrEditItemsHandler();
 	});
 
 	// handling request from form add items
@@ -120,7 +121,7 @@ $(function() {
 					<select class="select-location">
 						<option value="" selected="">-- Location --</option>
 						<option value="Staging Lt. 1">Staging Lt. 1</option>
-						<option value="Staging Lt. 2">Staging Lt. 2</option>
+						<option value="Staging Lt. 3">Staging Lt. 3</option>
 						<option value="Gudang Bawah Tangga">Gudang Bawah Tangga</option>
 					</select>
 				</td>

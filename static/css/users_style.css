@@ -64,6 +64,51 @@ table.users-table {
 	border: solid 1px #ddd;
 	font-size: 80%;
 }
+/* button */
+button.remove-users {
+	border: solid 1px #ff4757;
+	padding: 10px;
+	border-radius: 3px;
+	background-color: #ff4757;
+	font-weight: 400;
+	color: #f1f2f6;
+}
+button.remove-users:hover {
+	background-color: #f1f2f6;
+	color: #ff4757;
+	border: solid 1px #ff4757;
+}
+button:hover {
+	cursor: pointer;
+}
+
+button.remove-true {
+	border: solid 1px #0984e3;
+	border-radius: 3px;
+	padding: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	background-color: #0984e3;
+	color: #FFFFFF;
+	font-weight: 500;
+}
+button.remove-true:hover {
+	background-color: #FFFFFF;
+	color: #0984e3;
+}
+button.close-modal {
+	background-color: #d63031;
+	border: solid 1px #d63031;
+	padding: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	border-radius: 3px;
+	color: #FFFFFF;
+}
+button.close-modal:hover {
+	background-color: #FFFFFF;
+	color: #d63031;
+}
 /* End of User List Box style */
 
 /* Alert/Popup */
@@ -105,12 +150,17 @@ div.users-add-alert {
 /* Content */
 .remove-modal-reg-content {
 	background-color: #fefefe;
-	margin: 15% auto;
+	margin: 10% auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 75%;
+	width: 500px;
+	border-radius: 5px;
 }
 table.table-modal-content {
 	font-size: 90%;
+	width: 100%;
+}
+div#modal-table {
+	overflow-x: auto;
 }
 /* end of remove modal */
