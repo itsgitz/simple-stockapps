@@ -53,6 +53,12 @@ func main() {
 	router.HandleFunc("/json_reg_users", main_ctrl.AppJSONGetRegUsers)
 	router.HandleFunc("/remove_user", main_ctrl.AppRemoveUser)
 
+	// settings page url
+	router.HandleFunc("/settings", main_ctrl.AppSettings)
+
+	// settings report/searc_reports
+	router.HandleFunc("/search_reports", main_ctrl.AppSearchReports)
+
 	// defining http middleware using negroni method
 	middleware := negroni.Classic()
 	middleware.Use(negroni.NewStatic(http.Dir("static"))) // initialization static file
