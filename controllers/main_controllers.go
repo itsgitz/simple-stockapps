@@ -1070,6 +1070,17 @@ func (this *MainController) AppSettings(w http.ResponseWriter, r *http.Request) 
 	username_session := sess.GetString("user_name")
 	user_fullname_session := sess.GetString("user_fullname")
 
+	data := struct{
+		Id        string
+		Fullname  string
+		Username  string
+		Role      string
+		Password  string
+		Email     string
+		Date      string
+		Status    string
+	}{}
+
 	if r.Method == "GET" {
 		if len(username_session) <= 0 && len(user_fullname_session) <= 0 {
 			w.Header().Set("Content-Type", "application/json")
@@ -1082,13 +1093,25 @@ func (this *MainController) AppSettings(w http.ResponseWriter, r *http.Request) 
 			if err != nil { log.Println("[!] ERROR:", err) }
 			fmt.Fprint(w, string(outgoingJSON))
 		} else {
+			// get user information
+			id, fullname, username, role, password, email, date, status := models.ModelsGetCurrentSessionUser(username_session)
+			
+			data.Id = id
+			data.Fullname = username
+			data.Username = fullname
+			data.Role = role
+			data.Password = password
+			data.Email = email
+			data.Date = date
+			data.Status = status
+
 			ajax_items_filename := "views/ajax/ajax_settings.tpl"
 			tpl, err := template.New("").Delims("[[", "]]").ParseFiles(ajax_items_filename)
 			if err != nil {
 				log.Println("[!] ERROR:", err)
 			}
 
-			err = tpl.ExecuteTemplate(w, "settings_layout", nil)
+			err = tpl.ExecuteTemplate(w, "settings_layout", data)
 			if err != nil {
 				log.Println("[!] ERROR:", err)
 			}
@@ -1125,5 +1148,46 @@ func (this *MainController) AppSearchReports(w http.ResponseWriter, r *http.Requ
 				log.Println("[!] ERROR:", err)
 			}
 		}
+	}
+}
+
+func (this *MainController) AppUpdateSetting(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	username_session := sess.GetString("user_name")
+
+	update_success := struct{
+		Timeout   bool  `json:"Timeout"`
+		Success   bool  `json:"Success"`
+	}{}
+
+	if len(username_session) == 0 {
+		w.Header().Set("Content-Type", "application/json")
+		update_success.Timeout = true
+		update_success.Success = false
+		json_val, err := json.Marshal(update_success)
+		if err != nil {
+			log.Println(err)
+		}
+		fmt.Fprint(w, string(json_val))
+	} else {
+		w.Header().Set("Content-Type", "application/json")
+		r.ParseForm()
+		user_id := r.Form["user_id"][0]
+		user_fullname := r.Form["user_fullname"][0]
+		user_name := r.Form["user_name"][0]
+		user_password := r.Form["user_password"][0]
+		user_email := r.Form["user_email"][0]
+
+		status := "Registered"
+
+		models.ModelsUpdateUser(user_id, user_fullname, user_name, user_password, status, user_email)
+
+		update_success.Timeout = false
+		update_success.Success = true
+		json_val, err := json.Marshal(update_success)
+		if err != nil {
+			log.Println(err)
+		}
+		fmt.Fprint(w, string(json_val))
 	}
 }
