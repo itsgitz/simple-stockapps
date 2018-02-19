@@ -90,11 +90,50 @@ func ModelsShowRegUsers() []User_Login {
 	return users_value
 }
 
-// delte user
+// get current user on session for setting
+func ModelsGetCurrentSessionUser(username_in string) (user_id, user_name, user_full_name, user_privilege, user_password, user_email, date_created, status string) {
+
+	var id, username, fullname, role, password, email, date, status_in string
+	x, err := db.Queryx("SELECT * FROM user_login WHERE user_login_name=?", username_in)
+	defer x.Close()
+
+	for x.Next() {
+		x.Scan(&id, &username, &fullname, &role, &password, &email, &date, &status_in)
+	}
+
+	if err != nil {
+		log.Println("[!] ERROR: ModelGetCurrentSessionUser:", err)
+	}
+
+	return id, username, fullname, role, password, email, date, status_in
+}
+
+// delete user
 func ModelsDeleteUser(id string) error {
 	sql_query := "DELETE FROM user_login WHERE user_id=?"
 	x, err := db.Queryx(sql_query, id)
 	defer x.Close()
 
 	return err
+}
+
+// update/setting user
+func ModelsUpdateUser(user_id, user_fullname, user_name, user_password, status, user_email string) {
+	if len(user_password) == 0 {
+		sql_query := `UPDATE user_login SET user_login_name=?, user_name=?, user_email=?, status=? WHERE user_id=?`
+		x, thisError := db.Queryx(sql_query, user_name, user_fullname, user_email, status, user_id)
+		defer x.Close()
+
+		if thisError != nil {
+			log.Println(thisError)
+		}
+	} else {
+		sql_query := `UPDATE user_login SET user_login_name=?, user_name=?, password=?, user_email=?, status=? WHERE user_id=?`
+		x, thisError := db.Queryx(sql_query, user_name, user_fullname, user_password, user_email, status, user_id)
+		defer x.Close()
+
+		if thisError != nil {
+			log.Println(thisError)
+		}
+	}
 }
