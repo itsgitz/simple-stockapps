@@ -55,6 +55,7 @@ func main() {
 
 	// settings page url
 	router.HandleFunc("/settings", main_ctrl.AppSettings)
+	router.HandleFunc("/setting_user", main_ctrl.AppUpdateSetting)
 
 	// settings report/searc_reports
 	router.HandleFunc("/search_reports", main_ctrl.AppSearchReports)
