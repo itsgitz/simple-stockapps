@@ -3,45 +3,47 @@
 <div id="ajax-settings">
 	[[ template "edit_alert". ]]
 	<h4 style="padding-left: 5px; color: #d63031;">Settings</h4>
-	<form id="edit-settings">
-		<table id="" cellspacing="0" cellpadding="10">
-			<tr>
-				<td>ID</td>
-				<td><label id="setting-user-id" class="label-text">[[.Id]]</label></td>
-			</tr>
-			<tr>
-				<td>Full name</td>
-				<td><input id="setting-fullname" type="text" placeholder="Your full name" value="[[.Fullname]]"></td>
-			</tr>
-			<tr>
-				<td>Username</td>
-				<td><input id="setting-username" type="text" placeholder="Your Username" value="[[.Username]]"></td>
-			</tr>
-			<tr>
-				<td>Role/Privilege</td>
-				<td><label id="setting-role" class="label-text">[[.Role]]</label></td>
-			</tr>
-			<tr>
-				<td>Password</td>
-				<td><input id="setting-password" type="password" placeholder="Your secret Password"></td>
-			</tr>
-			<tr>
-				<td>E-mail</td>
-				<td><input id="setting-email" type="email" placeholder="Your e-mail address" value="[[.Email]]"></td>
-			</tr>
-			<tr>
-				<td>Date Created</td>
-				<td><label id="setting-date" class="label-text">[[.Date]]</label></td>
-			</tr>
-			<tr>
-				<td>Status</td>
-				<td><label id="setting-status" class="label-text">[[.Status]]</label></td>
-			</tr>
-			<tr>
-				<td colspan="2"><input id="update" type="submit" value="Update"></td>
-			</tr>
-		</table>
-	</form>
+	<div id="setting-table">
+		<form id="edit-settings">
+			<table id="form-table" cellspacing="0" cellpadding="10">
+				<tr>
+					<td>ID</td>
+					<td><label id="setting-user-id" class="label-text-setting">[[.Id]]</label></td>
+				</tr>
+				<tr>
+					<td>Full name</td>
+					<td><input id="setting-fullname" class="input-text" type="text" placeholder="Your full name" value="[[.Fullname]]"></td>
+				</tr>
+				<tr>
+					<td>Username</td>
+					<td><input id="setting-username" class="input-text" type="text" placeholder="Your Username" value="[[.Username]]"></td>
+				</tr>
+				<tr>
+					<td>Role/Privilege</td>
+					<td><label id="setting-role" class="label-text-setting">[[.Role]]</label></td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td><input id="setting-password" class="input-text" type="password" placeholder="Your secret Password"></td>
+				</tr>
+				<tr>
+					<td>E-mail</td>
+					<td><input id="setting-email" class="input-text" type="email" placeholder="Your e-mail address" value="[[.Email]]"></td>
+				</tr>
+				<tr>
+					<td>Date Created</td>
+					<td><label id="setting-date" class="label-text-setting">[[.Date]]</label></td>
+				</tr>
+				<tr>
+					<td>Status</td>
+					<td><label id="setting-status" class="label-text-setting">[[.Status]]</label></td>
+				</tr>
+				<tr>
+					<td colspan="2"><input id="update-button" type="submit" value="Update"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
 </div>
 [[ end ]]
 

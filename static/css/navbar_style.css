@@ -1,8 +1,6 @@
-@import url('https://fonts.googleapis.com/css?family=Ubuntu');
-
 * { box-sizing: border-box; }
 body { 
-	font-family: "Ubuntu", "arial", sans-serif; 
+	font-family: "Arial", sans-serif; 
 	margin: 0;
 }
 
