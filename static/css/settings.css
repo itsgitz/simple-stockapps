@@ -1,0 +1,37 @@
+div#ajax-settings {
+	overflow-x: auto;
+}
+div#setting-table {
+	padding-left: 25px;
+}
+table#form-table {
+	font-size: 80%;
+	width: 550px;
+}
+table#form-table tr:nth-child(even) {
+	background-color: #FFFFFF;
+}
+label.label-text-setting {
+	padding-left: 10px;
+}
+input.input-text {
+	border: none;
+	padding: 10px;
+	border-bottom: solid 1px #0097e6;
+	outline: none;
+	width: 100%;
+}
+input#update-button {
+	border: solid 1px #40739e;
+	padding: 8px;
+	width: 100%;
+	border-radius: 3px;
+	font-weight: 700;
+	background-color: #40739e;
+	color: #FFFFFF;
+}
+input#update-button:hover {
+	cursor: pointer;
+	background-color: #FFFFFF;
+	color: #40739e;
+}
