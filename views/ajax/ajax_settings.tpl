@@ -2,7 +2,7 @@
 [[ template "script". ]]
 <div id="ajax-settings">
 	[[ template "edit_alert". ]]
-	<h4 style="padding-left: 5px; color: #d63031;">Settings</h4>
+	<h4 style="padding-left: 5px; color: #d63031;">Settings Dashboard</h4>
 	<div id="setting-table">
 		<form id="edit-settings">
 			<table id="form-table" cellspacing="0" cellpadding="10">
