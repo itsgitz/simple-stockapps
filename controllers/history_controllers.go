@@ -44,7 +44,7 @@ func UpdateHistory(history_code, history_by, history_notes, item_unit, item_quan
 	case "#001-pick-up":
 		// example:
 		// Anggit Muhamad Ginanjar has picked up 2 cable roll of Cat-6 UTP Cable
-		history_content = history_by + " has picked up " + item_quantity + " " + item_unit_str + " of " + item_name + ", Location: " + item_location + ", " + history_date
+		history_content = history_date + ", " + history_by + " has picked up " + item_quantity + " " + item_unit_str + " of " + item_name + ", Location: " + item_location
 		break
 	case "#002-edit-item":
 		history_content = history_by + " has edited item, item name: " + item_name + " ID: " + item_id
@@ -103,4 +103,46 @@ func (this *MainController) AppJSONGetSideNotificaton(w http.ResponseWriter, r *
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	fmt.Fprintf(w, string(outgoingJSON))
+}
+
+// get only my history
+func (this *MainController) AppMyHistory(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	username_session := sess.GetString("user_fullname")
+
+	if len(username_session) == 0 {
+		w.Header().Set("Content-Type", "application/json")
+		session_timeout := struct{
+			Redirect  bool  `json:"Redirect"`
+		}{}
+		session_timeout.Redirect = true
+		json_val, err := json.Marshal(session_timeout)
+		if err != nil {
+			log.Println("[!] ERROR:", err)
+		}
+		fmt.Fprintf(w, string(json_val))
+	} else {
+		w.Header().Set("Content-Type", "application/json")
+		history, err := models.ModelsGetMyHistory(username_session)
+		if err != nil {
+			errMsg := "[!] ERROR: in ModelsGetMyHistory, Database Server: " + err.Error() + " Please contact the Administrator: anggit.ginanjar@lintasarta.co.id a.k.a AQX Tamvan :)"
+			http.Error(w, errMsg, http.StatusInternalServerError)
+		}
+
+		history_values := make([]History, len(history))
+		for i:=0; i<len(history); i++ {
+			history_values[i].History_id = history[i].History_id
+			history_values[i].History_date = history[i].History_date
+			history_values[i].History_code = history[i].History_code
+			history_values[i].History_by = history[i].History_by
+			history_values[i].History_content = history[i].History_content
+			history_values[i].History_notes = history[i].History_notes
+		}
+
+		json_val, err := json.Marshal(history_values)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		fmt.Fprintf(w, string(json_val))
+	}
 }
