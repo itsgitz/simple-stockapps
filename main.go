@@ -31,6 +31,8 @@ func main() {
 	// ajax sub-url routers
 	router.HandleFunc("/items", main_ctrl.AppItems)
 	router.HandleFunc("/reports", main_ctrl.AppReports)
+	router.HandleFunc("/json_get_my_history", main_ctrl.AppMyHistory)
+
 	router.HandleFunc("/users", main_ctrl.AppUsers)
 
 	// JSON
