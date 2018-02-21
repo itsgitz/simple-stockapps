@@ -1,0 +1,23 @@
+div#history-wrapper {
+	font-size: 90%;
+	line-height: 1.5;
+}
+div#history-all-box {
+	display: none;
+}
+div#history-my-box {
+	display: none;
+}
+div.history-content {
+	padding: 10px;
+	font-weight: 500;
+	background-color: #227093;
+	color: #ffffff;
+	border-radius: 5px;
+	border: solid 1px #d1ccc0;
+}
+div.history-content:hover {
+	cursor: pointer;
+	background-color: #ffffff;
+	color: #227093;
+}
