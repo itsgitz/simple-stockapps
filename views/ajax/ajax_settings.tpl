@@ -2,10 +2,13 @@
 [[ template "script". ]]
 <div id="ajax-settings">
 	[[ template "edit_alert". ]]
-	<h4 style="padding-left: 5px; color: #d63031;">Settings Dashboard</h4>
+	<h4 style="padding-left: 5px; color: #d63031;">Settings Dashboard</h4><hr><br><br>
 	<div id="setting-table">
 		<form id="edit-settings">
 			<table id="form-table" cellspacing="0" cellpadding="10">
+				<tr>
+					<td style="text-align: center;" colspan="2"><img src="/img/user.svg" width="120px;"><br></td>
+				</tr>
 				<tr>
 					<td>ID</td>
 					<td><label id="setting-user-id" class="label-text-setting">[[.Id]]</label></td>

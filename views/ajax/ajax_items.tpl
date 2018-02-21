@@ -3,8 +3,8 @@
 [[ template "script". ]]
 [[ template "loading_bar". ]]
 <div id="app-ajax-items">
-	<h4 style="color: #d63031;">Goods Dashboard</h4>
-	<span style="text-align: justify; color: #636e72;"><i style="font-size: 90%;">You could add, edit or remove (only Administrator privilege) goods in here, Please choose one of navigation options below.</i></span>
+	<h4 style="color: #d63031;">Goods Dashboard</h4><hr>
+	<span style="text-align: justify; color: #636e72;"><i style="font-size: 80%;">You could add, edit or remove (only Administrator privilege) goods in here, Please choose one of navigation options below.</i></span>
 
 	[[ template "side_navigation". ]]
 	<div id="app-form-wrapper">
@@ -43,7 +43,7 @@ $(function() {
 	// when addbutton click
 	addButton.click(function() {
 		var stateObj = { page: "items#add" };
-		history.pushState(stateObj, "page", "/navbar?#navigate_link=/items#add");
+		history.pushState(stateObj, "items", "/navbar?#navigate_link=/items#add");
 		addBox.css("display", "block");
 		removeBox.css("display", "none");
 		$("title").text("Adding Goods - Simple StockApps");
@@ -52,7 +52,7 @@ $(function() {
 	// when removebutton click
 	removeButton.click(function() {
 		var stateObj = { page: "items" };
-		history.pushState(stateObj, "page", "/navbar?#navigate_link=/items");
+		history.pushState(stateObj, "items", "/navbar?#navigate_link=/items");
 		removeBox.css("display", "block");
 		addBox.css("display", "none");
 		$("title").text("Removing Goods - Simple StockApps");

@@ -3,17 +3,16 @@
 		// add user button clicked
 		addUserButton.click(function() {
 			var stateObj = {page: "users#add"};
-			history.pushState(stateObj, "page", "/navbar?#navigate_link=/users#add");
+			history.pushState(stateObj, "users", "/navbar?#navigate_link=/users#add");
 			registeredUserListBox.css("display", "none");
 			newUsersListBox.css("display", "none");
 			addBox.css("display", "block");
 			$("title").text("Add Users - Simple StockApps");
-
 		});
 		// user list button clicked
 		registeredUserListButton.click(function() {
 			var stateObj = {page: "users"};
-			history.pushState(stateObj, "page", "/navbar?#navigate_link=/users");
+			history.pushState(stateObj, "users", "/navbar?#navigate_link=/users");
 			registeredUserListBox.css("display", "block");
 			addBox.css("display", "none");
 			newUsersListBox.css("display", "none");
@@ -22,7 +21,7 @@
 		});
 		newUsersListButton.click(function() {
 			var stateObj = {page: "users#new"};
-			history.pushState(stateObj, "page", "/navbar?#navigate_link=/users#new");
+			history.pushState(stateObj, "users", "/navbar?#navigate_link=/users#new");
 			newUsersListBox.css("display", "block");
 			registeredUserListBox.css("display", "none");
 			addBox.css("display", "none");
