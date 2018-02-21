@@ -25,3 +25,9 @@ func ModelsUpdateHistory(id, date, code, by, content, notes string) error {
 	defer x.Close()
 	return err
 }
+
+func ModelsGetMyHistory(user string) ([]History, error) {
+	get_history := []History{}
+	err := db.Select(&get_history, "SELECT * FROM history WHERE history_by=? ORDER BY history_date DESC", user)
+	return get_history, err
+}
