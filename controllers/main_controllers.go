@@ -439,6 +439,7 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 				typeof_time_period := r.Form["typeof_time_period"][0]	// days, week, month (varchar)
 				item_owner := r.Form["item_owner"][0] // item owner to insert (varchar)
 				item_location := r.Form["item_location"][0] //
+				its_request := r.Form["its_request"][0]
 
 				item_quantity_int, _ := strconv.Atoi(item_quantity)
 				item_limitation_int, _ := strconv.Atoi(item_limitation)
@@ -505,6 +506,9 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 				errModels := models.ModelsInsertDataItems(item_id, item_name, item_model, item_limitation, item_quantity, item_unit, date_of_entry, str_time_prd, item_expired, item_owner, owner_id, item_location, item_status, user_fullname_session)
 				if errModels != nil {
 					log.Println(errModels)
+				} else {
+					//UpdateHistory(history_code, history_by, history_notes, item_unit, item_quantity, item_name, item_id, item_location string)
+					UpdateHistory(its_request, user_fullname_session, "Add items", item_unit, item_quantity, item_name, item_id, item_location)
 				}
 				//log.Println(item_id, item_name, item_model, item_limitation, item_quantity, item_unit, date_of_entry, str_time_prd, item_expired, item_owner, owner_id, item_location, item_status, user_fullname_session)
 			break
@@ -610,6 +614,8 @@ func (this *MainController) AppPickupItem(w http.ResponseWriter, r *http.Request
 
 // update data item
 func (this *MainController) AppJSONUpdateItem(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	user_fullname_session := sess.GetString("user_fullname")
 	r.ParseForm()
 	if r.Method == "GET" {
 		http.Error(w, "NOT FOUND :(", http.StatusNotFound)
@@ -626,6 +632,7 @@ func (this *MainController) AppJSONUpdateItem(w http.ResponseWriter, r *http.Req
 		item_owner := r.Form["item_owner"][0]
 		item_location := r.Form["item_location"][0]
 		date_of_entry := r.Form["date_of_entry"][0]
+		its_request := r.Form["its_request"][0]
 
 		//log.Println(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, time_period, type_period, item_owner, item_location)
 		// convert to integer datatype
@@ -693,18 +700,27 @@ func (this *MainController) AppJSONUpdateItem(w http.ResponseWriter, r *http.Req
 				log.Println(err)
 			}
 			fmt.Fprintf(w, string(sendJson))
+			//UpdateHistory(history_code, history_by, history_notes, item_unit, item_quantity, item_name, item_id, item_location string)
+			UpdateHistory(its_request, user_fullname_session, "Edit items", item_unit, item_quantity, item_name, item_id, item_location)
 		}
 	}
 }
 
 // Remove data from item table in database
 func (this *MainController) AppJSONRemoveItem(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	user_fullname_session := sess.GetString("user_fullname")
 	r.ParseForm()
 	if r.Method == "GET" {
 		http.Error(w, "NOT FOUND BRAAY", http.StatusNotFound)
 	} else if r.Method == "POST" {
 		// get the item_id that will be removed by Administrator
 		get_item_id := r.Form["item_id"][0]
+		its_request := r.Form["its_request"][0]
+		item_unit := r.Form["item_unit"][0]
+		item_quantity := r.Form["item_quantity"][0]
+		item_name:= r.Form["item_name"][0]
+		item_location := r.Form["item_location"][0]
 		//log.Println(get_item_id) // item_id
 		// remove item using ModelsRemoveDataItem()
 		err := models.ModelsRemoveDataItem(get_item_id)
@@ -724,6 +740,8 @@ func (this *MainController) AppJSONRemoveItem(w http.ResponseWriter, r *http.Req
 				log.Println(err)
 			}
 			fmt.Fprintf(w, string(sendJson))
+			//UpdateHistory(history_code, history_by, history_notes, item_unit, item_quantity, item_name, item_id, item_location string)
+			UpdateHistory(its_request, user_fullname_session, "Remove items", item_unit, item_quantity, item_name, get_item_id, item_location)
 		}
 	} else {
 		http.Error(w, "BAD REQUEST COYY", http.StatusBadRequest)

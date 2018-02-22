@@ -4,7 +4,33 @@ const addRequest = "#003-add-item";
 const removeRequest = "#004-remove-item";
 const updateRequest = "#005-update-item"
 
-
+var ws = new WebSocket('ws://localhost:8080/ws');
+// if browser support or not support
+if (window.WebSocket) {
+	console.log("Your web browser is support websocket");
+} else {
+	console.log("Your web browser doesn't support websocket");
+}
+ws.onopen = function() {
+	console.log("WebSocket connection opened!");
+	var greetingCard = "I'm connected with you :), My Platform: " + navigator.platform;
+	ws.send(greetingCard);
+}
+ws.onclose = function() {
+	console.log("WebSocket connection closed!");
+	console.log("Ready: " + ws.readyState);
+	console.log("WebSocket server connection is close... I'll try to reconnecting in 3s ... Or if I always try to reconnecting to websocket server, please clean the cookies and cache in your browser :) -AQX-");
+	setTimeout(function() {
+		window.location = "/";
+	}, 3000);
+	setTimeout(function() {
+		console.log("Establish WebSocket server connection in 1s ... -AQX-")
+		window.location = "/";
+	}, 1000);
+}
+ws.onerror = function(error) {
+	console.log(error);
+}
 // add items handler
 function appFormAddItemsHandler() {
 	var addItemForm = $("form.app-form-add");
@@ -121,14 +147,17 @@ function appFormAddItemsHandler() {
 					typeof_time_period: typeofTimePeriod,	// send type of time period such as Day(s), Week(s), Month(s)
 					item_owner: itemOwner,	// send item owner data
 					item_location: itemLocation, // send item location
-					form_request: "ADD"	// send what kind of request
+					form_request: "ADD",	// send what kind of request
+					its_request: addRequest
 				},
 				success: function(response) {
 					if (response.Message) {
 						alert("Session login has timed out :(");
 						window.location ="/";
 					} else {
-						alert("Successful inserting data!");			
+						alert("Successful inserting data!");
+						ws.send(addRequest);
+						window.location = "/";		
 					}
 				}
 			});
@@ -279,7 +308,7 @@ function getJSONTableDataItems() {
 				resultTable += "    <td>"+ res[i].added_by +"</td>";
 				resultTable += "    <td>"+ res[i].item_status +"</td>";
 				resultTable += "    <td><button class='action-button app-edit' value='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-model='"+res[i].item_model+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-unit='"+res[i].item_unit+"' data-time-period='"+res[i].item_time_period+"' data-item-owner='"+res[i].item_owner+"' data-item-location='"+res[i].item_location+"' data-date-entry='"+res[i].date_of_entry+"' data-item-expired='"+res[i].item_expired+"' data-added-by='"+res[i].added_by+"' data-item-status='"+res[i].item_status+"'>Edit</button></td>";
-				resultTable += "    <td><button class='action-button app-remove' value='"+ res[i].item_id +"' data-item-name='"+res[i].item_name+"' data-item-owner='"+res[i].item_owner+"' data-item-location='"+res[i].item_location+"'>Remove</button></td>";
+				resultTable += "    <td><button class='action-button app-remove' value='"+ res[i].item_id +"' data-item-name='"+res[i].item_name+"' data-item-owner='"+res[i].item_owner+"' data-item-location='"+res[i].item_location+"' data-item-unit="+res[i].item_unit+" data-item-quantity="+res[i].item_quantity+">Remove</button></td>";
 				resultTable += "  </tr>";
 			}
 
@@ -400,9 +429,9 @@ function editTable() {
 		editContent += "  <td>";
 		editContent += "    <select class='edit-location'>";
 		editContent += "       <option value=''>-- Location --</option>";
-		editContent += "       <option value='DC TBS 1st Floor'>DC TBS 1st Floor</option>";
-		editContent += "       <option value='DC TBS 2nd Floor'>DC TBS 2nd Floor</option>";
-		editContent += "       <option value='DC TBS 3rd Floor'>DC TBS 3rd Floor</option>";
+		editContent += "       <option value='Staging Lt.1'>Staging Lt.1</option>";
+		editContent += "       <option value='Staging Lt.3'>Staging Lt.3</option>";
+		editContent += "       <option value='Gudang Bawah Tangga'>Gudang Bawah Tangga</option>";
 		editContent += "    </select>";
 		editContent += "   &nbsp;<label style='color: #27ae60; font-weight: bold;'><i>*Current: "+itemThisLocation+"</i></label>";
 		editContent += "  </td>";
@@ -501,7 +530,8 @@ function editTable() {
 						time_period: editedTimePeriod,
 						type_period: editedTypePeriod,
 						item_owner: editedOwner,
-						item_location: editedLocation
+						item_location: editedLocation,
+						its_request: editRequest
 					},
 					success: function(res) {
 						console.log(res);
@@ -519,6 +549,7 @@ function editTable() {
 								jqueryGetModal.css("display", "block");
 							}
 						}
+						ws.send(editRequest);
 					}
 				});
 			}
@@ -539,6 +570,8 @@ function removeTable() {
 		var btnItemNameAttr = $(this).attr("data-item-name");
 		var btnItemOwnerAttr = $(this).attr("data-item-owner");
 		var btnItemLocation = $(this).attr("data-item-location");
+		var btnItemUnit = $(this).attr("data-item-unit");
+		var btnItemQuantity = $(this).attr("data-item-quantity");
 
 		// show modal / popup
 		var jqueryGetModal = $("div#prompt-remove-alert");
@@ -590,13 +623,20 @@ function removeTable() {
 				async: true,
 				method: "POST",
 				data: {
-					item_id: btnValue
+					//UpdateHistory(history_code, history_by, history_notes, item_unit, item_quantity, item_name, item_id, item_location string)
+					item_id: btnValue,
+					item_unit: btnItemUnit,
+					item_quantity: btnItemQuantity,
+					item_name: btnItemNameAttr,
+					item_location: btnItemLocation,
+					its_request: removeRequest
 				},
 				success: function(res) {
 					console.log(res);
 					// if success, show 
 					if (res.redirect) {
 						$("div.tbl-content-modal").html("<p style='padding: 10px; font-weight: bold; color: #3498db;'>"+res.message+" Please wait ... </p>");
+						ws.send(removeRequest);
 						setTimeout(function() {
 							jqueryGetModal.fadeOut(300);
 						}, 3000);

@@ -44,18 +44,18 @@ func UpdateHistory(history_code, history_by, history_notes, item_unit, item_quan
 	case "#001-pick-up":
 		// example:
 		// Anggit Muhamad Ginanjar has picked up 2 cable roll of Cat-6 UTP Cable
-		history_content = history_date + ", " + history_by + " has picked up " + item_quantity + " " + item_unit_str + " of " + item_name + ", Location: " + item_location
+		history_content = history_date + ", " + history_by + " has picked up " + item_quantity + " " + item_unit_str + " of " + item_name + ", Location: " + item_location + " ID: #" + item_id
 		break
 	case "#002-edit-item":
-		history_content = history_by + " has edited item, item name: " + item_name + " ID: " + item_id
+		history_content = history_date + ", " + history_by + " has edited item, name: " + item_name + ", Location: " + item_location + " ID: #" + item_id
 		break
 	case "#003-add-item":
-		history_content = history_by + " has added item, item name: " + item_name + " ID: " + item_id
+		history_content = history_date + ", " + history_by + " has added item, name: " + item_name + ", Location: " + item_location + " ID: #" + item_id
 		break
 	case "#004-remove-item":
-		history_content = history_by + " has removed item, item name: " + item_name + " ID: " + item_id
+		history_content = history_date + ", " + history_by + " has removed item, name: " + item_name + ", Location: " + item_location + " ID: #" + item_id
 	case "#005-update-item":
-		history_content = history_by + " has updated item, item name: " + item_name + " ID: " + item_id
+		history_content = history_date + ", " + history_by + " has updated item, name: " + item_name + ", Location: " + item_location + " ID: #" + item_id
 		break
 	}
 

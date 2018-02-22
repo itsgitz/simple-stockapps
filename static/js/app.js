@@ -53,6 +53,51 @@ ws.onmessage = function(e) {
 					}
 				});
 			break;
+			case "#002-edit-item":
+				tableBox.load(" #app-table-box", function() {
+					appTableHandler();
+					tableBox.hide();
+					tableBox.fadeIn(300);
+				});
+				sideNotificationBar.load(" #app-side-notif", function() {
+					appAjaxNotif();
+					sideNotificationBar.hide();
+					sideNotificationBar.fadeIn(300);
+					if ($(window).width() < 750) {
+						$("div#app-side-notif").css("display", "none");
+					}
+				});
+			break;
+			case "#003-add-item":
+				tableBox.load(" #app-table-box", function() {
+					appTableHandler();
+					tableBox.hide();
+					tableBox.fadeIn(300);
+				});
+				sideNotificationBar.load(" #app-side-notif", function() {
+					appAjaxNotif();
+					sideNotificationBar.hide();
+					sideNotificationBar.fadeIn(300);
+					if ($(window).width() < 750) {
+						$("div#app-side-notif").css("display", "none");
+					}
+				});
+			break;
+			case "#004-remove-item":
+				tableBox.load(" #app-table-box", function() {
+					appTableHandler();
+					tableBox.hide();
+					tableBox.fadeIn(300);
+				});
+				sideNotificationBar.load(" #app-side-notif", function() {
+					appAjaxNotif();
+					sideNotificationBar.hide();
+					sideNotificationBar.fadeIn(300);
+					if ($(window).width() < 750) {
+						$("div#app-side-notif").css("display", "none");
+					}
+				});
+			break;
 		}
 	}
 }
