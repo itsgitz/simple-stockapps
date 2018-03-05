@@ -103,11 +103,13 @@ input.app-login-btn:hover {
 div#app-table-box {
 	overflow-x: auto;
 	position: absolute;
-	top: 220px;
+	top: 260px;
 	left: 0;
 	width: 75%;
 }
 div#app-table-nav {
+	position: absolute;
+	top: 190px;
 	padding: 5px;
 	padding-top: 10px;
 	padding-left: : 30px;
@@ -132,7 +134,7 @@ div#app-side-notif {
 	width: 24%;
 	position: absolute;
 	right: 0;
-	top: 160px;
+	top: 210px;
 	background-color: #FFFFFF;
 	border: solid 1px #ddd;
 	overflow-x: hidden;
@@ -206,7 +208,7 @@ div#app-pickup-alert {
 
 div.app-pickup-content {
 	background-color: #FEFEFE;
-	margin: 50px auto;
+	margin: 70px auto;
 	padding: 20px;
 	border: solid 1px #888;
 	width: 80%;
@@ -261,8 +263,8 @@ button.modal-button:hover {
 /* home searchbar */
 input#app-home-searchbar {
 	position: absolute;
-	top: 160px;
-	right: 25%;
+	top: 20px;
+	right: 0%;
 	background-image: url(/img/searchicon.png);
 	background-size: 12px;
 	background-position: 7px 7px;

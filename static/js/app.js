@@ -1,5 +1,5 @@
 // jQuery.3.2.1
-var ws = new WebSocket('ws://localhost:8080/ws');
+var ws = new WebSocket('ws://10.24.44.107:8080/ws');
 // all websocket request
 const pickupRequest = "#001-pick-up";
 
