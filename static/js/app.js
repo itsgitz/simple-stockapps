@@ -1,5 +1,5 @@
 // jQuery.3.2.1
-var ws = new WebSocket('ws://10.24.44.107:8080/ws');
+var ws = new WebSocket('ws://localhost:8080/ws');
 // all websocket request
 const pickupRequest = "#001-pick-up";
 
@@ -473,10 +473,13 @@ function appSideNotification() {
 	var navigationBar = document.getElementById("app-navbar");
 	var jqueryGetSideNotificationBar = $("div#app-side-notif");
 	var jqueryGetTableBox = $("div#app-table-box");
+	var jqueryGetAppTableNav = $("div#app-table-nav");
+	var jqueryHomeSearchBar = $("div#app-home-searchbar");
 	
 	if (navigationBar) {
-		jqueryGetSideNotificationBar.css("top", "200px");
-		jqueryGetTableBox.css("top", "260px");
+		jqueryGetSideNotificationBar.css("top", "250px");
+		jqueryGetTableBox.css("top", "300px");
+		jqueryGetAppTableNav.css("top", "230px");
 	}
 	appAjaxNotif();
 }
@@ -507,6 +510,6 @@ function appHomeSerachBar() {
 	var isLoggedIn = $("div#app-user-islogged-in").text();
 	var homeSearchBar = $("input#app-home-searchbar");
 	if (isLoggedIn == "true") {
-		homeSearchBar.css("top", "200px");
+		homeSearchBar.css("top", "20px");
 	}
 }
