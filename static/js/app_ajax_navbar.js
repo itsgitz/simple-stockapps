@@ -108,7 +108,7 @@ function appAjaxController() {
 	// reports page click
 	$("a.ajax-search-reports").click(function() {
 		var stateObj = { page: "search_reports" };
-		history.pushState(stateObj, "search_reports", "/navbar#navigate_link=/search_reports");
+		history.pushState(stateObj, "search_reports", "/navbar?#navigate_link=/search_reports");
 		$("title").text("Reports Dashboard - Simple StockApps");
 		appAjaxRequestPage("/search_reports");
 	})

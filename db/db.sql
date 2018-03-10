@@ -56,7 +56,8 @@ CREATE TABLE IF NOT EXISTS `history` (
 	`history_code` VARCHAR(16) NOT NULL,
 	`history_by` VARCHAR(64) NOT NULL,
 	`history_content` TEXT NOT NULL,
-	`history_notes` TEXT NOT NULL
+	`history_notes` TEXT NOT NULL,
+	`picked_item` INT NOT NULL
 )
 ENGINE=InnoDB
 ROW_FORMAT=COMPRESSED
