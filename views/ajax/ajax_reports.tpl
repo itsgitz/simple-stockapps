@@ -217,6 +217,7 @@
 									window.location = "/";
 								} else {
 									var getContent = document.getElementById("history-modal-content");
+									var historyMyBox = $("div#history-my-box");
 									getContent.innerHTML = "<h3 style='padding: 10px; font-weight: bold; color: #3498db;'>" + res.message; + "</h2>";
 									setTimeout(function() {
 										$("div#history-modal").fadeOut(300);
@@ -227,6 +228,8 @@
 										}
 									}
 									ws.send("#006-cancel-pick-up");
+									historyMyBox.load(" #history-my-box");
+									appGetMyHistory();
 								}
 							}
 						});
