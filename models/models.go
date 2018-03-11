@@ -196,3 +196,16 @@ func ModelsPickupItem(item_id, item_quantity, item_status string) error {
 func ModelsInsertDataTest(data ...string) {
 	log.Println(data)
 }
+
+// cancel pickup request
+func ModelsUpdateCancelPickUp(item_id string, reverse_quantity int) error {
+	x, err := db.Queryx("UPDATE items SET item_quantity=? WHERE item_id=?", reverse_quantity, item_id)
+	defer x.Close()
+	return err
+}
+
+func ModelsUpdateHistoryCancel(status, history_id string) error {
+	x, err := db.Queryx("UPDATE history SET history_status=? WHERE history_id=?", status, history_id)
+	defer x.Close()
+	return err
+}

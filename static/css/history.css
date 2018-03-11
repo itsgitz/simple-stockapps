@@ -55,3 +55,26 @@ button.close-modal:hover {
 	background-color: #FFFFFF;
 	color: #d63031;
 }
+
+button.cancel-pick {
+	background-color: #e67e22;
+	border: solid 1px #e67e22;
+	padding: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	border-radius: 3px;
+	color: #FFFFFF;
+}
+button.cancel-pick:hover {
+	background-color: #FFFFFF;
+	color: #e67e22;
+}
+span.canceled-text {
+	background-color: #2ecc71;
+	border: solid 1px #2ecc71;
+	padding: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	border-radius: 3px;
+	color: #ffffff;
+}

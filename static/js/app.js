@@ -98,6 +98,36 @@ ws.onmessage = function(e) {
 					}
 				});
 			break;
+			case "#005-update-item":
+				tableBox.load(" #app-table-box", function() {
+					appTableHandler();
+					tableBox.hide();
+					tableBox.fadeIn(300);
+				});
+				sideNotificationBar.load(" #app-side-notif", function() {
+					appAjaxNotif();
+					sideNotificationBar.hide();
+					sideNotificationBar.fadeIn(300);
+					if ($(window).width() < 750) {
+						$("div#app-side-notif").css("display", "none");
+					}
+				});
+			break;
+			case "#006-cancel-pick-up":
+				tableBox.load(" #app-table-box", function() {
+					appTableHandler();
+					tableBox.hide();
+					tableBox.fadeIn(300);
+				});
+				sideNotificationBar.load(" #app-side-notif", function() {
+					appAjaxNotif();
+					sideNotificationBar.hide();
+					sideNotificationBar.fadeIn(300);
+					if ($(window).width() < 750) {
+						$("div#app-side-notif").css("display", "none");
+					}
+				});
+			break;
 		}
 	}
 }
@@ -346,7 +376,7 @@ function appPickupFunction() {
 
 		pickupYes.click(function () {
 			// number of picked up by user
-			var itemHowMuch = $("input.app-howmuch").val();
+			var itemHowMuch = $("input.app-howmuch").val(); // a.k.a picked item
 
 			var alertPickupMessage;
 			var modalPickupAlert = document.getElementById("app-pickup-alert");
@@ -367,7 +397,7 @@ function appPickupFunction() {
 							item_id: getItemId,
 							item_limitation: getLimitation,
 							item_quantity_picked: quantityToMin,
-							item_howmuch: itemHowMuch,
+							item_howmuch: itemHowMuch, // a.k.a picked item
 							request: pickupRequest,
 							notes: textNotes,
 							item_unit: getUnit,

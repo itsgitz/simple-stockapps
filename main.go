@@ -48,6 +48,8 @@ func main() {
 	router.HandleFunc("/json_update_item", main_ctrl.AppJSONUpdateItem)
 	// Pickup item url
 	router.HandleFunc("/json_pickup_item", main_ctrl.AppPickupItem)
+	// cancel pickup request
+	router.HandleFunc("/json_cancel_pick", main_ctrl.AppCancelPickUp)
 
 	// add user url
 	router.HandleFunc("/add_user", main_ctrl.AppAddUser)

@@ -11,7 +11,7 @@ import (
 	"simple_stockapps/models"
 )
 
-func UpdateHistory(history_code, history_by, history_notes, item_unit, item_quantity, item_name, item_id, item_location string) {
+func UpdateHistory(history_code, history_by, history_notes, item_unit, item_quantity, item_name, item_id, item_location, picked_item, history_status string) {
 	waktu := time.Now()
 	// generate history id
 	history_id := generator.GenerateID()
@@ -38,7 +38,12 @@ func UpdateHistory(history_code, history_by, history_notes, item_unit, item_quan
 	const addRequest = "#003-add-item";
 	const removeRequest = "#004-remove-item";
 	const updateRequest = "#005-update-item";
+	const cancelPickUp = "#006-cancel-pick-up";
 	*/
+
+	// fill picked_item column with value
+	// if history_code request is except #001-pick-up or "Pick up item", than picked_item is zero in database
+	// I'm using picked_item column for "Cancel Request History"
 
 	switch(history_code) {
 	case "#001-pick-up":
@@ -57,10 +62,12 @@ func UpdateHistory(history_code, history_by, history_notes, item_unit, item_quan
 	case "#005-update-item":
 		history_content = history_date + ", " + history_by + " has updated item, name: " + item_name + ", Location: " + item_location + " ID: #" + item_id
 		break
+	case "#006-cancel-pick-up":
+		history_content = history_date + ", " + history_by + " has canceled pick some items"
 	}
 
 	// inserting history into database
-	err := models.ModelsUpdateHistory(history_id, history_date, history_code, history_by, history_content, history_notes)
+	err := models.ModelsUpdateHistory(history_id, history_date, history_code, history_by, history_content, history_notes, picked_item, item_id, history_status)
 	// as always i use this error handler
 	if err != nil {
 		log.Println(err)
@@ -75,6 +82,9 @@ type History struct{
 	History_by       string `json:"history_by"`
 	History_content  string `json:"history_content"`
 	History_notes    string `json:"history_notes"`
+	Picked_item      int    `json:"picked_item"`
+	Item_id          string `json:"item_id"`
+	History_status 	 string `json:"history_status"`
 }
 
 // get history 
@@ -96,6 +106,9 @@ func (this *MainController) AppJSONGetSideNotificaton(w http.ResponseWriter, r *
 		allValues[i].History_by = values[i].History_by
 		allValues[i].History_content = values[i].History_content
 		allValues[i].History_notes = values[i].History_notes
+		allValues[i].Picked_item = values[i].Picked_item
+		allValues[i].Item_id = values[i].Item_id
+		allValues[i].History_status = values[i].History_status
 	}
 	outgoingJSON, err := json.Marshal(allValues)
 	if err != nil {
@@ -137,6 +150,9 @@ func (this *MainController) AppMyHistory(w http.ResponseWriter, r *http.Request)
 			history_values[i].History_by = history[i].History_by
 			history_values[i].History_content = history[i].History_content
 			history_values[i].History_notes = history[i].History_notes
+			history_values[i].Picked_item = history[i].Picked_item
+			history_values[i].Item_id = history[i].Item_id
+			history_values[i].History_status = history[i].History_status
 		}
 
 		json_val, err := json.Marshal(history_values)

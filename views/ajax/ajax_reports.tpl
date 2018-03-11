@@ -16,6 +16,35 @@
 
 [[ define "script" ]]
 <script>
+	var ws = new WebSocket('ws://localhost:8080/ws');
+	// all websocket request
+
+	// if browser support or not support
+	if (window.WebSocket) {
+		console.log("Your web browser is support websocket");
+	} else {
+		console.log("Your web browser doesn't support websocket");
+	}
+	ws.onopen = function() {
+		console.log("WebSocket connection opened!");
+		var greetingCard = "I'm connected with you :), My Platform: " + navigator.platform;
+		ws.send(greetingCard);
+	}
+	ws.onclose = function() {
+		console.log("WebSocket connection closed!");
+		console.log("Ready: " + ws.readyState);
+		console.log("WebSocket server connection is close... I'll try to reconnecting in 3s ... Or if I always try to reconnecting to websocket server, please clean the cookies and cache in your browser :) -AQX-");
+		setTimeout(function() {
+			window.location = "/";
+		}, 3000);
+		setTimeout(function() {
+			console.log("Establish WebSocket server connection in 1s ... -AQX-")
+			window.location = "/";
+		}, 1000);
+	}
+	ws.onerror = function(error) {
+		console.log(error);
+	}
 	var allHistoryButton = $("button.history-all");
 	var myHistoryButton = $("button.history-my");
 	var allHistoryBox = $("div#history-all-box");
@@ -70,7 +99,11 @@
 				resultHistory = "<br>";
 				for (i=0; i<respLength; i++) {
 					resultHistory += "<div class='history-content' data-by='"+res[i].history_by+"' data-notes='"+res[i].history_notes+"' title='Click for display notes'>";
-					resultHistory += res[i].history_content;
+					if (res[i].history_status == "Canceled") {
+						resultHistory += res[i].history_content + " (Canceled)";
+					} else {
+						resultHistory += res[i].history_content;
+					}
 					resultHistory += "</div>";
 				}
 				document.getElementById("history-all-box").innerHTML = resultHistory;
@@ -114,8 +147,12 @@
 				var resultHistory;
 				resultHistory = "<br>";
 				for (i=0; i<respLength; i++) {
-					resultHistory += "<div class='history-content' data-by='"+res[i].history_by+"' data-notes='"+res[i].history_notes+"' title='Click for display notes'>";
-					resultHistory += res[i].history_content;
+					resultHistory += "<div class='history-content' data-history-id='"+res[i].history_id+"' data-code='"+res[i].history_code+"' data-by='"+res[i].history_by+"' data-notes='"+res[i].history_notes+"' data-item-id='"+res[i].item_id+"' data-picked-item='"+res[i].picked_item+"' data-history-status='"+res[i].history_status+"' title='Click for display notes'>";
+					if (res[i].history_status == "None") {
+						resultHistory += res[i].history_content;
+					} else {
+						resultHistory += res[i].history_content + " (Canceled)";
+					}
 					resultHistory += "</div>";
 				}
 				document.getElementById("history-my-box").innerHTML = resultHistory;
@@ -124,6 +161,11 @@
 				historyContent.click(function() {
 					var thisBy = $(this).attr("data-by");
 					var thisNotes = $(this).attr("data-notes");
+					var thisCode = $(this).attr("data-code");
+					var thisItemId = $(this).attr("data-item-id"); // item id
+					var thisPickedItem = $(this).attr("data-picked-item"); // number of picked item before
+					var thisHistoryId = $(this).attr("data-history-id");
+					var thisHistoryStatus = $(this).attr("data-history-status");
 					var notes;
 					var jqueryGetModal = $("div#history-modal");
 					var getModal = document.getElementById("history-modal");
@@ -131,7 +173,14 @@
 					notes = "<h4>Notes</h4><hr>";
 					notes += "<p><i>" + thisNotes + "</i></p>";
 					notes += "<p> -"+ thisBy +"- </p>";
-					notes += "<p style='text-align: center;'><button class='close-modal'>Close</button></p>";
+					notes += "<p style='text-align: center;'>"
+					notes += "  <button class='close-modal'>Close</button>";
+					if (thisCode == "#001-pick-up" && thisHistoryStatus == "None") {
+						notes += "   <button class='cancel-pick'>Cancel Pick up</button>";
+					} else if (thisCode == "#001-pick-up" && thisHistoryStatus == "Canceled") {
+						notes += "   <span class='canceled-text'>Canceled</span>";
+					}
+					notes += "</p>";
 
 					jqueryGetModal.fadeIn(300);
 					window.onclick = function(e) {
@@ -141,8 +190,46 @@
 					}
 
 					getContent.innerHTML = notes;
-					$("button.close-modal").click(function() {
+					var closeButtonModal = $("button.close-modal");
+					var cancelPickButton = $("button.cancel-pick");
+
+					// close button
+					closeButtonModal.click(function() {
 						jqueryGetModal.fadeOut(300);
+					});
+
+					// cancel pick up
+					cancelPickButton.click(function() {
+						//console.log(thisItemId, thisPickedItem);
+						$.ajax({
+							url: "/json_cancel_pick",
+							async: true,
+							method: "POST",
+							data: {
+								history_id: thisHistoryId,
+								item_id: thisItemId,
+								picked_item: thisPickedItem
+							},
+							success: function(res) {
+								console.log(res);
+								if (res.Message_Timeout) {
+									alert("Session has timeout :(");
+									window.location = "/";
+								} else {
+									var getContent = document.getElementById("history-modal-content");
+									getContent.innerHTML = "<h3 style='padding: 10px; font-weight: bold; color: #3498db;'>" + res.message; + "</h2>";
+									setTimeout(function() {
+										$("div#history-modal").fadeOut(300);
+									}, 3000);
+									window.onclick = function(e) {
+										if (e.target == getContent) {
+											$("div#history-modal-content").css("display", "block");
+										}
+									}
+									ws.send("#006-cancel-pick-up");
+								}
+							}
+						});
 					});
 				});
 			}

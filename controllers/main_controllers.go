@@ -508,7 +508,7 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 					log.Println(errModels)
 				} else {
 					//UpdateHistory(history_code, history_by, history_notes, item_unit, item_quantity, item_name, item_id, item_location string)
-					UpdateHistory(its_request, user_fullname_session, "Add items", item_unit, item_quantity, item_name, item_id, item_location)
+					UpdateHistory(its_request, user_fullname_session, "Add items", item_unit, item_quantity, item_name, item_id, item_location, "0", "None")
 				}
 				//log.Println(item_id, item_name, item_model, item_limitation, item_quantity, item_unit, date_of_entry, str_time_prd, item_expired, item_owner, owner_id, item_location, item_status, user_fullname_session)
 			break
@@ -579,7 +579,7 @@ func (this *MainController) AppPickupItem(w http.ResponseWriter, r *http.Request
 			// note: history_code = itsRequest variable
 			//       history_by = user_fullname_session
 			//       history_notes = itsNotes
-			UpdateHistory(itsRequest, user_fullname_session, itsNotes, item_unit, item_howmuch, item_name, item_id, item_location)
+			UpdateHistory(itsRequest, user_fullname_session, itsNotes, item_unit, item_howmuch, item_name, item_id, item_location, item_howmuch, "None")
 			errPickup := models.ModelsPickupItem(item_id, item_quantity_picked, item_status)
 			if errPickup != nil {
 				http.Error(w, errPickup.Error(), http.StatusInternalServerError)
@@ -608,6 +608,77 @@ func (this *MainController) AppPickupItem(w http.ResponseWriter, r *http.Request
 			json_message_session_timedout, err := json.Marshal(responseMessageSessionTimedOut)
 			if err != nil { log.Println(err) }
 			fmt.Fprintf(w, string(json_message_session_timedout))
+		}
+	}
+}
+
+// cancel pickup request
+func (this *MainController) AppCancelPickUp(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	username_session := sess.GetString("user_name")
+	user_fullname_session := sess.GetString("user_fullname")
+
+	r.ParseForm()
+	if r.Method == "GET" {
+		http.Error(w, "NOT FOUND :(", http.StatusNotFound)
+	} else if r.Method == "POST" {
+		if len(username_session) != 0 {
+			history_id := r.Form["history_id"][0] // get history id
+			item_id := r.Form["item_id"][0] // get item id
+			picked_item := r.Form["picked_item"][0] // get number of picked item
+
+			// get current quantity
+			current_quantity, err := models.ModelsGetCurrentQuantity(item_id)
+			if err != nil {
+				log.Println(err)
+			}
+
+			// change current quantity, with adding current quantity and number of picked item
+			int_picked_item, _ := strconv.Atoi(picked_item)
+			reverse_quantity := current_quantity + int_picked_item
+
+			log.Println("Reverse:", reverse_quantity)
+			log.Println(item_id, picked_item)
+			log.Println(current_quantity)
+			log.Println("history_id:", history_id)
+			
+			// cancel request
+			errCancel := models.ModelsUpdateCancelPickUp(item_id, reverse_quantity)
+			if errCancel != nil {
+				log.Println(errCancel)
+			} else {
+				w.Header().Set("Content-Type", "application/json")
+				success := struct{
+					Success  bool  `json:"success"`
+					Message  string `json:"message"`
+				}{
+					Success:  true,
+					Message:  "Successful canceled pick up",
+				}
+
+				json_val, err := json.Marshal(success)
+				if err != nil { log.Println(err) }
+				fmt.Fprintf(w, string(json_val))
+
+				errHistoryCancel := models.ModelsUpdateHistoryCancel("Canceled", history_id)
+				if err != nil {
+					log.Println(errHistoryCancel)
+				}
+				//UpdateHistory(history_code, history_by, history_notes, item_unit, item_quantity, item_name, item_id, item_location, 
+				//picked_item, history_status string)
+				UpdateHistory("#006-cancel-pick-up", user_fullname_session, "Canceled Request", "None", "None", "None", "None", "None", "0", "None")
+			}
+		} else {
+			w.Header().Set("Content-Type", "application/json")
+			responseMessageSessionTimedOut := struct{
+				Message  bool  `json:"Message_Timeout"`
+			}{
+				Message: true,
+			}
+
+			json_val, err := json.Marshal(responseMessageSessionTimedOut)
+			if err != nil { log.Println(err) }
+			fmt.Fprintf(w, string(json_val))
 		}
 	}
 }
@@ -701,7 +772,7 @@ func (this *MainController) AppJSONUpdateItem(w http.ResponseWriter, r *http.Req
 			}
 			fmt.Fprintf(w, string(sendJson))
 			//UpdateHistory(history_code, history_by, history_notes, item_unit, item_quantity, item_name, item_id, item_location string)
-			UpdateHistory(its_request, user_fullname_session, "Edit items", item_unit, item_quantity, item_name, item_id, item_location)
+			UpdateHistory(its_request, user_fullname_session, "Edit items", item_unit, item_quantity, item_name, item_id, item_location, "0", "None")
 		}
 	}
 }
@@ -741,7 +812,7 @@ func (this *MainController) AppJSONRemoveItem(w http.ResponseWriter, r *http.Req
 			}
 			fmt.Fprintf(w, string(sendJson))
 			//UpdateHistory(history_code, history_by, history_notes, item_unit, item_quantity, item_name, item_id, item_location string)
-			UpdateHistory(its_request, user_fullname_session, "Remove items", item_unit, item_quantity, item_name, get_item_id, item_location)
+			UpdateHistory(its_request, user_fullname_session, "Remove items", item_unit, item_quantity, item_name, get_item_id, item_location, "0", "None")
 		}
 	} else {
 		http.Error(w, "BAD REQUEST COYY", http.StatusBadRequest)
@@ -1169,6 +1240,7 @@ func (this *MainController) AppSearchReports(w http.ResponseWriter, r *http.Requ
 	}
 }
 
+// update user setting
 func (this *MainController) AppUpdateSetting(w http.ResponseWriter, r *http.Request) {
 	sess := session.Start(w, r)
 	username_session := sess.GetString("user_name")
