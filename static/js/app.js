@@ -228,6 +228,7 @@ function appTableHandler() {
 function appShowItemsTable(res) {
 	var dataLength = res.length;
 	var isLoggedIn = $("div#app-user-islogged-in").text();
+	var isAdmin = $("div#app-user-is-admin").text();
 	var tableMonitoring = "<table id='app-table' class='app-table' border='0' cellpadding='12' cellspacing='0'>";
 	// window hash
 	var windowHash = window.location.hash;
@@ -248,7 +249,7 @@ function appShowItemsTable(res) {
 	tableMonitoring += "  <th>Status</th>";
 	
 	if (isLoggedIn == "true") {
-		tableMonitoring += "  <th>Action</th>";
+		tableMonitoring += "  <th colspan='2'>Action</th>";
 	}
 
 	// if data length (json) is exists or more than zero (0)
@@ -271,6 +272,9 @@ function appShowItemsTable(res) {
 			tableMonitoring += "    <td class='tb-status'>"+ res[i].item_status +"</td>";
 			if (isLoggedIn == "true") {
 				tableMonitoring += "    <td><a id='app-pick-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"' data-item-unit='"+res[i].item_unit+"' data-location='"+res[i].item_location+"'>Pick Up</a></td>";
+				if (isAdmin == "true") {
+					tableMonitoring += "     <td><a id='app-add-qty-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"' data-item-unit='"+res[i].item_unit+"' data-location='"+res[i].item_location+"'><img src='img/plus.svg' width='20px' title='Add Quantity'></a></td></td>"
+				}
 			}
 			tableMonitoring += "  </tr>";
 		}
