@@ -151,7 +151,7 @@
 					var thisUserName = $(this).attr("data-user-name");
 					var thisUserFullName = $(this).attr("data-user-fullname");
 					var modalTable;
-					
+
 					// open popup section ...
 					var modal = document.getElementById("remove-modal-user");
 					var jqueryGetModal = $("div#remove-modal-user");
