@@ -49,6 +49,32 @@ ENGINE=InnoDB
 ROW_FORMAT=COMPRESSED
 KEY_BLOCK_SIZE=8;
 
+CREATE TABLE IF NOT EXISTS `items_current_used` (
+	`item_id` VARCHAR(16) NOT NULL PRIMARY KEY,
+	`name` VARCHAR(254) NOT NULL,
+	`in` DATETIME NOT NULL,
+	`quantity` INT NOT NULL,
+	`used` INT NOT NULL,
+	`rest` INT NOT NULL,
+	`status` VARCHAR(32) NOT NULL
+)
+ENGINE=InnoDB
+ROW_FORMAT=COMPRESSED
+KEY_BLOCK_SIZE=8;
+
+CREATE TABLE IF NOT EXISTS `items_report_storage` (
+	`item_id` VARCHAR(16) NOT NULL PRIMARY KEY,
+	`name` VARCHAR(254) NOT NULL,
+	`in` DATETIME NOT NULL,
+	`quantity` INT NOT NULL,
+	`used` INT NOT NULL,
+	`rest` INT NOT NULL,
+	`status` VARCHAR(32) NOT NULL
+)
+ENGINE=InnoDB
+ROW_FORMAT=COMPRESSED
+KEY_BLOCK_SIZE=8;
+
 -- History table for history/log and notification backend storage
 CREATE TABLE IF NOT EXISTS `history` (
 	`history_id` VARCHAR(16) NOT NULL PRIMARY KEY,

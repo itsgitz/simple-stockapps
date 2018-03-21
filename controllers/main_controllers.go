@@ -116,6 +116,32 @@ type Items struct {
 	Redirect 			bool    `json:"redirect"`
 }
 
+type Items_Current_Used struct {
+	Item_id             string  `json:"item_id"`
+	Name                string  `json:"name"`
+	In                  string  `json:"in"`
+	Quantity            int     `json:"quantity"`
+	Used                int     `json:"used"`
+	Rest                int     `json:"rest"`
+	Status              string  `json:"status"`
+}
+
+type Items_Report_Storage struct {
+	Item_id             string  `json:"item_id"`
+	Name                string  `json:"name"`
+	In                  string  `json:"in"`
+	Quantity            int     `json:"quantity"`
+	Used                int     `json:"used"`
+	Rest                int     `json:"rest"`
+	Status              string  `json:"status"`
+}
+
+func (this *MainController) AppGetICU(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	val, err := models
+}
+
 // only lintasarta's items will be showed
 func (this *MainController) AppJSONOurItemsData(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -504,8 +530,12 @@ func (this *MainController) AppItems(w http.ResponseWriter, r *http.Request) {
 
 				// inserting all of data
 				errModels := models.ModelsInsertDataItems(item_id, item_name, item_model, item_limitation, item_quantity, item_unit, date_of_entry, str_time_prd, item_expired, item_owner, owner_id, item_location, item_status, user_fullname_session)
-				if errModels != nil {
+				errICU := models.ModelsInsertICU(item_id, item_name, date_of_entry, item_quantity, "0", item_quantity, item_status)
+				errIRS := models.ModelsInsertIRS(item_id, item_name, date_of_entry, item_quantity, "0", item_quantity, item_status)
+				if errModels != nil && errICU != nil {
 					log.Println(errModels)
+					log.Println(errICU)
+					log.Println(errIRS)
 				} else {
 					//UpdateHistory(history_code, history_by, history_notes, item_unit, item_quantity, item_name, item_id, item_location string)
 					UpdateHistory(its_request, user_fullname_session, "Add items", item_unit, item_quantity, item_name, item_id, item_location, "0", "None")

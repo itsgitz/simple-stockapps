@@ -88,6 +88,32 @@ func ModelsPrintItemsTableRows() int {
 	return number_of_rows
 }
 
+type Items_Current_Used struct {
+	Item_id             string  `json:"item_id"`
+	Name                string  `json:"name"`
+	In                  string  `json:"in"`
+	Quantity            int     `json:"quantity"`
+	Used                int     `json:"used"`
+	Rest                int     `json:"rest"`
+	Status              string  `json:"status"`
+}
+
+type Items_Report_Storage struct {
+	Item_id             string  `json:"item_id"`
+	Name                string  `json:"name"`
+	In                  string  `json:"in"`
+	Quantity            int     `json:"quantity"`
+	Used                int     `json:"used"`
+	Rest                int     `json:"rest"`
+	Status              string  `json:"status"`
+}
+
+func ModelsGetICU() Items_Current_Used[] {
+	val := []Items_Current_Used{}
+
+	query := fmt.Sprintf()
+}
+
 // Searching item using this function
 func ModelsSearchForItems(search, cat string) []Items_Columns {
 	items_value := []Items_Columns{}
@@ -172,12 +198,33 @@ func ModelsInsertDataItems(data ...string) error {
 	return err
 }
 
+// insert items_current_used (ICU) and items_report_storage (IRS) table
+//
+func ModelsInsertICU(item_id, name, in, quantity, used, rest, status string) error {
+	sql_query := `INSERT INTO items_current_used (item_id, name, in, quantity, used, rest, status) VALUES
+		(?, ?, ?, ?, ?, ?, ?)
+	`
+	x, err := db.Queryx(sql_query, item_id, name, in, quantity, used, rest, status)
+	defer x.Close()
+	return err
+}
+
+func ModelsInsertIRS(item_id, name, in, quantity, used, rest, status string) error {
+	sql_query := `INSERT INTO items_report_storage (item_id, name, in, quantity, used, rest, status) VALUES
+		(?, ?, ?, ?, ?, ?, ?)
+	`
+	x, err := db.Queryx(sql_query, item_id, name, in, quantity, used, rest, status)
+	defer x.Close()
+	return err
+}
+
 // ModelsRemoveDataItem() is function that used for removing an item with the given ID
 func ModelsRemoveDataItem(item_id string) error {
 	x, err := db.Queryx("DELETE FROM items WHERE item_id=?", item_id)
 	defer x.Close()
 	return err
 }
+
 
 // ModelsUpdateDataItem() is function that used for updating an item with the given ID
 //func ModelsUpdateDataItem(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, item_time_period, item_expired, item_owner, item_location, item_status string) error {
