@@ -11,7 +11,8 @@
 		<link rel="stylesheet" href="/css/settings.css?[[.HtmlScriptVersion]]">
 		<link rel="stylesheet" href="/css/history.css?[[.HtmlScriptVersion]]">
 		<link rel="icon" href="/img/lintasarta_icon.png" type="image/gif">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+		<script src="/js/jquery-3.3.1.min.js"></script>
 		<script src="/js/all_items_functions.js?[[.HtmlScriptVersion]]"></script>
 		<script src="/js/all_users_functions.js?[[.HtmlScriptVersion]]"></script>
 		<script src="/js/app_ajax_navbar.js?[[.HtmlScriptVersion]]"></script>

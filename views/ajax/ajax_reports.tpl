@@ -16,7 +16,7 @@
 
 [[ define "script" ]]
 <script>
-	var ws = new WebSocket('ws://localhost:8080/ws');
+	var ws = new WebSocket('ws://10.24.24.76:8080/ws');
 	// all websocket request
 
 	// if browser support or not support
