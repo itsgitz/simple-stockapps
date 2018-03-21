@@ -8,6 +8,7 @@ package models
 import (
 	"fmt"
 	"log"
+	"strconv"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -91,7 +92,7 @@ func ModelsPrintItemsTableRows() int {
 type Items_Current_Used struct {
 	Item_id             string  `json:"item_id"`
 	Name                string  `json:"name"`
-	In                  string  `json:"in"`
+	In_date             string  `json:"in"`
 	Quantity            int     `json:"quantity"`
 	Used                int     `json:"used"`
 	Rest                int     `json:"rest"`
@@ -101,17 +102,29 @@ type Items_Current_Used struct {
 type Items_Report_Storage struct {
 	Item_id             string  `json:"item_id"`
 	Name                string  `json:"name"`
-	In                  string  `json:"in"`
+	In_date             string  `json:"in"`
 	Quantity            int     `json:"quantity"`
 	Used                int     `json:"used"`
 	Rest                int     `json:"rest"`
 	Status              string  `json:"status"`
 }
 
-func ModelsGetICU() Items_Current_Used[] {
+func ModelsGetICU() ([]Items_Current_Used, error) {
 	val := []Items_Current_Used{}
 
-	query := fmt.Sprintf()
+	query := `SELECT * FROM items_current_used ORDER BY in_date DESC`
+	err = db.Select(&val, query)
+
+	return val, err
+}
+
+func ModelsGetIRS() ([]Items_Report_Storage, error) {
+	val := []Items_Report_Storage{}
+
+	query := `SELECT * FROM items_report_storage ORDER BY in_date DESC`
+	err = db.Select(&val, query)
+
+	return val, err
 }
 
 // Searching item using this function
@@ -201,7 +214,7 @@ func ModelsInsertDataItems(data ...string) error {
 // insert items_current_used (ICU) and items_report_storage (IRS) table
 //
 func ModelsInsertICU(item_id, name, in, quantity, used, rest, status string) error {
-	sql_query := `INSERT INTO items_current_used (item_id, name, in, quantity, used, rest, status) VALUES
+	sql_query := `INSERT INTO items_current_used (item_id, name, in_date, quantity, used, rest, status) VALUES
 		(?, ?, ?, ?, ?, ?, ?)
 	`
 	x, err := db.Queryx(sql_query, item_id, name, in, quantity, used, rest, status)
@@ -210,10 +223,192 @@ func ModelsInsertICU(item_id, name, in, quantity, used, rest, status string) err
 }
 
 func ModelsInsertIRS(item_id, name, in, quantity, used, rest, status string) error {
-	sql_query := `INSERT INTO items_report_storage (item_id, name, in, quantity, used, rest, status) VALUES
+	sql_query := `INSERT INTO items_report_storage (item_id, name, in_date, quantity, used, rest, status) VALUES
 		(?, ?, ?, ?, ?, ?, ?)
 	`
 	x, err := db.Queryx(sql_query, item_id, name, in, quantity, used, rest, status)
+	defer x.Close()
+	return err
+}
+
+// get current qty
+func ModelsGetCurrentQty(item_id string) int {
+	var c_qty int
+	x, err := db.Queryx("SELECT quantity FROM items_current_used WHERE item_id=? LIMIT 1", item_id)
+	if err != nil {
+		log.Println(err)
+	}
+	defer x.Close()
+	for x.Next() {
+		x.Scan(&c_qty)
+	}
+
+	return c_qty
+}
+
+func ModelsGetReportQty(item_id string) int {
+	var c_qty int
+	x, err := db.Queryx("SELECT quantity FROM items_report_storage WHERE item_id=? LIMIT 1", item_id)
+	if err != nil {
+		log.Println(err)
+	}
+	defer x.Close()
+	for x.Next() {
+		x.Scan(&c_qty)
+	}
+
+	return c_qty
+}
+
+// used
+func ModelsGetCurrentUsed(item_id string) int {
+	var c_used int
+	x, err := db.Queryx("SELECT used FROM items_current_used WHERE item_id=? LIMIT 1", item_id)
+	if err != nil {
+		log.Println(err)
+	}
+	defer x.Close()
+	for x.Next() {
+		x.Scan(&c_used)
+	}
+
+	return c_used
+}
+
+func ModelsGetCurrentRest(item_id string) int {
+	var c_rest int
+	x, err := db.Queryx("SELECT rest FROM items_current_used WHERE item_id=? LIMIT 1", item_id)
+	if err != nil {
+		log.Println(err)
+	}
+	defer x.Close()
+	for x.Next() {
+		x.Scan(&c_rest)
+	}
+
+	return c_rest
+}
+
+func ModelsGetReportUsed(item_id string) int {
+	var c_used int
+	x, err := db.Queryx("SELECT used FROM items_report_storage WHERE item_id=? LIMIT 1", item_id)
+	if err != nil {
+		log.Println(err)
+	}
+	defer x.Close()
+	for x.Next() {
+		x.Scan(&c_used)
+	}
+
+	return c_used
+}
+
+func ModelsGetReportRest(item_id string) int {
+	var c_rest int
+	x, err := db.Queryx("SELECT rest FROM items_report_storage WHERE item_id=? LIMIT 1", item_id)
+	if err != nil {
+		log.Println(err)
+	}
+	defer x.Close()
+	for x.Next() {
+		x.Scan(&c_rest)
+	}
+
+	return c_rest
+}
+
+func ModelsUpdateICU(item_id, item_howmuch, item_status string) error {
+	get_current_used := ModelsGetCurrentUsed(item_id)
+	get_current_qty := ModelsGetCurrentQty(item_id)
+
+	item_howmuch_int, _ := strconv.Atoi(item_howmuch)
+
+	// rest
+	new_used := get_current_used + item_howmuch_int
+	rest := get_current_qty - new_used
+
+	sql_query := `UPDATE items_current_used SET used=?, rest=?, status=? WHERE item_id=?`
+	x, err := db.Queryx(sql_query, new_used, rest, item_status, item_id)
+	defer x.Close()
+	return err
+}
+
+func ModelsCancelUpdateICU(item_id, item_picked string) error {
+	get_current_used := ModelsGetCurrentUsed(item_id)
+	get_current_rest := ModelsGetCurrentRest(item_id)
+
+	picked, _ := strconv.Atoi(item_picked)
+	reverse_rest := get_current_rest + picked
+	reverse_used := get_current_used - picked
+	x, err := db.Queryx(`UPDATE items_current_used SET used=?, rest=? WHERE item_id=?`, reverse_used, reverse_rest, item_id)
+	defer x.Close()
+
+	return err
+}
+
+func ModelsCancelUpdateIRS(item_id, item_picked string) error {
+	get_current_used := ModelsGetReportUsed(item_id)
+	get_current_rest := ModelsGetReportRest(item_id)
+
+	picked, _ := strconv.Atoi(item_picked)
+	reverse_rest := get_current_rest + picked
+	reverse_used := get_current_used - picked
+	x, err := db.Queryx(`UPDATE items_report_storage SET used=?, rest=? WHERE item_id=?`, reverse_used, reverse_rest, item_id)
+	defer x.Close()
+
+	return err
+}
+
+func ModelsUpdateIRS(item_id, item_howmuch, item_status string) error {
+	get_current_used := ModelsGetReportUsed(item_id)
+	get_current_qty := ModelsGetReportQty(item_id)
+
+	item_howmuch_int, _ := strconv.Atoi(item_howmuch)
+
+	// rest
+	new_used := get_current_used + item_howmuch_int
+	rest := get_current_qty - new_used
+
+	sql_query := `UPDATE items_report_storage SET used=?, rest=?, status=? WHERE item_id=?`
+	x, err := db.Queryx(sql_query, new_used, rest, item_status, item_id)
+	defer x.Close()
+	return err
+}
+
+func ModelsRemoveICU(item_id string) error {
+	x, err := db.Queryx("DELETE FROM items_current_used WHERE item_id=?", item_id)
+	defer x.Close()
+	return err
+}
+
+func ModelsRemoveIRS(item_id string) error {
+	x, err := db.Queryx("DELETE FROM items_report_storage WHERE item_id=?", item_id)
+	defer x.Close()
+	return err
+}
+
+func ModelsEditICU(item_id, item_quantity string) error {
+	// 1. qty
+	// 2. rest
+	get_current_used := ModelsGetCurrentUsed(item_id)
+
+	qty, _ := strconv.Atoi(item_quantity)
+	rest := qty - get_current_used
+
+	x, err := db.Queryx("UPDATE items_current_used SET quantity=?, rest=? WHERE item_id=?", item_quantity, rest, item_id)
+	defer x.Close()
+	return err
+}
+
+func ModelsEditIRS(item_id, item_quantity string) error {
+	// 1. qty
+	// 2. rest
+	get_current_used := ModelsGetReportUsed(item_id)
+
+	qty, _ := strconv.Atoi(item_quantity)
+	rest := qty - get_current_used
+
+	x, err := db.Queryx("UPDATE items_report_storage SET quantity=?, rest=? WHERE item_id=?", item_quantity, rest, item_id)
 	defer x.Close()
 	return err
 }

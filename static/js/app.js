@@ -238,6 +238,7 @@ function appShowItemsTable(res) {
 	tableMonitoring += "  <th>Model/Brand</th>";
 	tableMonitoring += "  <th>Quantity</th>";
 	tableMonitoring += "  <th>Limitation</th>";
+	tableMonitoring += "  <th>Used</th>";
 	tableMonitoring += "  <th>Item Unit/Type</th>";
 	// window has "other_items" hash url, then show item owner column
 	if (windowHash == "#other_items" || windowHash == "#empty_items") {
@@ -262,6 +263,7 @@ function appShowItemsTable(res) {
 			tableMonitoring += "    <td>"+ res[i].item_model +"</td>";
 			tableMonitoring += "    <td>"+ res[i].item_quantity +"</td>";
 			tableMonitoring += "    <td>"+ res[i].item_limitation +"</td>";
+			tableMonitoring += "    <td>"+ res[i].item_used +"</td>";
 			tableMonitoring += "    <td>"+ res[i].item_unit +"</td>";
 			if (windowHash == "#other_items" || windowHash == "#empty_items") {
 				tableMonitoring += "     <td>"+res[i].item_owner+"</td>";

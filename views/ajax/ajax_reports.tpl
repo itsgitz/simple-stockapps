@@ -229,7 +229,6 @@
 										}
 									}
 									ws.send("#006-cancel-pick-up");
-									historyMyBox.load(" #history-my-box");
 									appGetMyHistory();
 								}
 							}

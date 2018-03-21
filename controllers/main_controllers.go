@@ -104,6 +104,7 @@ type Items struct {
 	Item_model			string  `json:"item_model"`
 	Item_limitation		int     `json:"item_limitation"`
 	Item_quantity		int     `json:"item_quantity"`
+	Item_used           int     `json:"item_used"`
 	Item_unit 			string  `json:"item_unit"`
 	Date_of_entry		string  `json:"date_of_entry"`
 	Item_time_period	string  `json:"item_time_period"`
@@ -119,7 +120,7 @@ type Items struct {
 type Items_Current_Used struct {
 	Item_id             string  `json:"item_id"`
 	Name                string  `json:"name"`
-	In                  string  `json:"in"`
+	In_date             string  `json:"in"`
 	Quantity            int     `json:"quantity"`
 	Used                int     `json:"used"`
 	Rest                int     `json:"rest"`
@@ -129,17 +130,59 @@ type Items_Current_Used struct {
 type Items_Report_Storage struct {
 	Item_id             string  `json:"item_id"`
 	Name                string  `json:"name"`
-	In                  string  `json:"in"`
+	In_date             string  `json:"in"`
 	Quantity            int     `json:"quantity"`
 	Used                int     `json:"used"`
 	Rest                int     `json:"rest"`
 	Status              string  `json:"status"`
 }
 
-func (this *MainController) AppGetICU(w http.ResponseWriter, r *http.Request) {
+func (this *MainController) AppJSONGetICU(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	val, err := models
+	val, err := models.ModelsGetICU()
+	if err != nil {
+		errMsg := "[!] ERROR: in ModelsGetICU, Database Server: " + err.Error() + " Please contact the Administrator: anggit.ginanjar@lintasarta.co.id a.k.a AQX Tamvan :)"
+		http.Error(w, errMsg, http.StatusInternalServerError)
+	}
+
+	x := make([]Items_Current_Used, len(val))
+
+	for i:=0; i<len(val); i++ {
+		x[i].Item_id = val[i].Item_id
+		x[i].Name = val[i].Name
+		x[i].In_date = val[i].In_date
+		x[i].Quantity = val[i].Quantity
+		x[i].Used = val[i].Used
+		x[i].Rest = val[i].Rest
+		x[i].Status = val[i].Status
+	}
+	json_val, _ := json.Marshal(x)
+	fmt.Fprintf(w, string(json_val))
+}
+
+func (this *MainController) AppJSONGetIRS(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	val, err := models.ModelsGetIRS()
+	if err != nil {
+		errMsg := "[!] ERROR: in ModelsGetIRS, Database Server: " + err.Error() + " Please contact the Administrator: anggit.ginanjar@lintasarta.co.id a.k.a AQX Tamvan :)"
+		http.Error(w, errMsg, http.StatusInternalServerError)
+	}
+
+	x := make([]Items_Report_Storage, len(val))
+
+	for i:=0; i<len(val); i++ {
+		x[i].Item_id = val[i].Item_id
+		x[i].Name = val[i].Name
+		x[i].In_date = val[i].In_date
+		x[i].Quantity = val[i].Quantity
+		x[i].Used = val[i].Used
+		x[i].Rest = val[i].Rest
+		x[i].Status = val[i].Status
+	}
+	json_val, _ := json.Marshal(x)
+	fmt.Fprintf(w, string(json_val))
 }
 
 // only lintasarta's items will be showed
@@ -147,6 +190,7 @@ func (this *MainController) AppJSONOurItemsData(w http.ResponseWriter, r *http.R
 	w.Header().Set("Content-Type", "application/json")
 
 	values, err := models.ModelsSelectFromOurItems()
+	used, _ := models.ModelsGetICU()
 
 	if err != nil {
 		errMsg := "[!] ERROR: in ModelsSelectFromOurItems, Database Server: " + err.Error() + " Please contact the Administrator: anggit.ginanjar@lintasarta.co.id a.k.a AQX Tamvan :)"
@@ -171,6 +215,7 @@ func (this *MainController) AppJSONOurItemsData(w http.ResponseWriter, r *http.R
 		x[i].Item_location = values[i].Item_location
 		x[i].Item_status = values[i].Item_status
 		x[i].Added_by = values[i].Added_by
+		x[i].Item_used = used[i].Used
 	}
 
 	outgoingJSON, err := json.Marshal(x)
@@ -611,7 +656,12 @@ func (this *MainController) AppPickupItem(w http.ResponseWriter, r *http.Request
 			//       history_notes = itsNotes
 			UpdateHistory(itsRequest, user_fullname_session, itsNotes, item_unit, item_howmuch, item_name, item_id, item_location, item_howmuch, "None")
 			errPickup := models.ModelsPickupItem(item_id, item_quantity_picked, item_status)
-			if errPickup != nil {
+			errUpdateICU := models.ModelsUpdateICU(item_id, item_howmuch, item_status)
+			errUpdateIRS := models.ModelsUpdateIRS(item_id, item_howmuch, item_status)
+
+			if errPickup != nil && errUpdateICU != nil && errUpdateIRS != nil {
+				log.Println(errUpdateICU)
+				log.Println(errUpdateIRS)
 				http.Error(w, errPickup.Error(), http.StatusInternalServerError)
 			} else {
 				w.Header().Set("Content-Type", "application/json")
@@ -674,8 +724,12 @@ func (this *MainController) AppCancelPickUp(w http.ResponseWriter, r *http.Reque
 			
 			// cancel request
 			errCancel := models.ModelsUpdateCancelPickUp(item_id, reverse_quantity)
-			if errCancel != nil {
+			errCancelICU := models.ModelsCancelUpdateICU(item_id, 	picked_item)
+			errCancelIRS := models.ModelsCancelUpdateIRS(item_id, picked_item)
+			if errCancel != nil && errCancelICU != nil {
 				log.Println(errCancel)
+				log.Println(errCancelICU)
+				log.Println(errCancelIRS)
 			} else {
 				w.Header().Set("Content-Type", "application/json")
 				success := struct{
@@ -785,7 +839,11 @@ func (this *MainController) AppJSONUpdateItem(w http.ResponseWriter, r *http.Req
 
 		// update data
 		errUpdate := models.ModelsUpdateDataItem(item_id, item_name, item_model, item_quantity, item_limitation, item_unit, str_time_prd, item_expired, item_owner, item_location, item_status)
+		errIRS := models.ModelsEditIRS(item_id, item_quantity)
+		errICU := models.ModelsEditICU(item_id, item_quantity)
 		if errUpdate != nil {
+			log.Println(errIRS)
+			log.Println(errICU)
 			http.Error(w, errUpdate.Error(), http.StatusInternalServerError)
 		} else {
 			w.Header().Set("Content-Type", "application/json")
@@ -825,7 +883,11 @@ func (this *MainController) AppJSONRemoveItem(w http.ResponseWriter, r *http.Req
 		//log.Println(get_item_id) // item_id
 		// remove item using ModelsRemoveDataItem()
 		err := models.ModelsRemoveDataItem(get_item_id)
-		if err != nil {
+		errICU := models.ModelsRemoveICU(get_item_id)
+		errIRS := models.ModelsRemoveIRS(get_item_id)
+		if err != nil && errICU != nil && errIRS != nil {
+			log.Println(errICU)
+			log.Println(errIRS)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		} else {
 			w.Header().Set("Content-Type", "application/json")

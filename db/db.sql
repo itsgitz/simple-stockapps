@@ -52,7 +52,7 @@ KEY_BLOCK_SIZE=8;
 CREATE TABLE IF NOT EXISTS `items_current_used` (
 	`item_id` VARCHAR(16) NOT NULL PRIMARY KEY,
 	`name` VARCHAR(254) NOT NULL,
-	`in` DATETIME NOT NULL,
+	`in_date` DATETIME NOT NULL,
 	`quantity` INT NOT NULL,
 	`used` INT NOT NULL,
 	`rest` INT NOT NULL,
@@ -65,7 +65,7 @@ KEY_BLOCK_SIZE=8;
 CREATE TABLE IF NOT EXISTS `items_report_storage` (
 	`item_id` VARCHAR(16) NOT NULL PRIMARY KEY,
 	`name` VARCHAR(254) NOT NULL,
-	`in` DATETIME NOT NULL,
+	`in_date` DATETIME NOT NULL,
 	`quantity` INT NOT NULL,
 	`used` INT NOT NULL,
 	`rest` INT NOT NULL,

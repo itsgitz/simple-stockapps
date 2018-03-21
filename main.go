@@ -42,6 +42,9 @@ func main() {
 	router.HandleFunc("/json_search_items", main_ctrl.AppJSONSearchData)
 	router.HandleFunc("/json_get_empty_items", main_ctrl.AppJSONGetEmptyItems)
 	router.HandleFunc("/json_get_side_notification", main_ctrl.AppJSONGetSideNotificaton)
+
+	router.HandleFunc("/json_get_icu", main_ctrl.AppJSONGetICU)
+	router.HandleFunc("/json_get_irs", main_ctrl.AppJSONGetIRS)
 	// remove item url
 	router.HandleFunc("/json_remove_item", main_ctrl.AppJSONRemoveItem)
 	// update item url

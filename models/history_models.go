@@ -12,7 +12,7 @@ type History struct{
 	History_notes    string
 	Picked_item		 int
 	Item_id          string
-	History_status 			 string
+	History_status 	 string
 }
 
 // func history update for notification
