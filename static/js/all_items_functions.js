@@ -43,7 +43,8 @@ function appFormAddItemsHandler() {
 		bulan = waktuBaru.getMonth() + 1,		// month (ex: 10)
 		tanggal = waktuBaru.getDate()		// date (ex: 01 or 12)
 	var jam = waktuBaru.getHours(),
-		menit = waktuBaru.getMinutes();
+		menit = waktuBaru.getMinutes(),
+		detik = waktuBaru.getSeconds();
 
 	if (bulan < 10) {
 		bulan = "0" + bulan;
@@ -60,7 +61,11 @@ function appFormAddItemsHandler() {
 	if (menit < 10) {
 		menit = "0" + menit;
 	}
-	var currentJam = jam + ":" + menit;
+
+	if (detik < 10) {
+		detik = "0" + detik;
+	}
+	var currentJam = jam + ":" + menit + ":" + detik;
 	var currentTanggal = tahun + "-" + bulan + "-" + tanggal; // 
 
 	// set default current date
@@ -81,7 +86,7 @@ function appFormAddItemsHandler() {
 		var itemLocation = $("select.select-location").val(); // item location
 
 		// regular expression --> YYYY-MM-DD hh:mm
-		var regularExpressionForDatetime = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})$/;
+		var regularExpressionForDatetime = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
 		var resultFormValidation = regularExpressionForDatetime.test(dateOfEntry);
 
 		// itemExpired is optional value, user could blank this out

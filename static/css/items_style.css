@@ -452,4 +452,8 @@ div#app-edit-alert {
 	table.table-form-add {
 		width: 100%;
 	}
+
+	div.edit-modal-content {
+		width: 100%;
+	}
 }

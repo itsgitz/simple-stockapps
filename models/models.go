@@ -451,3 +451,79 @@ func ModelsUpdateHistoryCancel(status, history_id string) error {
 	defer x.Close()
 	return err
 }
+
+func ModelsGetQuantityFromItems(item_id string) int {
+	var qty int
+	x, err := db.Queryx("SELECT item_quantity FROM items WHERE item_id=?", item_id)
+	if err != nil {
+		log.Println(err)
+	}
+	defer x.Close()
+	for x.Next() {
+		x.Scan(&qty)
+	}
+
+	return qty
+}
+
+func ModelsGetLimitationFromItems(item_id string) int {
+	var lmt int
+	x, err := db.Queryx("SELECT item_limitation FROM items WHERE item_id=?", item_id)
+	if err != nil {
+		log.Println(err)
+	}
+	defer x.Close()
+	for x.Next() {
+		x.Scan(&lmt)
+	}
+
+	return lmt
+}
+
+func ModelsGetStatusFromItems(item_id string) string {
+	var status string
+	x, err := db.Queryx("SELECT item_status FROM items WHERE item_id=?", item_id)
+	if err != nil {
+		log.Println(err)
+	}
+	defer x.Close()
+	for x.Next() {
+		x.Scan(&status)
+	}
+
+	return status
+}
+
+func ModelsUpdateCancelStatus(item_id string) error {
+	qty := ModelsGetQuantityFromItems(item_id)
+	lmt := ModelsGetLimitationFromItems(item_id)
+	var status string
+	if qty == lmt {
+		status = "Limited"
+	} else if qty > lmt {
+		status = "Available"
+	} else if qty == 0 {
+		status = "Not Available"
+	}
+
+	x, err := db.Queryx("UPDATE items SET item_status=? WHERE item_id=?", status, item_id)
+	defer x.Close()
+
+	return err
+}
+
+func ModelsUpdateCancelStatusForICU(item_id string) error {
+	status := ModelsGetStatusFromItems(item_id)
+	x, err := db.Queryx("UPDATE items_current_used SET status=? WHERE item_id=?", status, item_id)
+	defer x.Close()
+
+	return err
+}
+
+func ModelsUpdateCancelStatusForIRS(item_id string) error {
+	status := ModelsGetStatusFromItems(item_id)
+	x, err := db.Queryx("UPDATE items_report_storage SET status=? WHERE item_id=?", status, item_id)
+	defer x.Close()
+
+	return err
+}

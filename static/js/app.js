@@ -215,6 +215,7 @@ function appTableHandler() {
 		success: function(res) {
 			appShowItemsTable(res);
 			appPickupFunction();
+			appAddQty()
 		},
 		beforeSend: function(res) {
 			$("div#app-table-box").html("<h2 style='color: #7f8c8d; padding: 50px;'>Loading please wait ...</h2>");
@@ -295,8 +296,56 @@ function appShowItemsTable(res) {
 function appAddQty() {
 	var addButton = $("a#app-add-qty-btn");
 
-	addButton.click(function() {
-		alert("Goblog");
+	addButton.click(function(e) {
+		e.preventDefault();
+		var modal = document.getElementById("app-add-modal");
+		var content = document.getElementById("app-add-content");
+		var jqModal = $("div#app-add-modal");
+		var jqContent = $("div#app-add-content");
+
+		// name
+		var getId = $(this).attr("data-item-id");
+		var getName = $(this).attr("data-item-name");
+		var getQty = $(this).attr("data-item-quantity");
+
+		// fill content
+		var textContent = "<table class='add-table-qty'>";
+		textContent += "  <tr>";
+		textContent += "      <td>Name</td>";
+		textContent += "      <td>"+getName+"</td>"
+		textContent += "  </tr>";
+		textContent += "  <tr>";
+		textContent += "      <td>Current Quantity</td>";
+		textContent += "      <td>"+getQty+"</td>";
+		textContent += "  </tr>";
+		textContent += "  <tr>";
+		textContent += "      <td><input class='added-qty' type='number' placeholder='Input Quantity'></td>";
+		textContent += "  </tr>";
+		textContent += "</table>";
+		textContent += "  <p><button class='add-button-submit'>Add</button><button class='add-close-button'>Close</button></p>";
+		content.innerHTML = textContent;
+
+		// show the popup
+		jqModal.fadeIn(300);
+
+		window.onclick = function(e) {
+			if (e.target == modal) {
+				jqModal.fadeOut(300);
+			}
+		}
+
+		var addButtonSubmit = $("button.add-button-submit");
+		var addCloseButton = $("button.add-close-button");
+
+		// close button clicked
+		addCloseButton.click(function() {
+			jqModal.fadeOut(300);
+		});
+
+		// add button submit clicked
+		addButtonSubmit.click(function() {
+
+		});
 	});
 }
 

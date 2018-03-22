@@ -54,6 +54,9 @@
 
 <div id="app-pickup-alert"></div>
 <div id="app-modal-pickup-container"></div>
+<div id="app-add-modal">
+	<div id="app-add-content"></div>
+</div>
 [[ end ]]
 
 [[ define "side_notification_bar" ]]

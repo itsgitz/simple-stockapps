@@ -318,6 +318,9 @@ p.notif-text {
 	button.app-close-btn {
 		width: 100%;
 	}
+	div#app-add-content {
+		width: 100%;
+	}
 }
 @media only screen and (max-width: 750px) {
 	div#app-side-notif {
@@ -329,4 +332,29 @@ p.notif-text {
 	div#app-table-box table {
 		width: 100%;
 	}
+}
+
+
+div#app-add-modal {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0,0,0);
+	background-color: rgba(0,0,0,0.4);
+}
+div#app-add-content {
+	background-color: #FEFEFE;
+	margin: 10% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 750px;
+}
+
+table.add-table-qty tr:nth-child(even) {
+	background-color: #FFFFFF;
 }

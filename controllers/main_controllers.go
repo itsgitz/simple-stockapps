@@ -724,12 +724,19 @@ func (this *MainController) AppCancelPickUp(w http.ResponseWriter, r *http.Reque
 			
 			// cancel request
 			errCancel := models.ModelsUpdateCancelPickUp(item_id, reverse_quantity)
-			errCancelICU := models.ModelsCancelUpdateICU(item_id, 	picked_item)
+			errCancelStatus := models.ModelsUpdateCancelStatus(item_id)
+			errCancelICU := models.ModelsCancelUpdateICU(item_id, picked_item)
 			errCancelIRS := models.ModelsCancelUpdateIRS(item_id, picked_item)
-			if errCancel != nil && errCancelICU != nil {
+			errStatusICU := models.ModelsUpdateCancelStatusForICU(item_id)
+			errStatusIRS := models.ModelsUpdateCancelStatusForIRS(item_id)
+		
+			if errCancel != nil && errCancelICU != nil && errStatusICU != nil && errStatusIRS != nil {
 				log.Println(errCancel)
+				log.Println(errCancelStatus)
 				log.Println(errCancelICU)
 				log.Println(errCancelIRS)
+				log.Println(errStatusICU)
+				log.Println(errStatusIRS)
 			} else {
 				w.Header().Set("Content-Type", "application/json")
 				success := struct{
