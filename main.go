@@ -45,6 +45,7 @@ func main() {
 
 	router.HandleFunc("/json_get_icu", main_ctrl.AppJSONGetICU)
 	router.HandleFunc("/json_get_irs", main_ctrl.AppJSONGetIRS)
+	router.HandleFunc("/add_qty", main_ctrl.AppAddQty)
 	// remove item url
 	router.HandleFunc("/json_remove_item", main_ctrl.AppJSONRemoveItem)
 	// update item url

@@ -890,7 +890,7 @@ func (this *MainController) AppJSONRemoveItem(w http.ResponseWriter, r *http.Req
 		//log.Println(get_item_id) // item_id
 		// remove item using ModelsRemoveDataItem()
 		err := models.ModelsRemoveDataItem(get_item_id)
-		errICU := models.ModelsRemoveICU(get_item_id)mantap_anggit_cing_sukses_amin)
+		errICU := models.ModelsRemoveICU(get_item_id)
 		errIRS := models.ModelsRemoveIRS(get_item_id)
 		if err != nil && errICU != nil && errIRS != nil {
 			log.Println(errICU)
@@ -1378,5 +1378,35 @@ func (this *MainController) AppUpdateSetting(w http.ResponseWriter, r *http.Requ
 			log.Println(err)
 		}
 		fmt.Fprint(w, string(json_val))
+	}
+}
+
+func (this *MainController) AppAddQty(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	username_session := sess.GetString("user_name")
+	r.ParseForm()
+	if r.Method == "GET" {
+		fmt.Fprintf(w, "Not Found Braay")
+	} else if r.Method == "POST" {
+		item_id := r.Form["item_id"][0]
+		added_item := r.Form["added_item"][0]
+		_ = item_id
+		_ = added_item
+		if len(username_session) != 0 {
+			//err := models.ModelsAddQty(item_id, added_item)
+			//if err != nil {
+			//	log.Println(err)
+			//}
+		} else {
+			w.Header().Set("Content-Type", "application/json")
+			redirect := struct{
+				redirect  bool
+			}{
+				redirect: true,
+			}
+
+			json_val, _ := json.Marshal(redirect)
+			fmt.Fprintf(w, string(json_val))
+		}
 	}
 }

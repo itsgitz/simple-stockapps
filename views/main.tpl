@@ -57,6 +57,9 @@
 <div id="app-add-modal">
 	<div id="app-add-content"></div>
 </div>
+<div id="app-sub-modal">
+	<div id="app-sub-content"></div>
+</div>
 [[ end ]]
 
 [[ define "side_notification_bar" ]]

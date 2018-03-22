@@ -148,7 +148,7 @@ $(function() {
 	}
 
 	appTableNavigation();
-	appHomeSerachBar();
+	appHomeSearchBar();
 	appSideNotification();
 });
 
@@ -215,7 +215,8 @@ function appTableHandler() {
 		success: function(res) {
 			appShowItemsTable(res);
 			appPickupFunction();
-			appAddQty()
+			appAddQty();
+			//appSubQty();
 		},
 		beforeSend: function(res) {
 			$("div#app-table-box").html("<h2 style='color: #7f8c8d; padding: 50px;'>Loading please wait ...</h2>");
@@ -277,7 +278,7 @@ function appShowItemsTable(res) {
 			if (isLoggedIn == "true") {
 				tableMonitoring += "    <td><a id='app-pick-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"' data-item-unit='"+res[i].item_unit+"' data-location='"+res[i].item_location+"'>Pick Up</a></td>";
 				if (isAdmin == "true") {
-					tableMonitoring += "     <td><a id='app-add-qty-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"' data-item-unit='"+res[i].item_unit+"' data-location='"+res[i].item_location+"'><img src='img/plus.svg' width='20px' title='Add Quantity'></a></td></td>"
+					tableMonitoring += "    <td><a id='app-add-qty-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"' data-item-unit='"+res[i].item_unit+"' data-location='"+res[i].item_location+"'><img src='img/plus.svg' width='20px'></a></td>";
 				}
 			}
 			tableMonitoring += "  </tr>";
@@ -293,6 +294,62 @@ function appShowItemsTable(res) {
 	document.getElementById("app-table-box").innerHTML = tableMonitoring;
 }
 
+/*function appSubQty() {
+	var subButton = $("a#app-sub-qty-btn");
+
+	subButton.click(function(e) {
+		e.preventDefault();
+		var modal = document.getElementById("app-sub-modal");
+		var content = document.getElementById("app-sub-content");
+		var jqModal = $("div#app-sub-modal");
+		var jqContent = $("div#app-sub-content");
+
+				var getId = $(this).attr("data-item-id");
+		var getName = $(this).attr("data-item-name");
+		var getQty = $(this).attr("data-item-quantity");
+
+		// fill content
+		var textContent = "<table class='sub-table-qty'>";
+		textContent += "  <tr>";
+		textContent += "      <td>Name</td>";
+		textContent += "      <td>"+getName+"</td>"
+		textContent += "  </tr>";
+		textContent += "  <tr>";
+		textContent += "      <td>Current Quantity</td>";
+		textContent += "      <td>"+getQty+"</td>";
+		textContent += "  </tr>";
+		textContent += "  <tr>";
+		textContent += "      <td><input class='subtracted-qty' type='number' placeholder='Input Quantity'></td>";
+		textContent += "  </tr>";
+		textContent += "</table>";
+		textContent += "  <p><button class='sub-button-submit'>Add</button><button class='sub-close-button'>Close</button></p>";
+		content.innerHTML = textContent;
+
+		// show the popup
+		jqModal.fadeIn(300);
+
+		window.onclick = function(e) {
+			if (e.target == modal) {
+				jqModal.fadeOut(300);
+			}
+		}
+
+		var subButtonSubmit = $("button.sub-button-submit");
+		var subCloseButton = $("button.sub-close-button");
+
+		// close button clicked
+		subCloseButton.click(function() {
+			jqModal.fadeOut(300);
+		});
+
+		// add button submit clicked
+		subButtonSubmit.click(function() {
+			var homeMuch = $("input.subtracted-qty");
+		});
+	});
+}
+*/
+// add quantity button
 function appAddQty() {
 	var addButton = $("a#app-add-qty-btn");
 
@@ -344,7 +401,20 @@ function appAddQty() {
 
 		// add button submit clicked
 		addButtonSubmit.click(function() {
-
+			var addedItem = $("input.added-qty").val();
+			console.log(getId, getName, addedItem);
+			$.ajax({
+				url: "/add_qty",
+				async: true,
+				data: {
+					item_name: getName,
+					item_id: getId,
+					added_item: addedItem
+				},
+				success: function(res) {
+					
+				}
+			});
 		});
 	});
 }
@@ -600,7 +670,7 @@ function appAjaxNotif() {
 	});
 }
 
-function appHomeSerachBar() {
+function appHomeSearchBar() {
 	var isLoggedIn = $("div#app-user-islogged-in").text();
 	var homeSearchBar = $("input#app-home-searchbar");
 	if (isLoggedIn == "true") {
