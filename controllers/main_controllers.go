@@ -890,7 +890,7 @@ func (this *MainController) AppJSONRemoveItem(w http.ResponseWriter, r *http.Req
 		//log.Println(get_item_id) // item_id
 		// remove item using ModelsRemoveDataItem()
 		err := models.ModelsRemoveDataItem(get_item_id)
-		errICU := models.ModelsRemoveICU(get_item_id)
+		errICU := models.ModelsRemoveICU(get_item_id)mantap_anggit_cing_sukses_amin)
 		errIRS := models.ModelsRemoveIRS(get_item_id)
 		if err != nil && errICU != nil && errIRS != nil {
 			log.Println(errICU)
