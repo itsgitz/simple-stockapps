@@ -216,7 +216,7 @@ function appTableHandler() {
 			appShowItemsTable(res);
 			appPickupFunction();
 			appAddQty();
-			//appSubQty();
+			appSubQty();
 		},
 		beforeSend: function(res) {
 			$("div#app-table-box").html("<h2 style='color: #7f8c8d; padding: 50px;'>Loading please wait ...</h2>");
@@ -253,7 +253,7 @@ function appShowItemsTable(res) {
 	tableMonitoring += "  <th>Status</th>";
 	
 	if (isLoggedIn == "true") {
-		tableMonitoring += "  <th colspan='2'>Action</th>";
+		tableMonitoring += "  <th colspan='3'>Action</th>";
 	}
 
 	// if data length (json) is exists or more than zero (0)
@@ -279,6 +279,7 @@ function appShowItemsTable(res) {
 				tableMonitoring += "    <td><a id='app-pick-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"' data-item-unit='"+res[i].item_unit+"' data-location='"+res[i].item_location+"'>Pick Up</a></td>";
 				if (isAdmin == "true") {
 					tableMonitoring += "    <td><a id='app-add-qty-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"' data-item-unit='"+res[i].item_unit+"' data-location='"+res[i].item_location+"'><img src='img/plus.svg' width='20px'></a></td>";
+					tableMonitoring += "    <td><a id='app-sub-qty-btn' href='' data-item-id='"+res[i].item_id+"' data-item-name='"+res[i].item_name+"' data-item-quantity='"+res[i].item_quantity+"' data-item-limitation='"+res[i].item_limitation+"' data-item-owner='"+res[i].item_owner+"' data-item-unit='"+res[i].item_unit+"' data-location='"+res[i].item_location+"'><img src='img/minus-symbol.svg' width='20px'></a></td>";
 				}
 			}
 			tableMonitoring += "  </tr>";
@@ -294,7 +295,8 @@ function appShowItemsTable(res) {
 	document.getElementById("app-table-box").innerHTML = tableMonitoring;
 }
 
-/*function appSubQty() {
+// substract the quantity function
+function appSubQty() {
 	var subButton = $("a#app-sub-qty-btn");
 
 	subButton.click(function(e) {
@@ -304,7 +306,7 @@ function appShowItemsTable(res) {
 		var jqModal = $("div#app-sub-modal");
 		var jqContent = $("div#app-sub-content");
 
-				var getId = $(this).attr("data-item-id");
+		var getId = $(this).attr("data-item-id");
 		var getName = $(this).attr("data-item-name");
 		var getQty = $(this).attr("data-item-quantity");
 
@@ -348,7 +350,7 @@ function appShowItemsTable(res) {
 		});
 	});
 }
-*/
+
 // add quantity button
 function appAddQty() {
 	var addButton = $("a#app-add-qty-btn");
@@ -376,7 +378,7 @@ function appAddQty() {
 		textContent += "      <td>"+getQty+"</td>";
 		textContent += "  </tr>";
 		textContent += "  <tr>";
-		textContent += "      <td><input class='added-qty' type='number' placeholder='Input Quantity'></td>";
+		textContent += "      <td><input class='added-qty' type='number' placeholder='Input Quantity' min='0'></td>";
 		textContent += "  </tr>";
 		textContent += "</table>";
 		textContent += "  <p><button class='add-button-submit'>Add</button><button class='add-close-button'>Close</button></p>";
@@ -402,17 +404,36 @@ function appAddQty() {
 		// add button submit clicked
 		addButtonSubmit.click(function() {
 			var addedItem = $("input.added-qty").val();
-			console.log(getId, getName, addedItem);
+			var waktu = appGenerateDateTime();
+
+			console.log(getId, getName, addedItem, waktu);
 			$.ajax({
 				url: "/add_qty",
 				async: true,
+				method: "POST",
 				data: {
 					item_name: getName,
 					item_id: getId,
-					added_item: addedItem
+					added_item: addedItem,
+					in_date: waktu
 				},
 				success: function(res) {
-					
+					if (res.redirect) {
+						alert("Session has timed out :(");
+						window.location = "/";
+					} else {
+						content.innerHTML = "<p style='padding: 10px; font-weight: bold; color: #3498db;'>" + res.message + "</p>";
+						setTimeout(function() {
+							jqModal.fadeOut(300);
+						}, 2000);
+
+						window.onclick = function(e) {
+							if (e.target == modal) {
+								jqModal.css("display", "block");
+							}
+						}
+						ws.send("#005-update-item");
+					}
 				}
 			});
 		});
@@ -676,4 +697,42 @@ function appHomeSearchBar() {
 	if (isLoggedIn == "true") {
 		homeSearchBar.css("top", "20px");
 	}
+}
+
+// Date and time
+function appGenerateDateTime() {
+	// Date and time variable
+	// using current date and time on "date-of-entry" value when loaded
+	var waktuBaru = new Date();	// new date object
+	var tahun = waktuBaru.getFullYear(),	// full year (ex: 2017)
+		bulan = waktuBaru.getMonth() + 1,		// month (ex: 10)
+		tanggal = waktuBaru.getDate()		// date (ex: 01 or 12)
+	var jam = waktuBaru.getHours(),
+		menit = waktuBaru.getMinutes(),
+		detik = waktuBaru.getSeconds();
+
+	if (bulan < 10) {
+		bulan = "0" + bulan;
+	}
+
+	if (tanggal < 10) {
+		tanggal = "0" + tanggal;
+	}
+
+	if (jam < 10) {
+		jam = "0" + jam;
+	}
+
+	if (menit < 10) {
+		menit = "0" + menit;
+	}
+
+	if (detik < 10) {
+		detik = "0" + detik;
+	}
+	var currentJam = jam + ":" + menit + ":" + detik;
+	var currentTanggal = tahun + "-" + bulan + "-" + tanggal; //
+
+	currentTime = currentTanggal + " " + currentJam;
+	return currentTime;
 }

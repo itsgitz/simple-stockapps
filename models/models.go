@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/go-sql-driver/mysql"
+	"simple_stockapps/generator"
 )
 
 //Items table in database
@@ -37,7 +38,8 @@ var err error
 // initialization connection to database using init() function
 // will run first when the program start to running
 func init() {
-	db, err = sqlx.Connect("mysql", "dc:)1)1P4sswordHello@tcp(127.0.0.1:3306)/stockapps")
+	//db, err = sqlx.Connect("mysql", "dc:)1)1P4sswordHello@tcp(127.0.0.1:3306)/stockapps")
+	db, err = sqlx.Connect("mysql", "root:@tcp(127.0.0.1:3306)/stockapps")
 	if err != nil {
 		log.Println("[!] ERROR:", err)
 	}
@@ -100,6 +102,7 @@ type Items_Current_Used struct {
 }
 
 type Items_Report_Storage struct {
+	Storage_id          string  `json:"storage_id"`
 	Item_id             string  `json:"item_id"`
 	Name                string  `json:"name"`
 	In_date             string  `json:"in"`
@@ -223,10 +226,11 @@ func ModelsInsertICU(item_id, name, in, quantity, used, rest, status string) err
 }
 
 func ModelsInsertIRS(item_id, name, in, quantity, used, rest, status string) error {
-	sql_query := `INSERT INTO items_report_storage (item_id, name, in_date, quantity, used, rest, status) VALUES
-		(?, ?, ?, ?, ?, ?, ?)
+	storage_id := "STORAGE_" + generator.GenerateOwnerID()
+	sql_query := `INSERT INTO items_report_storage (storage_id, item_id, name, in_date, quantity, used, rest, status) VALUES
+		(?, ?, ?, ?, ?, ?, ?, ?)
 	`
-	x, err := db.Queryx(sql_query, item_id, name, in, quantity, used, rest, status)
+	x, err := db.Queryx(sql_query, storage_id, item_id, name, in, quantity, used, rest, status)
 	defer x.Close()
 	return err
 }
@@ -317,6 +321,19 @@ func ModelsGetReportRest(item_id string) int {
 	return c_rest
 }
 
+func ModelsGetCurrentDate(item_id string) string {
+	var date string
+	x, err := db.Queryx("SELECT in_date FROM items_current_used WHERE item_id=? LIMIT 1", item_id)
+	if err != nil {
+		log.Println(err)
+	}
+	defer x.Close()
+	for x.Next() {
+		x.Scan(&date)
+	}
+	return date
+}
+
 func ModelsUpdateICU(item_id, item_howmuch, item_status string) error {
 	get_current_used := ModelsGetCurrentUsed(item_id)
 	get_current_qty := ModelsGetCurrentQty(item_id)
@@ -376,15 +393,19 @@ func ModelsUpdateIRS(item_id, item_howmuch, item_status string) error {
 }
 
 func ModelsRemoveICU(item_id string) error {
+	get_current_date := ModelsGetCurrentDate(item_id)
 	x, err := db.Queryx("DELETE FROM items_current_used WHERE item_id=?", item_id)
 	defer x.Close()
+	ModelsRemoveIRS(item_id, get_current_date)
 	return err
 }
 
-func ModelsRemoveIRS(item_id string) error {
-	x, err := db.Queryx("DELETE FROM items_report_storage WHERE item_id=?", item_id)
+func ModelsRemoveIRS(item_id, in_date string) {
+	x, err := db.Queryx("DELETE FROM items_report_storage WHERE item_id=? AND in_date=?", item_id, in_date)
 	defer x.Close()
-	return err
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func ModelsEditICU(item_id, item_quantity string) error {
@@ -526,4 +547,60 @@ func ModelsUpdateCancelStatusForIRS(item_id string) error {
 	defer x.Close()
 
 	return err
+}
+
+func ModelsAddQty(item_id, item_name, added_item, in_date string) (error, error) {
+	get_current_rest := ModelsGetCurrentRest(item_id)
+	get_current_qty := ModelsGetCurrentQty(item_id)
+	get_current_limit := ModelsGetLimitationFromItems(item_id)
+	get_current_used := ModelsGetCurrentUsed(item_id)
+	get_current_date := ModelsGetCurrentDate(item_id)
+
+	added_item_int, _ := strconv.Atoi(added_item)
+	var status string
+
+	storage_id := "STORAGE_" + generator.GenerateOwnerID()
+
+	if get_current_rest == 0 {
+		if added_item_int > get_current_limit {
+			status = "Available"
+		} else if added_item_int == get_current_limit {
+			status = "Limited"
+		}
+		sql := `UPDATE items_current_used SET in_date=?, quantity=?, used=?, rest=?, status=? WHERE item_id=?`
+		sql_items := `UPDATE items SET item_quantity=?, item_status=? WHERE item_id=?`
+		sql_irs := `INSERT INTO items_report_storage (storage_id, item_id, name, in_date, quantity, used, rest, status) VALUES
+			(?, ?, ?, ?, ?, ?, ?, ?)
+		`
+		x, errUpdateICU := db.Queryx(sql, in_date, added_item, 0, added_item, "Available", item_id)
+		z, errItems := db.Queryx(sql_items, added_item, status, item_id)
+		y, errUpdateIRS := db.Queryx(sql_irs, storage_id, item_id, item_name, in_date, added_item, 0, added_item, "Available")
+		defer x.Close()
+		defer y.Close()
+		defer z.Close()
+		log.Println(errItems)
+		return errUpdateICU, errUpdateIRS
+	} else {
+		added_qty := get_current_qty + added_item_int
+		added_rest := added_qty - get_current_used
+
+		if added_qty > get_current_limit {
+			status = "Available"
+		} else if added_qty == get_current_limit {
+			status = "Limited"
+		}
+
+		log.Println(get_current_date)
+		sql := `UPDATE items_current_used SET quantity=?, rest=?, status=? WHERE item_id=?`
+		sql_irs := `UPDATE items_report_storage SET quantity=?, rest=?, status=? WHERE item_id=? AND in_date=?`
+		sql_items := `UPDATE items SET item_quantity=?, item_status=? WHERE item_id=?`
+		x, errUpdateICU := db.Queryx(sql, added_qty, added_rest, status, item_id)
+		y, errUpdateIRS := db.Queryx(sql_irs, added_qty, added_rest, status, item_id, get_current_date)
+		z, errItems := db.Queryx(sql_items, added_qty, status, item_id)
+		defer x.Close()
+		defer y.Close()
+		defer z.Close()
+		log.Println(errItems)
+		return errUpdateICU, errUpdateIRS
+	}
 }

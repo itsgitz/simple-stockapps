@@ -152,8 +152,8 @@
 	/* Sign in Button style */
 	button.app-sign-btn {
 		position: absolute;
-		top: 20px;
-		right: 5px;
+		top: 30px;
+		right: 20px;
 		border: none;
 		padding-top: 10px;
 		padding-bottom: 10px;

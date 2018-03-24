@@ -128,6 +128,7 @@ type Items_Current_Used struct {
 }
 
 type Items_Report_Storage struct {
+	Storage_id          string  `json:"storage_id"`
 	Item_id             string  `json:"item_id"`
 	Name                string  `json:"name"`
 	In_date             string  `json:"in"`
@@ -173,6 +174,7 @@ func (this *MainController) AppJSONGetIRS(w http.ResponseWriter, r *http.Request
 	x := make([]Items_Report_Storage, len(val))
 
 	for i:=0; i<len(val); i++ {
+		x[i].Storage_id = val[i].Storage_id
 		x[i].Item_id = val[i].Item_id
 		x[i].Name = val[i].Name
 		x[i].In_date = val[i].In_date
@@ -891,10 +893,9 @@ func (this *MainController) AppJSONRemoveItem(w http.ResponseWriter, r *http.Req
 		// remove item using ModelsRemoveDataItem()
 		err := models.ModelsRemoveDataItem(get_item_id)
 		errICU := models.ModelsRemoveICU(get_item_id)
-		errIRS := models.ModelsRemoveIRS(get_item_id)
-		if err != nil && errICU != nil && errIRS != nil {
+		log.Println(get_item_id)
+		if err != nil && errICU != nil {
 			log.Println(errICU)
-			log.Println(errIRS)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		} else {
 			w.Header().Set("Content-Type", "application/json")
@@ -1389,23 +1390,39 @@ func (this *MainController) AppAddQty(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Not Found Braay")
 	} else if r.Method == "POST" {
 		item_id := r.Form["item_id"][0]
-		added_item := r.Form["added_item"][0]
-		_ = item_id
-		_ = added_item
+		item_name := r.Form["item_name"][0]
+		added_item := r.Form["added_item"][0] // how much
+		in_date := r.Form["in_date"][0]
+
 		if len(username_session) != 0 {
-			//err := models.ModelsAddQty(item_id, added_item)
-			//if err != nil {
-			//	log.Println(err)
-			//}
+			errOne, errTwo := models.ModelsAddQty(item_id, item_name, added_item, in_date)
+			if errOne != nil && errTwo != nil {
+				log.Println(errOne)
+				log.Println(errTwo)
+			} else {
+				w.Header().Set("Content-Type", "application/json")
+				success := struct{
+					Message string `json:"message"`
+				}{}
+				success.Message = "Successful adding item!"
+				json_val, err := json.Marshal(success)
+				if err != nil {
+					log.Println(err)
+				}
+				fmt.Fprintf(w, string(json_val))
+			}
 		} else {
 			w.Header().Set("Content-Type", "application/json")
-			redirect := struct{
-				redirect  bool
-			}{
-				redirect: true,
-			}
+			timeout := struct{
+				Redirect  bool `json:"redirect"`
+			}{}
 
-			json_val, _ := json.Marshal(redirect)
+			timeout.Redirect = true
+
+			json_val, err := json.Marshal(timeout)
+			if err != nil {
+				log.Println(err)
+			}
 			fmt.Fprintf(w, string(json_val))
 		}
 	}
