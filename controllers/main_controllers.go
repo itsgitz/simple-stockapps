@@ -458,7 +458,7 @@ func (this *MainController) AppShowReport(w http.ResponseWriter, r *http.Request
 		if len(username_session) != 0 {
 			r.ParseForm()
 			w.Header().Set("Content-Type", "application/json")
-			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Origin", "http://localhost:6060/")
 			year := r.Form["year"][0]
 			month := r.Form["month"][0]
 			keyword := year + "-" + month
