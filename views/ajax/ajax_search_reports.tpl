@@ -126,7 +126,7 @@
 							}
 							tableText += "</table>";
 							tableText += "<br>";
-							tableText += "<button class='export-button'>Export PDF</button>";
+							/*tableText += "<button class='export-button'>Export PDF</button>";
 							jqReportResult.fadeOut(300);
 							jqReportResult.fadeIn(300);
 							reportResult.innerHTML = tableText;
@@ -146,7 +146,7 @@
 										}
 									}
 								});
-							});
+							});*/
 						}
 					}
 				});
