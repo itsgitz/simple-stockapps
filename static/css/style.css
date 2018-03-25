@@ -382,3 +382,49 @@ table.add-table-qty tr:nth-child(even) {
 table.sub-table-qty tr:nth-child(even) {
 	background-color: #FFFFFF;
 }
+
+input.added-qty {
+	padding: 10px;
+	border: none;
+	border-bottom: solid 2px #2980b9;
+	outline: none;
+}
+button.add-button-submit {
+	border: solid 1px #27ae60;
+	background-color: #27ae60;
+	padding: 10px;
+	border-radius: 3px;
+	color: #FFFFFF;
+}
+button.add-close-button {
+	border: solid 1px #e74c3c;
+	background-color: #e74c3c;
+	padding: 10px;
+	border-radius: 3px;
+	color: #FFFFFF;	
+}
+button.add-button-submit:hover, button.add-close-button:hover {
+	cursor: pointer;
+}
+
+div#app-addqty-alert {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 25%;
+	right: 25%;
+	padding: 10px;
+	z-index: 1;
+	background-color: #e74c3c;
+	color: #ffffff;
+}
+
+span.close-alert-addqty {
+	color: #FFFFFF;
+	float: right;
+	font-size: 25px;
+	font-weight: bold;
+}
+span.close-alert-addqty:hover {
+	cursor: pointer;
+}

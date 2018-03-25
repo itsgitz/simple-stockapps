@@ -37,7 +37,7 @@
 		</form>
 		<br>
 		<button class="app-close-btn">Close</button><br><br>
-		<p><b>&copy;AQX</b> <a href="https://github.com/anggitmg" target="_blank" style="color: grey;">GitHub</a></p>
+		<p>&copy; 2018 AQX <a href="https://github.com/anggitmg" target="_blank" style="color: grey;">GitHub</a></p>
 	</div>
 </div>
 [[ end ]]
@@ -60,6 +60,7 @@
 <div id="app-sub-modal">
 	<div id="app-sub-content"></div>
 </div>
+<div id="app-addqty-alert"></div>
 [[ end ]]
 
 [[ define "side_notification_bar" ]]

@@ -67,6 +67,8 @@ func main() {
 
 	// settings report/searc_reports
 	router.HandleFunc("/search_reports", main_ctrl.AppSearchReports)
+	router.HandleFunc("/show_report", main_ctrl.AppShowReport)
+	router.HandleFunc("/to_pdf", main_ctrl.AppToPDF)
 
 	// defining http middleware using negroni method
 	middleware := negroni.Classic()

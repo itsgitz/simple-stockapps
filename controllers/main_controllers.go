@@ -17,6 +17,7 @@ import (
 
 	// http session using kataras
 	"github.com/kataras/go-sessions"
+	"github.com/SebastiaanKlippert/go-wkhtmltopdf"
 )
 
 type MainController struct {
@@ -49,7 +50,7 @@ func (this *MainController) AppMainPage(w http.ResponseWriter, r *http.Request) 
 	html_data := struct{
 		HtmlTitle             	string
 		HtmlUserIsLoggedIn		bool
-		HtmlUserIsAdmin     bool // check for privilege
+		HtmlUserIsAdmin         bool // check for privilege
 		HtmlUserFullName		string
 		HtmlScriptVersion       string
 		HtmlTime                string
@@ -400,6 +401,110 @@ func (this *MainController) AppJSONSearchData(w http.ResponseWriter, r *http.Req
 	}
 }
 
+// export to pdf
+func (this *MainController) AppToPDF(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	username_session := sess.GetString("user_name")
+	if len(username_session) == 0 {
+		w.Header().Set("Content-Type", "application/json")
+		timeout := struct{
+			Redirect bool `json:"redirect"`
+		}{}
+
+		timeout.Redirect = true
+		json_val, _ := json.Marshal(timeout)
+		fmt.Fprintf(w, string(json_val))
+	} else {
+		r.ParseForm()
+		year := r.Form["year"][0]
+		month := r.Form["month"][0]
+
+		pdfg, err := wkhtmltopdf.NewPDFGenerator()
+
+		if err != nil {
+			log.Println(err)
+		}
+		log.Println(year, month)
+		local_address := "http://localhost/export_reports"
+		log.Println(local_address)
+
+		pdfg.AddPage(wkhtmltopdf.NewPage(local_address))
+
+		err = pdfg.Create()
+		if err != nil {
+			log.Println(err)
+		}
+
+		pdf_name := "./" + year + "-" + month + ".pdf"
+		err = pdfg.WriteFile(pdf_name)
+		if err != nil {
+			log.Println(err)
+		}
+
+		log.Println("Exporting PDF has Done :)")
+	}
+}
+
+// show report
+func (this *MainController) AppShowReport(w http.ResponseWriter, r *http.Request) {
+	sess := session.Start(w, r)
+	username_session := sess.GetString("user_name")
+
+	var json_val []Items_Report_Storage
+
+	if r.Method == "GET" {
+		fmt.Fprintf(w, "Not Found :(")
+	} else if r.Method == "POST" {
+		if len(username_session) != 0 {
+			r.ParseForm()
+			w.Header().Set("Content-Type", "application/json")
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			year := r.Form["year"][0]
+			month := r.Form["month"][0]
+			keyword := year + "-" + month
+			val := models.ModelsGetReport(keyword)
+
+			if len(val) > 0 {
+				json_val = make([]Items_Report_Storage, len(val))
+			} else {
+				json_val = make([]Items_Report_Storage, 1)
+			}
+
+			if len(val) > 0 {
+				for i:=0; i<len(val); i++ {
+					json_val[i].Item_id = val[i].Item_id
+					json_val[i].Name = val[i].Name
+					json_val[i].In_date = val[i].In_date
+					json_val[i].Quantity = val[i].Quantity
+					json_val[i].Used = val[i].Used
+					json_val[i].Rest = val[i].Rest
+					json_val[i].Status = val[i].Status
+				}
+			} else {
+				json_val[0].Name = "Not Found"
+			}
+
+			outgoingJSON, err := json.Marshal(json_val)
+			if err != nil {
+				log.Println(err)
+			}
+			fmt.Fprintf(w, string(outgoingJSON))
+		} else {
+			w.Header().Set("Content-Type", "application/json")
+			timeout := struct{
+				Redirect  bool  `json:"redirect"`
+			}{}
+
+			timeout.Redirect = true
+			json_val, err := json.Marshal(timeout)
+			if err != nil {
+				log.Println(err)
+			}
+
+			fmt.Fprintf(w, string(json_val))
+		}
+	}
+}
 // AppNavbarMainPage function used as AJAX handler and will parsing url by JavaScript
 // example:
 // /navbar?navigate_link=/items --> load "/items" as AJAX request

@@ -391,7 +391,7 @@ function editTable() {
 		editContent += "  <td>Model/Brand</td>";
 		editContent += "  <td><input class='edit-table edit-model' type='text' placeholder='Model/Brand' value='"+itemThisModel+"'></td>";
 		editContent += "</tr>";
-		editContent += "<tr>";
+		editContent += "<tr style='display: none;'>";
 		editContent += "  <td>Quantity</td>";
 		editContent += "  <td><input class='edit-table edit-quantity' type='number' placeholder='Quantity' value='"+parseInt(itemThisQuantity)+"' min='1'>&nbsp;<label style='color: #27ae60; font-weight: bold;'><i>*Current: "+itemThisQuantity+"</i></label></td>";
 		editContent += "</tr>";

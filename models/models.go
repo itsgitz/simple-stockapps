@@ -144,6 +144,14 @@ func ModelsSearchForItems(search, cat string) []Items_Columns {
 	return items_value
 }
 
+func ModelsGetReport(keyword string) []Items_Report_Storage {
+	val := []Items_Report_Storage{}
+	keyword = "%"+ keyword + "%"
+	err = db.Select(&val, "SELECT * FROM items_report_storage WHERE in_date LIKE ? ORDER BY in_date ASC", keyword)
+
+	return val
+}
+
 // ModelsSelectFromItems function used for display the table of database content
 // the function will return all values in `items` table
 func ModelsSelectFromOurItems() ([]Items_Columns, error) {

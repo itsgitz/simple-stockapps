@@ -237,11 +237,11 @@ function appShowItemsTable(res) {
 	var windowHash = window.location.hash;
 	tableMonitoring += "  <th>No.</th>";
 	tableMonitoring += "  <th>Name</th>";
-	tableMonitoring += "  <th>Model/Brand</th>";
+	tableMonitoring += "  <th>Model/Brand/Type</th>";
 	tableMonitoring += "  <th>Quantity</th>";
 	tableMonitoring += "  <th>Limitation</th>";
 	tableMonitoring += "  <th>Used</th>";
-	tableMonitoring += "  <th>Item Unit/Type</th>";
+	tableMonitoring += "  <th>Item Unit</th>";
 	// window has "other_items" hash url, then show item owner column
 	if (windowHash == "#other_items" || windowHash == "#empty_items") {
 		tableMonitoring += "  <th>Owner</th>";
@@ -286,7 +286,7 @@ function appShowItemsTable(res) {
 		}
 	} else {
 		tableMonitoring += "<tr>";
-		tableMonitoring +=   "<td colspan='12'><h2>No Results have been found :(</h2></td>";
+		tableMonitoring +=   "<td colspan='15'><h2>No Results have been found :(</h2></td>";
 		tableMonitoring += "</tr>";
 	}
 	tableMonitoring += "</table>";
@@ -378,10 +378,10 @@ function appAddQty() {
 		textContent += "      <td>"+getQty+"</td>";
 		textContent += "  </tr>";
 		textContent += "  <tr>";
-		textContent += "      <td><input class='added-qty' type='number' placeholder='Input Quantity' min='0'></td>";
+		textContent += "      <td><br><input class='added-qty' type='number' placeholder='Input Quantity' min='0'></td>";
 		textContent += "  </tr>";
 		textContent += "</table>";
-		textContent += "  <p><button class='add-button-submit'>Add</button><button class='add-close-button'>Close</button></p>";
+		textContent += "  <p><button class='add-button-submit'>Add</button>&nbsp;<button class='add-close-button'>Close</button></p>";
 		content.innerHTML = textContent;
 
 		// show the popup
@@ -405,36 +405,48 @@ function appAddQty() {
 		addButtonSubmit.click(function() {
 			var addedItem = $("input.added-qty").val();
 			var waktu = appGenerateDateTime();
+			var jqAlertBox = $("div#app-addqty-alert");
+			var alertBox = document.getElementById("app-addqty-alert");
 
-			console.log(getId, getName, addedItem, waktu);
-			$.ajax({
-				url: "/add_qty",
-				async: true,
-				method: "POST",
-				data: {
-					item_name: getName,
-					item_id: getId,
-					added_item: addedItem,
-					in_date: waktu
-				},
-				success: function(res) {
-					if (res.redirect) {
-						alert("Session has timed out :(");
-						window.location = "/";
-					} else {
-						content.innerHTML = "<p style='padding: 10px; font-weight: bold; color: #3498db;'>" + res.message + "</p>";
-						setTimeout(function() {
-							jqModal.fadeOut(300);
-						}, 2000);
+			if (!parseInt(addedItem) || parseInt(addedItem) == 0) {
+				jqAlertBox.fadeOut(300);
+				jqAlertBox.fadeIn(300);
+				alertBox.innerHTML = "<span class='close-alert-addqty'>&times;</span><p>Please fill the quantity!</p>";
+			} else {
+				console.log(getId, getName, addedItem, waktu);
+				$.ajax({
+					url: "/add_qty",
+					async: true,
+					method: "POST",
+					data: {
+						item_name: getName,
+						item_id: getId,
+						added_item: addedItem,
+						in_date: waktu
+					},
+					success: function(res) {
+						if (res.redirect) {
+							alert("Session has timed out :(");
+							window.location = "/";
+						} else {
+							content.innerHTML = "<p style='padding: 10px; font-weight: bold; color: #3498db;'>" + res.message + "</p>";
+							setTimeout(function() {
+								jqModal.fadeOut(300);
+							}, 2000);
 
-						window.onclick = function(e) {
-							if (e.target == modal) {
-								jqModal.css("display", "block");
+							window.onclick = function(e) {
+								if (e.target == modal) {
+									jqModal.css("display", "block");
+								}
 							}
+							ws.send("#005-update-item");
+							jqAlertBox.fadeOut(300);
 						}
-						ws.send("#005-update-item");
 					}
-				}
+				});
+			}
+			$("span.close-alert-addqty").click(function() {
+				jqAlertBox.fadeOut(300);
 			});
 		});
 	});
