@@ -4,8 +4,8 @@ const addRequest = "#003-add-item";
 const removeRequest = "#004-remove-item";
 const updateRequest = "#005-update-item"
 
-//var ws = new WebSocket('ws://10.24.24.76:8080/ws');
-var ws = new WebSocket('ws://localhost:8080/ws');
+var ws = new WebSocket('ws://10.24.24.76:8080/ws');
+//var ws = new WebSocket('ws://localhost:8080/ws');
 // if browser support or not support
 if (window.WebSocket) {
 	console.log("Your web browser is support websocket");
