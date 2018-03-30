@@ -126,11 +126,11 @@
 							}
 							tableText += "</table>";
 							tableText += "<br>";
-							/*tableText += "<button class='export-button'>Export PDF</button>";
+							//tableText += "<button class='export-button'>Export PDF</button>";
 							jqReportResult.fadeOut(300);
 							jqReportResult.fadeIn(300);
 							reportResult.innerHTML = tableText;
-							var exportPDF = $("button.export-button");
+							/*var exportPDF = $("button.export-button");
 							exportPDF.click(function() {
 								$.ajax({
 									url: "/to_pdf",
