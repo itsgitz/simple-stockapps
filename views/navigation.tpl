@@ -11,7 +11,7 @@
 			<a href="/"><img src="img/home.svg" width="20px"></a>
 		</li>
 		<li>
-			<a class="ajax-navbar ajax-items" href="/navbar?#navigate_link=/items"><img src='img/items.svg' width="20px">&nbsp;Goods</a>
+			<a class="ajax-navbar ajax-items" href="/navbar?#navigate_link=/items"><img src='img/items.svg' width="20px">&nbsp;Stocks</a>
 		</li>
 		<li>
 			<a class="ajax-navbar ajax-reports" href="/navbar?#navigate_link=/reports"><img src='img/history.svg' width="20px">&nbsp;History</a>
